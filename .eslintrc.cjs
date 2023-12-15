@@ -40,5 +40,7 @@ module.exports = {
       1,
       { extensions: ['.js', '.jsx', '.ts', '.tsx'] },
     ],
+    'import/extensions': ['off'],
+    'no-restricted-exports': ['off'],
   },
 };
