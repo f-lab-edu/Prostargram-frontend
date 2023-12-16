@@ -9,6 +9,7 @@ const childElements = [
 globalStyle(`*:not(${[...parentElements, ...childElements].join()})`, {
   all: 'unset',
   display: 'revert',
+  boxSizing: 'border-box',
 });
 
 globalStyle('*, *::before, *::after', {
