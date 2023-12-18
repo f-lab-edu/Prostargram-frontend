@@ -1,11 +1,18 @@
 import { Outlet } from 'react-router-dom';
-import { h1 } from './AuthLayout.css';
+import * as Styles from './AuthLayout.css';
 
 const AuthLayout = () => {
   return (
-    <div>
-      <h1 className={h1}>AuthLayout</h1>
-      <Outlet />
+    <div className={Styles.container}>
+      <main className={Styles.innerContainer}>
+        <div className={Styles.leftBox}>
+          <Outlet />
+        </div>
+
+        <div className={Styles.rightBox}>
+          <p>그리임</p>
+        </div>
+      </main>
     </div>
   );
 };
