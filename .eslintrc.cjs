@@ -45,5 +45,7 @@ module.exports = {
     'import/prefer-default-export': ['off'],
     'react/jsx-props-no-spreading': ['off'],
     'react/button-has-type': ['off'],
+    'react/require-default-props': ['off'],
+    'react/default-props-match-prop-types': ['off'],
   },
 };
