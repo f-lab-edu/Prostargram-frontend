@@ -61,7 +61,11 @@ const LoginPage = () => {
                 errorMessage={isDirty ? errors.password?.message : undefined}
                 {...register('password', passwordValidator)}
                 inputPostFix={
-                  <button onClick={toggleHandler} style={{ display: 'flex' }}>
+                  <button
+                    type="button"
+                    onClick={toggleHandler}
+                    style={{ display: 'flex' }}
+                  >
                     {isToggle ? <OpenEyeIcon /> : <CloseEyeIcon />}
                   </button>
                 }
