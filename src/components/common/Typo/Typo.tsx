@@ -41,6 +41,7 @@ const Typo = ({
         marginLeft,
         marginRight,
         cursor,
+        wordBreak: 'keep-all',
       }}
       className={Styles.typography({
         fontSize,
