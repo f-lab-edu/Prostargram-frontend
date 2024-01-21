@@ -1,26 +1,41 @@
-/// <reference types="vite-plugin-svgr/client" />
-
-import { FormEvent } from 'react';
+import { Link } from 'react-router-dom';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 import Logo from '@components/common/Logo';
 import Typo from '@components/common/Typo';
 import Button from '@components/common/Button';
 import InputField from '@components/common/InputField';
 import ToggleWrapper from '@components/common/ToggleWrapper';
+import { emailValidator, passwordValidator } from '@utils/validate';
 
 import OpenEyeIcon from '@assets/icons/open-eye.svg?react';
 import CloseEyeIcon from '@assets/icons/close-eye.svg?react';
 
 import * as Styles from './LoginPage.css';
 
+interface IFormInput {
+  email: string;
+  password: string;
+}
+
 const LoginPage = () => {
-  const submitHandler = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const {
+    register,
+    handleSubmit,
+
+    formState: { errors, isDirty },
+  } = useForm<IFormInput>({
+    defaultValues: { email: '', password: '' },
+    mode: 'onSubmit',
+  });
+
+  const onSubmit: SubmitHandler<IFormInput> = (data) => {
+    console.log(data);
   };
 
   return (
     <div className={Styles.container}>
-      <form onSubmit={submitHandler} className={Styles.form}>
+      <form onSubmit={handleSubmit(onSubmit)} className={Styles.form}>
         <div style={{ marginBottom: 40 }}>
           <Logo />
         </div>
@@ -30,8 +45,10 @@ const LoginPage = () => {
             id="email"
             type="text"
             label="이메일"
-            name="email"
+            maxLength={30}
             placeholder="이메일을 입력해주세요."
+            errorMessage={isDirty ? errors.email?.message : undefined}
+            {...register('email', emailValidator)}
           />
           <ToggleWrapper>
             {({ isToggle, toggleHandler }) => (
@@ -39,8 +56,10 @@ const LoginPage = () => {
                 id="password"
                 type={isToggle ? 'text' : 'password'}
                 label="비밀번호"
-                name="password"
+                maxLength={20}
                 placeholder="비밀번호를 입력해주세요."
+                errorMessage={isDirty ? errors.password?.message : undefined}
+                {...register('password', passwordValidator)}
                 inputPostFix={
                   <button onClick={toggleHandler} style={{ display: 'flex' }}>
                     {isToggle ? <OpenEyeIcon /> : <CloseEyeIcon />}
@@ -71,11 +90,13 @@ const LoginPage = () => {
 
       <Button fill="gray">GitHub 로그인</Button>
 
-      <Typo as="p" textAlign="center" marginTop={45} fontSize="body-14">
+      <Typo as="p" fontSize="body-14" marginTop={45} textAlign="center">
         계정이 없으신가요?{' '}
-        <Typo as="span" color="primary-2" fontSize="body-14">
-          회원가입
-        </Typo>
+        <Link to="sign-up">
+          <Typo as="span" color="primary-2" fontSize="body-14" cursor="pointer">
+            회원가입
+          </Typo>
+        </Link>
       </Typo>
     </div>
   );

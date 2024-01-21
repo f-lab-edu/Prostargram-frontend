@@ -1,13 +1,11 @@
 /// <reference types="vite-plugin-svgr/client" />
 
 import {
-  ChangeEvent,
   HTMLInputTypeAttribute,
+  InputHTMLAttributes,
   ReactNode,
   Ref,
   forwardRef,
-  useEffect,
-  useState,
 } from 'react';
 import CautionIcon from '@assets/icons/caution.svg?react';
 
@@ -17,9 +15,10 @@ import * as Styles from './InputField.css';
 
 interface InputFieldProps {
   id: string;
-  name: string;
+  name?: string;
   type?: HTMLInputTypeAttribute;
   label: string;
+  maxLength?: InputHTMLAttributes<HTMLInputElement>['maxLength'];
   placeholder?: string;
   errorMessage?: string;
   labelPrefix?: ReactNode;
@@ -41,25 +40,10 @@ const InputField = forwardRef(
       inputPostFix,
       size,
       variants,
+      ...props
     }: InputFieldProps,
     ref: Ref<HTMLInputElement>,
   ) => {
-    const [inputValue, setInputValue] = useState('');
-    const [errorState, setErrorState] = useState(false);
-
-    const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-      setInputValue(e.target.value);
-      if (errorState) {
-        setErrorState(false);
-      }
-    };
-
-    useEffect(() => {
-      if (errorMessage) {
-        setErrorState(true);
-      }
-    }, [errorMessage]);
-
     return (
       <div className={Styles.container}>
         <label htmlFor={id} className={Styles.label}>
@@ -72,16 +56,15 @@ const InputField = forwardRef(
           type={type}
           name={name}
           placeholder={placeholder}
-          value={inputValue}
-          onChange={changeHandler}
           ref={ref}
           size={size}
-          state={errorState ? 'fail' : 'normal'}
+          state={errorMessage ? 'fail' : 'normal'}
           variants={variants}
           postfix={inputPostFix}
+          {...props}
         />
 
-        {errorState && (
+        {errorMessage && (
           <div className={Styles.inputWrapper}>
             <CautionIcon />
             <Typo fontSize="body-12" color="red">
