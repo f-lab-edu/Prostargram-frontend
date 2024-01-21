@@ -14,6 +14,7 @@ interface TypoProps {
   marginBottom?: CSSProperties['marginBottom'];
   marginLeft?: CSSProperties['marginLeft'];
   marginRight?: CSSProperties['marginRight'];
+  cursor?: CSSProperties['cursor'];
 }
 
 const Typo = ({
@@ -28,6 +29,7 @@ const Typo = ({
   marginBottom,
   marginLeft,
   marginRight,
+  cursor,
 }: TypoProps) => {
   return (
     <Component
@@ -38,6 +40,7 @@ const Typo = ({
         marginBottom,
         marginLeft,
         marginRight,
+        cursor,
       }}
       className={Styles.typography({
         fontSize,
