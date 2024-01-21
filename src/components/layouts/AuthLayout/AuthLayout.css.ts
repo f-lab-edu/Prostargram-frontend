@@ -63,3 +63,8 @@ export const rightBox = style([
     },
   }),
 ]);
+
+export const groupSVG = style({
+  width: '100%',
+  margin: '0 90px',
+});

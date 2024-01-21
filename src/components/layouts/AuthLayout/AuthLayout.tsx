@@ -1,4 +1,8 @@
+/// <reference types="vite-plugin-svgr/client" />
+
 import { Outlet } from 'react-router-dom';
+
+import GroupSVG from '@assets/svg/group1.svg?react';
 import * as Styles from './AuthLayout.css';
 
 const AuthLayout = () => {
@@ -10,7 +14,6 @@ const AuthLayout = () => {
         </div>
 
         <div className={Styles.rightBox}>
-          <p>그리임</p>
         </div>
       </main>
     </div>
