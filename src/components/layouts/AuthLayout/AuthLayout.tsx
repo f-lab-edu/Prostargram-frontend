@@ -14,7 +14,6 @@ const AuthLayout = () => {
         </div>
 
         <div className={Styles.rightBox}>
-          <GroupSVG className={Styles.groupSVG} />
         </div>
       </main>
     </div>
