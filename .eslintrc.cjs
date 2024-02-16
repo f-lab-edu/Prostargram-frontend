@@ -9,7 +9,12 @@ module.exports = {
     'plugin:react/jsx-runtime',
     'plugin:prettier/recommended',
   ],
-  ignorePatterns: ['dist', '.eslintrc.cjs', 'vite.config.ts'],
+  ignorePatterns: [
+    'dist',
+    '.eslintrc.cjs',
+    'vite.config.ts',
+    'vitest.config.ts',
+  ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     project: './tsconfig.json',
@@ -40,6 +45,12 @@ module.exports = {
       1,
       { extensions: ['.js', '.jsx', '.ts', '.tsx'] },
     ],
+    'jsx-a11y/label-has-associated-control': [
+      2,
+      {
+        labelAttributes: ['htmlFor'],
+      },
+    ],
     'import/extensions': ['off'],
     'no-restricted-exports': ['off'],
     'import/prefer-default-export': ['off'],
@@ -47,5 +58,11 @@ module.exports = {
     'react/button-has-type': ['off'],
     'react/require-default-props': ['off'],
     'react/default-props-match-prop-types': ['off'],
+    'import/no-extraneous-dependencies': [
+      'error',
+      {
+        devDependencies: true,
+      },
+    ],
   },
 };
