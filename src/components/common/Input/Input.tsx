@@ -11,13 +11,20 @@ interface InputProps
 
 const Input = forwardRef(
   (
-    { size, state, postfix, variants, ...props }: InputProps,
+    {
+      size,
+      state = 'normal',
+      postfix,
+      variants,
+      disabled,
+      ...props
+    }: InputProps,
     ref: Ref<HTMLInputElement>,
   ) => {
     return (
       <div
         className={Styles.wrapperStyles({
-          state,
+          state: disabled ? 'disabled' : state,
           size,
           variants,
         })}

@@ -43,6 +43,7 @@ export const wrapperStyles = recipe({
         },
       ],
       fail: [{ borderColor: vars.colors.red, borderWidth: '2px' }],
+      disabled: [{ background: vars.colors['gray-8'] }],
     },
     size: {
       small: { height: 32 },
@@ -58,6 +59,9 @@ export const inputStyle = style([
     fontSize: 14,
     '::placeholder': {
       fontSize: 12,
+    },
+    ':disabled': {
+      color: vars.colors['gray-3'],
     },
   },
   responsiveStyle({

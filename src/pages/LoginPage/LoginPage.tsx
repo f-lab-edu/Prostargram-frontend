@@ -6,7 +6,7 @@ import Typo from '@components/common/Typo';
 import Button from '@components/common/Button';
 import InputField from '@components/common/InputField';
 import ToggleWrapper from '@components/common/ToggleWrapper';
-import { emailValidator, passwordValidator } from '@utils/validate';
+import validator from '@utils/validate';
 
 import OpenEyeIcon from '@assets/icons/open-eye.svg?react';
 import CloseEyeIcon from '@assets/icons/close-eye.svg?react';
@@ -48,7 +48,7 @@ const LoginPage = () => {
             maxLength={30}
             placeholder="이메일을 입력해주세요."
             errorMessage={isDirty ? errors.email?.message : undefined}
-            {...register('email', emailValidator)}
+            {...register('email', validator.email())}
           />
           <ToggleWrapper>
             {({ isToggle, toggleHandler }) => (
@@ -59,7 +59,7 @@ const LoginPage = () => {
                 maxLength={20}
                 placeholder="비밀번호를 입력해주세요."
                 errorMessage={isDirty ? errors.password?.message : undefined}
-                {...register('password', passwordValidator)}
+                {...register('password', validator.password())}
                 inputPostFix={
                   <button
                     type="button"
