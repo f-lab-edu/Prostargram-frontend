@@ -21,7 +21,6 @@ export const innerContainer = style([
   {
     width: '100%',
     minWidth: 290,
-    minHeight: 600,
     maxWidth: 380,
     display: 'flex',
     flexDirection: 'column',
@@ -34,9 +33,7 @@ export const innerContainer = style([
   },
   responsiveStyle({
     desktop: {
-      height: '100%',
       maxWidth: 1200,
-      maxHeight: 800,
       flexDirection: 'row',
     },
   }),
@@ -44,7 +41,6 @@ export const innerContainer = style([
 
 const box = style([
   {
-    height: '100%',
     flex: 1,
   },
   flexCenter,

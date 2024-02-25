@@ -1,6 +1,7 @@
 /// <reference types="vite-plugin-svgr/client" />
 
 import {
+  HTMLAttributes,
   HTMLInputTypeAttribute,
   InputHTMLAttributes,
   ReactNode,
@@ -13,7 +14,7 @@ import Input from '../Input';
 import Typo from '../Typo';
 import * as Styles from './InputField.css';
 
-interface InputFieldProps {
+interface InputFieldProps extends HTMLAttributes<HTMLInputElement> {
   id: string;
   name?: string;
   type?: HTMLInputTypeAttribute;

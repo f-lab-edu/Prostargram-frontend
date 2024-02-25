@@ -11,13 +11,9 @@ const defaultButtonStyle = style([
     fontWeight: 'bold',
     textAlign: 'center',
     cursor: 'pointer',
-    transition: '0.1s all',
+    transition: '0.1s filter',
   },
-  responsiveStyle({
-    desktop: {
-      height: '50px',
-    },
-  }),
+  responsiveStyle({}),
 ]);
 
 const makeButtonStyle = (color: keyof typeof vars.colors) => ({
@@ -36,7 +32,12 @@ export const buttonStyle = recipe({
     size: {
       small: { height: '38px' },
       medium: { height: '45px' },
-      large: { height: '50px' },
+      large: style([
+        { height: '38px', fontSize: vars.font['body-14'].fontSize },
+        responsiveStyle({
+          desktop: { height: '48px', fontSize: vars.font['body-16'].fontSize },
+        }),
+      ]),
     },
     fill: {
       blue: [defaultButtonStyle, makeButtonStyle('primary-1')],

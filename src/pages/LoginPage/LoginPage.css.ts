@@ -7,7 +7,7 @@ export const container = style([
     width: '100%',
     height: '100%',
     backgroundColor: vars.colors.white,
-    padding: '50px 25px 50px 25px',
+    padding: '50px 30px',
   },
   responsiveStyle({
     desktop: {
