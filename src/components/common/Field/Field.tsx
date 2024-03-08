@@ -5,10 +5,14 @@ import Typo from '../Typo';
 
 import * as Styles from './Field.css';
 
-interface FieldProps extends PropsWithChildren {}
+interface FieldProps extends PropsWithChildren {
+  className?: string;
+}
 
-const Field = ({ children }: FieldProps) => {
-  return <div className={Styles.fieldContainer}>{children}</div>;
+const Field = ({ className, children }: FieldProps) => {
+  return (
+    <div className={`${Styles.fieldContainer} ${className}`}>{children}</div>
+  );
 };
 
 interface FieldLabelProps extends PropsWithChildren {
@@ -29,10 +33,12 @@ const FieldEmphasize = ({ children }: FieldEmphasizeProps) => {
   return <em className={Styles.emphasize}>{children}</em>;
 };
 
-interface FieldBoxProps extends PropsWithChildren {}
+interface FieldBoxProps extends PropsWithChildren {
+  className?: string;
+}
 
-const FieldBox = ({ children }: FieldBoxProps) => {
-  return <div className={Styles.fieldBox}>{children}</div>;
+const FieldBox = ({ className, children }: FieldBoxProps) => {
+  return <div className={`${Styles.fieldBox} ${className}`}>{children}</div>;
 };
 
 interface FieldErrorMessageProps extends PropsWithChildren {}
