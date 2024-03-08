@@ -17,6 +17,21 @@ export const container = style([
   }),
 ]);
 
+export const subTitle = style([
+  {
+    fontSize: vars.font['bold-20'].fontSize,
+    fontWeight: vars.font['bold-20'].fontWeight,
+    marginTop: '40px',
+    marginBottom: '20px',
+  },
+  responsiveStyle({
+    desktop: {
+      marginTop: '50px',
+      marginBottom: '30px',
+    },
+  }),
+]);
+
 export const linkField = style([
   {
     display: 'flex',
@@ -26,39 +41,53 @@ export const linkField = style([
   responsiveStyle({ desktop: { marginBottom: '30px' } }),
 ]);
 
-const addtionalDefaultButton = style({
-  padding: '10px 15px',
-  ':hover': {
-    background: vars.colors['primary-1'],
-    color: vars.colors['gray-9'],
-    borderColor: vars.colors['primary-1'],
+const addtionalDefaultButton = style([
+  {
+    padding: '5px 15px',
+    ':hover': {
+      background: vars.colors['primary-1'],
+      color: vars.colors['gray-9'],
+      borderColor: vars.colors['primary-1'],
+    },
+    ':active': {
+      background: vars.colors['primary-1'],
+      color: vars.colors['gray-9'],
+      borderColor: vars.colors['primary-1'],
+    },
   },
-  ':active': {
-    background: vars.colors['primary-1'],
-    color: vars.colors['gray-9'],
-    borderColor: vars.colors['primary-1'],
-  },
-});
+  responsiveStyle({ desktop: { padding: '10px 15px' } }),
+]);
 
 export const addLinkButton = style([
   addtionalDefaultButton,
   {
-    height: '2.5rem',
+    height: '1.75rem',
   },
+  responsiveStyle({ desktop: { height: '2.5rem' } }),
 ]);
 
-export const interestsFieldBox = style({
+const defaultFieldBox = style({
   display: 'flex',
   flexDirection: 'row',
   flexWrap: 'wrap',
-  gap: '10px',
 });
 
-export const myInterestField = style([
+export const interestsFieldBox = style([
+  defaultFieldBox,
   {
-    display: 'flex',
-    flexWrap: 'wrap',
-    flexDirection: 'row',
+    gap: '10px',
+  },
+]);
+
+export const myInterestErrorMessage = style({
+  marginBottom: '10px',
+  fontSize: vars.font['body-12'].fontSize,
+  color: vars.colors.red,
+});
+
+export const myInterestFieldBox = style([
+  defaultFieldBox,
+  {
     marginBottom: '60px',
   },
   responsiveStyle({ desktop: { marginBottom: '120px' } }),
@@ -67,8 +96,7 @@ export const myInterestField = style([
 export const addInterestButton = style([
   addtionalDefaultButton,
   {
-    border: '1px solid black',
     width: '4.625rem',
-    padding: '14px 25px',
+    height: '2.5rem',
   },
 ]);

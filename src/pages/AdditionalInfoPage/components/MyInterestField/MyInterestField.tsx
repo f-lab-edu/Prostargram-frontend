@@ -7,53 +7,82 @@ import {
 } from 'react';
 import { useFormContext } from 'react-hook-form';
 
+import CircleClose from '@assets/icons/circle-close.svg?react';
 import { REG_EXP } from '@constants/regExp';
 import { calculateWidth } from '@utils/dynamicWidth';
+import { IAddionalInfoType } from '../../types/AdditionalInfoTypes';
 
-import CircleClose from '@assets/icons/circle-close.svg?react';
 import * as Styles from './MyInterestField.css';
 
 interface MyInterestFieldProps
   extends Omit<HTMLAttributes<HTMLInputElement>, 'onClick'> {
   index: number;
-  removeHandler: (index: number) => void;
+  onRemove: (index: number) => void;
 }
 
 const MyInterestField = ({
   index,
-  removeHandler,
+  onRemove,
   ...props
 }: MyInterestFieldProps) => {
   const [word, setIsWord] = useState<string>('');
   const [isEditing, setIsEditing] = useState<boolean>(true);
-  const { register } = useFormContext();
+  const { register, getValues, setError, clearErrors } =
+    useFormContext<IAddionalInfoType>();
   const { onChange, onBlur, ...formProps } = register(
     `myInterests.${index}.myInterest`,
   );
 
+  const inputWidth = calculateWidth(word.length);
+  const isDuplicate =
+    getValues(`myInterests`).findIndex(
+      ({ myInterest }, currentIndex) =>
+        currentIndex !== index && myInterest === word,
+    ) !== -1;
+
+  const noticeDuplicateError = () =>
+    setError('myInterests', {
+      type: 'validate',
+      message: '중복된 관심사입니다.',
+    });
+
+  const finishEditingMyInterest = () => {
+    setIsEditing(false);
+    clearErrors('myInterests');
+  };
+
   const clickHandler = () => {
     if (!isEditing) {
-      removeHandler(index);
+      onRemove(index);
+    }
+  };
+
+  const keyupHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === ' ') {
+      if (isDuplicate) {
+        noticeDuplicateError();
+        onRemove(index);
+        return;
+      }
+
+      finishEditingMyInterest();
     }
   };
 
   const blurHandler = (e: FocusEvent<HTMLInputElement>) => {
     if (!word.length) {
-      removeHandler(index);
+      onRemove(index);
       return;
     }
 
-    if (onBlur) {
-      onBlur(e);
+    if (isDuplicate) {
+      noticeDuplicateError();
+      onRemove(index);
+      return;
     }
 
-    setIsEditing(false);
-  };
-
-  const keyupHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === ' ') {
-      setIsEditing(false);
-    }
+    finishEditingMyInterest();
+    onBlur(e);
   };
 
   const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
@@ -63,9 +92,7 @@ const MyInterestField = ({
       setIsWord(next);
     }
 
-    if (onChange) {
-      onChange(e);
-    }
+    onChange(e);
   };
 
   const preventSpacebar = (e: KeyboardEvent<HTMLButtonElement>) => {
@@ -74,14 +101,12 @@ const MyInterestField = ({
     }
   };
 
-  const inputWidth = calculateWidth(word.length);
-
   return (
     <button
       type="button"
-      className={isEditing ? Styles.inputEditing : Styles.inputCompleted}
+      className={isEditing ? Styles.editing : Styles.completed}
       onClick={clickHandler}
-      onKeyDown={preventSpacebar}
+      onKeyUp={preventSpacebar}
     >
       <input
         {...formProps}
@@ -97,7 +122,7 @@ const MyInterestField = ({
       />
       {!isEditing && (
         <>
-          <CircleClose className={Styles.circleX} />
+          <CircleClose className={Styles.circleCloseIcon} />
           <span>#{word}</span>
         </>
       )}

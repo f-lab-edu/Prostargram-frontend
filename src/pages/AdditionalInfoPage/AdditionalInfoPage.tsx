@@ -4,9 +4,9 @@ import {
   SubmitHandler,
   useFieldArray,
 } from 'react-hook-form';
+import { useCallback } from 'react';
 
 import { RECOMMANED_INTERESTS } from 'src/data/mock';
-import Typo from '@components/common/Typo';
 import Logo from '@components/common/Logo';
 import Field from '@components/common/Field';
 import Button from '@components/common/Button';
@@ -15,16 +15,9 @@ import Plus from '@assets/icons/plus.svg?react';
 import AdditionalLink from './components/AdditionalLink';
 import MyInterestField from './components/MyInterestField';
 import InterestCheckbox from './components/InterestCheckbox';
+import { IAddionalInfoType } from './types/AdditionalInfoTypes';
 
 import * as Styles from './AdditionalInfoPage.css';
-
-interface IAddionalInfoType {
-  links: { link: string }[];
-  interests: string[];
-  myInterests: {
-    myInterest: string;
-  }[];
-}
 
 const LINK_FIELDS_LIMIT = 3;
 const MY_INTERESTS_FIELDS_LIMIT = 10;
@@ -33,7 +26,11 @@ const AdditionalInfoPage = () => {
   const methods = useForm<IAddionalInfoType>({
     defaultValues: { links: [{ link: '' }], interests: [], myInterests: [] },
   });
-  const { handleSubmit, control } = methods;
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = methods;
 
   const {
     fields: linkfields,
@@ -69,7 +66,10 @@ const AdditionalInfoPage = () => {
     }
   };
 
-  const removeMyInterests = (index: number) => removeMyInterest(index);
+  const removeMyInterests = useCallback(
+    (index: number) => removeMyInterest(index),
+    [removeMyInterest],
+  );
   const removeLinks = (index: number) => removeLink(index);
 
   return (
@@ -78,9 +78,7 @@ const AdditionalInfoPage = () => {
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormProvider {...methods}>
-          <Typo as="p" marginTop="50px" marginBottom="30px" fontSize="bold-20">
-            추가 정보
-          </Typo>
+          <h1 className={Styles.subTitle}>추가 정보</h1>
           <Field>
             <Field.FieldLabel htmlFor="links">링크 (최대 3개)</Field.FieldLabel>
             <Field.FieldBox className={Styles.linkField}>
@@ -115,14 +113,19 @@ const AdditionalInfoPage = () => {
 
           <Field>
             <Field.FieldLabel>
-              나만의 관심사를 추가해보세요! <em>(최대 10개)</em>
+              나만의 관심사를 추가해보세요! (최대 10개)
             </Field.FieldLabel>
-            <Field.FieldBox className={Styles.myInterestField}>
+            {errors.myInterests && (
+              <p className={Styles.myInterestErrorMessage}>
+                {errors.myInterests.message}
+              </p>
+            )}
+            <Field.FieldBox className={Styles.myInterestFieldBox}>
               {myInterestsFields.map((field, index) => (
                 <MyInterestField
                   key={field.id}
                   index={index}
-                  removeHandler={removeMyInterests}
+                  onRemove={removeMyInterests}
                 />
               ))}
               {myInterestsFields.length !== MY_INTERESTS_FIELDS_LIMIT && (
@@ -132,7 +135,7 @@ const AdditionalInfoPage = () => {
                   className={Styles.addInterestButton}
                   onClick={addMyInterests}
                 >
-                  <Plus />
+                  <Plus width="20px" />
                 </Button>
               )}
             </Field.FieldBox>

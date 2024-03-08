@@ -12,8 +12,8 @@ const defaultCheckbox = style([
     cursor: 'pointer',
     transition: 'background 0.1s',
     ':hover': {
-      background: vars.colors['primary-1'],
-      borderColor: vars.colors['primary-1'],
+      background: vars.colors['primary-2'],
+      borderColor: vars.colors['primary-2'],
       color: vars.colors['gray-9'],
     },
   },

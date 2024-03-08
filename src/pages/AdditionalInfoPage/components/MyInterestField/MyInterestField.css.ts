@@ -17,14 +17,14 @@ const defaultInput = style([
   }),
 ]);
 
-export const inputEditing = style([
+export const editing = style([
   defaultInput,
   {
     background: vars.colors['gray-9'],
   },
 ]);
 
-export const inputCompleted = style([
+export const completed = style([
   defaultInput,
   {
     background: vars.colors['primary-1'],
@@ -44,7 +44,7 @@ export const input = style({
   textAlign: 'center',
 });
 
-export const circleX = style({
+export const circleCloseIcon = style({
   display: 'block',
   position: 'absolute',
   left: 2,

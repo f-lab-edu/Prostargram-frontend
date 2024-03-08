@@ -17,11 +17,12 @@ const Field = ({ className, children }: FieldProps) => {
 
 interface FieldLabelProps extends PropsWithChildren {
   htmlFor?: string;
+  className?: string;
 }
 
-const FieldLabel = ({ htmlFor, children }: FieldLabelProps) => {
+const FieldLabel = ({ htmlFor, className, children }: FieldLabelProps) => {
   return (
-    <label htmlFor={htmlFor} className={Styles.label}>
+    <label htmlFor={htmlFor} className={`${Styles.label} ${className}`}>
       {children}
     </label>
   );
