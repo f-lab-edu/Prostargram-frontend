@@ -10,6 +10,8 @@ import Typo from '@components/common/Typo';
 import Logo from '@components/common/Logo';
 import Field from '@components/common/Field';
 import Button from '@components/common/Button';
+
+import Plus from '@assets/icons/plus.svg?react';
 import AdditionalLink from './components/AdditionalLink';
 import MyInterestField from './components/MyInterestField';
 import InterestCheckbox from './components/InterestCheckbox';
@@ -96,7 +98,7 @@ const AdditionalInfoPage = () => {
                   className={Styles.addLinkButton}
                   onClick={appendLinks}
                 >
-                  +
+                  <Plus />
                 </Button>
               )}
             </Field.FieldBox>
@@ -130,7 +132,7 @@ const AdditionalInfoPage = () => {
                   className={Styles.addInterestButton}
                   onClick={addMyInterests}
                 >
-                  +
+                  <Plus />
                 </Button>
               )}
             </Field.FieldBox>

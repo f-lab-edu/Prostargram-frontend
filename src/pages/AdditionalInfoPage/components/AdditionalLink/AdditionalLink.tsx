@@ -25,7 +25,7 @@ const AdditionalLink = ({ index, removeHandler }: AdditionalLinkProps) => {
             onClick={() => removeHandler(index)}
             aria-label="remove-link"
           >
-            <Close fill="black" />
+            <Close className={Styles.removeIcon} />
           </button>
         )
       }

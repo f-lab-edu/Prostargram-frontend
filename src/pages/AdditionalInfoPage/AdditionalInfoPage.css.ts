@@ -17,13 +17,17 @@ export const container = style([
   }),
 ]);
 
-export const linkField = style({
-  display: 'flex',
-  flexDirection: 'column',
-  marginBottom: '40px',
-});
+export const linkField = style([
+  {
+    display: 'flex',
+    flexDirection: 'column',
+    marginBottom: '10px',
+  },
+  responsiveStyle({ desktop: { marginBottom: '30px' } }),
+]);
 
 const addtionalDefaultButton = style({
+  padding: '10px 15px',
   ':hover': {
     background: vars.colors['primary-1'],
     color: vars.colors['gray-9'],
@@ -36,24 +40,35 @@ const addtionalDefaultButton = style({
   },
 });
 
-export const addLinkButton = style([addtionalDefaultButton]);
+export const addLinkButton = style([
+  addtionalDefaultButton,
+  {
+    height: '2.5rem',
+  },
+]);
 
 export const interestsFieldBox = style({
   display: 'flex',
+  flexDirection: 'row',
   flexWrap: 'wrap',
   gap: '10px',
 });
 
-export const myInterestField = style({
-  display: 'flex',
-  flexWrap: 'wrap',
-});
+export const myInterestField = style([
+  {
+    display: 'flex',
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+    marginBottom: '60px',
+  },
+  responsiveStyle({ desktop: { marginBottom: '120px' } }),
+]);
 
 export const addInterestButton = style([
   addtionalDefaultButton,
   {
     border: '1px solid black',
     width: '4.625rem',
-    height: '41px',
+    padding: '14px 25px',
   },
 ]);

@@ -1,12 +1,21 @@
+import { responsiveStyle } from '@styles/styles.css';
 import { vars } from '@styles/theme.css';
 import { style } from '@vanilla-extract/css';
 
-const defaultInput = style({
-  position: 'relative',
-  border: '1px solid black',
-  borderRadius: '10px',
-  padding: '10px 15px',
-});
+const defaultInput = style([
+  {
+    position: 'relative',
+    padding: '10px 15px',
+    border: '1px solid black',
+    borderRadius: '10px',
+    fontSize: vars.font['body-14'].fontSize,
+  },
+  responsiveStyle({
+    desktop: {
+      fontSize: vars.font['body-16'].fontSize,
+    },
+  }),
+]);
 
 export const inputEditing = style([
   defaultInput,
@@ -18,8 +27,8 @@ export const inputEditing = style([
 export const inputCompleted = style([
   defaultInput,
   {
-    borderColor: vars.colors['primary-1'],
     background: vars.colors['primary-1'],
+    borderColor: vars.colors['primary-1'],
     color: vars.colors['gray-9'],
     transition: 'background 0.1s',
     cursor: 'pointer',

@@ -8,6 +8,7 @@ export const LogoStyle = style([
     fontWeight: vars.font['bold-32'].fontWeight,
     color: vars.colors['primary-1'],
     textShadow: '2px 2px 5px rgba(0, 0, 0, 0.25)',
+    textAlign: 'center',
     cursor: 'pointer',
   },
   responsiveStyle({
