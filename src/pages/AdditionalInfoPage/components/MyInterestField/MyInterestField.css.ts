@@ -21,6 +21,10 @@ export const editing = style([
   defaultInput,
   {
     background: vars.colors['gray-9'],
+    ':focus-within': {
+      borderColor: vars.colors['primary-1'],
+      borderWidth: 2,
+    },
   },
 ]);
 
@@ -39,7 +43,7 @@ export const completed = style([
   },
 ]);
 
-export const input = style({
+export const myInterestInput = style({
   width: '3rem',
   textAlign: 'center',
 });

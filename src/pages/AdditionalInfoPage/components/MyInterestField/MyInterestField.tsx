@@ -17,28 +17,26 @@ import * as Styles from './MyInterestField.css';
 interface MyInterestFieldProps
   extends Omit<HTMLAttributes<HTMLInputElement>, 'onClick'> {
   index: number;
+  checkList: string[];
   onRemove: (index: number) => void;
 }
 
 const MyInterestField = ({
   index,
+  checkList,
   onRemove,
   ...props
 }: MyInterestFieldProps) => {
   const [word, setIsWord] = useState<string>('');
   const [isEditing, setIsEditing] = useState<boolean>(true);
-  const { register, getValues, setError, clearErrors } =
+  const { register, setError, clearErrors } =
     useFormContext<IAddionalInfoType>();
   const { onChange, onBlur, ...formProps } = register(
     `myInterests.${index}.myInterest`,
   );
 
   const inputWidth = calculateWidth(word.length);
-  const isDuplicate =
-    getValues(`myInterests`).findIndex(
-      ({ myInterest }, currentIndex) =>
-        currentIndex !== index && myInterest === word,
-    ) !== -1;
+  const isDuplicate = checkList.includes(word);
 
   const noticeDuplicateError = () =>
     setError('myInterests', {
@@ -113,7 +111,7 @@ const MyInterestField = ({
         {...props}
         type={isEditing ? 'text' : 'hidden'}
         value={word}
-        className={Styles.input}
+        className={Styles.myInterestInput}
         style={{ width: inputWidth }}
         maxLength={15}
         onChange={changeHandler}

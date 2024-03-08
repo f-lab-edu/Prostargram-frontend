@@ -4,7 +4,6 @@ import {
   SubmitHandler,
   useFieldArray,
 } from 'react-hook-form';
-import { useCallback } from 'react';
 
 import { RECOMMANED_INTERESTS } from 'src/data/mock';
 import Logo from '@components/common/Logo';
@@ -28,6 +27,7 @@ const AdditionalInfoPage = () => {
   });
   const {
     handleSubmit,
+    getValues,
     control,
     formState: { errors },
   } = methods;
@@ -67,17 +67,19 @@ const AdditionalInfoPage = () => {
     }
   };
 
-  const addMyInterests = () => {
+  const appendMyInterests = () => {
     if (myInterestsFields.length < MY_INTERESTS_FIELDS_LIMIT) {
       appendMyInterest({ myInterest: '' });
     }
   };
 
-  const removeMyInterests = useCallback(
-    (index: number) => removeMyInterest(index),
-    [removeMyInterest],
-  );
   const removeLinks = (index: number) => removeLink(index);
+  const removeMyInterests = (index: number) => removeMyInterest(index);
+
+  const currentInterestList = [
+    ...getValues('interests'),
+    ...getValues('myInterests').map(({ myInterest }) => myInterest),
+  ];
 
   return (
     <div className={Styles.container}>
@@ -132,6 +134,7 @@ const AdditionalInfoPage = () => {
                 <MyInterestField
                   key={field.id}
                   index={index}
+                  checkList={currentInterestList}
                   onRemove={removeMyInterests}
                 />
               ))}
@@ -140,14 +143,14 @@ const AdditionalInfoPage = () => {
                   type="button"
                   fill="white"
                   className={Styles.addInterestButton}
-                  onClick={addMyInterests}
+                  onClick={appendMyInterests}
                 >
                   <Plus width="20px" />
                 </Button>
               )}
             </Field.FieldBox>
           </Field>
-          <Button>회원가입 완료</Button>
+          <Button type="button">회원가입 완료</Button>
         </FormProvider>
       </form>
     </div>
