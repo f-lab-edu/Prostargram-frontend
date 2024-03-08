@@ -51,7 +51,14 @@ const AdditionalInfoPage = () => {
   });
 
   const onSubmit: SubmitHandler<IAddionalInfoType> = (values) => {
-    console.log(values);
+    const { links, interests, myInterests } = values;
+    const additionalInfo = {
+      interests,
+      links: links.map(({ link }) => link).filter((v) => !!v),
+      myInterests: myInterests.map(({ myInterest }) => myInterest),
+    };
+
+    console.log(additionalInfo);
   };
 
   const appendLinks = () => {
