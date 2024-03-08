@@ -36,7 +36,6 @@ const MyInterestField = ({
   );
 
   const inputWidth = calculateWidth(word.length);
-  const isDuplicate = checkList.includes(word);
 
   const noticeDuplicateError = () =>
     setError('myInterests', {
@@ -44,9 +43,13 @@ const MyInterestField = ({
       message: '중복된 관심사입니다.',
     });
 
-  const finishEditingMyInterest = () => {
-    setIsEditing(false);
-    clearErrors('myInterests');
+  const isDuplicate = () => {
+    if (checkList.includes(word)) {
+      noticeDuplicateError();
+      onRemove(index);
+      return true;
+    }
+    return false;
   };
 
   const clickHandler = () => {
@@ -55,16 +58,13 @@ const MyInterestField = ({
     }
   };
 
-  const keyupHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === ' ') {
-      if (isDuplicate) {
-        noticeDuplicateError();
-        onRemove(index);
-        return;
-      }
+  const keydownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key !== ' ' && e.key !== 'Enter') return;
+    if (isEditing && isDuplicate()) return;
+    e.preventDefault();
 
-      finishEditingMyInterest();
-    }
+    setIsEditing(false);
+    clearErrors('myInterests');
   };
 
   const blurHandler = (e: FocusEvent<HTMLInputElement>) => {
@@ -72,30 +72,19 @@ const MyInterestField = ({
       onRemove(index);
       return;
     }
+    if (isEditing && isDuplicate()) return;
 
-    if (isDuplicate) {
-      noticeDuplicateError();
-      onRemove(index);
-      return;
-    }
-
-    finishEditingMyInterest();
     onBlur(e);
+    setIsEditing(false);
+    clearErrors('myInterests');
   };
 
   const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const next = e.target.value.trim();
 
     if (REG_EXP.ONLY_ENG_NUM.test(next)) {
-      setIsWord(next);
-    }
-
-    onChange(e);
-  };
-
-  const preventSpacebar = (e: KeyboardEvent<HTMLButtonElement>) => {
-    if (e.key === ' ') {
-      e.preventDefault();
+      setIsWord(() => next);
+      onChange(e);
     }
   };
 
@@ -104,11 +93,8 @@ const MyInterestField = ({
       type="button"
       className={isEditing ? Styles.editing : Styles.completed}
       onClick={clickHandler}
-      onKeyUp={preventSpacebar}
     >
       <input
-        {...formProps}
-        {...props}
         type={isEditing ? 'text' : 'hidden'}
         value={word}
         className={Styles.myInterestInput}
@@ -116,7 +102,9 @@ const MyInterestField = ({
         maxLength={15}
         onChange={changeHandler}
         onBlur={blurHandler}
-        onKeyUp={keyupHandler}
+        onKeyDown={keydownHandler}
+        {...formProps}
+        {...props}
       />
       {!isEditing && (
         <>

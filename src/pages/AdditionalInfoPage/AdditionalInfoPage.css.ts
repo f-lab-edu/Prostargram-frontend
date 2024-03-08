@@ -97,6 +97,6 @@ export const addInterestButton = style([
   addtionalDefaultButton,
   {
     width: '4.625rem',
-    height: '2.5rem',
+    height: '41px',
   },
 ]);

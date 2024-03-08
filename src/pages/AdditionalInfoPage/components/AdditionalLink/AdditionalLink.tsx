@@ -1,4 +1,5 @@
 import { useFormContext } from 'react-hook-form';
+import { KeyboardEvent } from 'react';
 
 import Input from '@components/common/Input';
 
@@ -13,10 +14,17 @@ interface AdditionalLinkProps {
 const AdditionalLink = ({ index, removeHandler }: AdditionalLinkProps) => {
   const { register } = useFormContext();
 
+  const keyupHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+    }
+  };
+
   return (
     <Input
       type="text"
       placeholder="https://github.com/example"
+      onKeyDown={keyupHandler}
       postfix={
         index !== 0 && (
           <button

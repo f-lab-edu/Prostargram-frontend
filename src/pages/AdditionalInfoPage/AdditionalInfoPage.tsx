@@ -50,7 +50,7 @@ const AdditionalInfoPage = () => {
     control,
   });
 
-  const onSubmit: SubmitHandler<IAddionalInfoType> = (values) => {
+  const submitHander: SubmitHandler<IAddionalInfoType> = (values) => {
     const { links, interests, myInterests } = values;
     const additionalInfo = {
       interests,
@@ -85,7 +85,7 @@ const AdditionalInfoPage = () => {
     <div className={Styles.container}>
       <Logo />
 
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(submitHander)}>
         <FormProvider {...methods}>
           <h1 className={Styles.subTitle}>추가 정보</h1>
           <Field>
@@ -150,7 +150,7 @@ const AdditionalInfoPage = () => {
               )}
             </Field.FieldBox>
           </Field>
-          <Button type="button">회원가입 완료</Button>
+          <Button>회원가입 완료</Button>
         </FormProvider>
       </form>
     </div>
