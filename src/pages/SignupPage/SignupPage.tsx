@@ -5,7 +5,8 @@ import Logo from '@components/common/Logo';
 import Input from '@components/common/Input';
 import Field from '@components/common/Field';
 import Button from '@components/common/Button';
-import validators, { REG_EXP } from '@utils/validate';
+import { REG_EXP } from '@constants/regExp';
+import validators from '@utils/validate';
 
 import * as Styles from './SignupPage.css';
 

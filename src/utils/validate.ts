@@ -1,13 +1,5 @@
 import { FieldValues, RegisterOptions } from 'react-hook-form';
-
-export const REG_EXP = {
-  EMAIL:
-    /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i,
-  PASSWORD:
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@$!%*?&.,])[A-Za-z\d$@$!%*?&.,]/,
-  NICKNAME: /^(?=.*[a-z0-9가-힣_.])[a-z0-9가-힣_.]{2,16}$/i,
-  CONFIRM: /[\d]$/,
-};
+import { REG_EXP } from '@constants/regExp';
 
 const email: () => RegisterOptions<FieldValues> = () => ({
   required: '이메일은 필수 입력 사항입니다.',
