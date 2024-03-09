@@ -5,9 +5,9 @@ import { style } from '@vanilla-extract/css';
 export const fieldContainer = style([
   {
     width: '100%',
-    marginBottom: 15,
+    marginBottom: 20,
   },
-  responsiveStyle({ desktop: { marginBottom: 20 } }),
+  responsiveStyle({ desktop: { marginBottom: 30 } }),
 ]);
 
 export const label = style({
