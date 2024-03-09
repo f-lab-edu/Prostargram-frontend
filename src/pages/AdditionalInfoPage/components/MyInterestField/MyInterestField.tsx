@@ -44,7 +44,7 @@ const MyInterestField = ({
     });
 
   const isDuplicate = () => {
-    if (checkList.includes(word)) {
+    if (word !== '' && checkList.includes(word)) {
       noticeDuplicateError();
       onRemove(index);
       return true;
