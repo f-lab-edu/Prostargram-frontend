@@ -1,11 +1,6 @@
-import {
-  useForm,
-  FormProvider,
-  SubmitHandler,
-  useFieldArray,
-} from 'react-hook-form';
+import { FormProvider, SubmitHandler } from 'react-hook-form';
 
-import { RECOMMANED_INTERESTS } from 'src/data/mock';
+import { RECOMMANED_INTERESTS } from '@data/mock';
 import Logo from '@components/common/Logo';
 import Field from '@components/common/Field';
 import Button from '@components/common/Button';
@@ -15,6 +10,8 @@ import AdditionalLink from './components/AdditionalLink';
 import MyInterestField from './components/MyInterestField';
 import InterestCheckbox from './components/InterestCheckbox';
 import { IAddionalInfoType } from './types/AdditionalInfoTypes';
+import useAdditionalInfoForm from './hooks/useAdditionalInfoForm';
+import useAdditionalInfoFieldArray from './hooks/useAdditionalInfoFieldArray';
 
 import * as Styles from './AdditionalInfoPage.css';
 
@@ -22,35 +19,32 @@ const LINK_FIELDS_LIMIT = 3;
 const MY_INTERESTS_FIELDS_LIMIT = 10;
 
 const AdditionalInfoPage = () => {
-  const methods = useForm<IAddionalInfoType>({
-    defaultValues: { links: [{ link: '' }], interests: [], myInterests: [] },
-  });
-  const {
-    handleSubmit,
-    getValues,
-    control,
-    formState: { errors },
-  } = methods;
+  const { methods, getValues, handleSubmit, errors } =
+    useAdditionalInfoForm<IAddionalInfoType>({
+      defaultValues: { links: [{ link: '' }], interests: [], myInterests: [] },
+    });
 
   const {
-    fields: linkfields,
-    append: appendLink,
-    remove: removeLink,
-  } = useFieldArray({
+    fields: linkFields,
+    appendField: appendLink,
+    removeField: removeLink,
+  } = useAdditionalInfoFieldArray<IAddionalInfoType>({
     name: 'links',
-    control,
+    control: methods.control,
+    fieldLimit: LINK_FIELDS_LIMIT,
   });
 
   const {
     fields: myInterestsFields,
-    append: appendMyInterest,
-    remove: removeMyInterest,
-  } = useFieldArray({
+    appendField: appendMyInterest,
+    removeField: removeMyInterest,
+  } = useAdditionalInfoFieldArray<IAddionalInfoType>({
     name: 'myInterests',
-    control,
+    control: methods.control,
+    fieldLimit: MY_INTERESTS_FIELDS_LIMIT,
   });
 
-  const submitHander: SubmitHandler<IAddionalInfoType> = (values) => {
+  const submitHandler: SubmitHandler<IAddionalInfoType> = (values) => {
     const { links, interests, myInterests } = values;
     const additionalInfo = {
       interests,
@@ -61,21 +55,6 @@ const AdditionalInfoPage = () => {
     console.log(additionalInfo);
   };
 
-  const appendLinks = () => {
-    if (linkfields.length < LINK_FIELDS_LIMIT) {
-      appendLink({ link: '' });
-    }
-  };
-
-  const appendMyInterests = () => {
-    if (myInterestsFields.length < MY_INTERESTS_FIELDS_LIMIT) {
-      appendMyInterest({ myInterest: '' });
-    }
-  };
-
-  const removeLinks = (index: number) => removeLink(index);
-  const removeMyInterests = (index: number) => removeMyInterest(index);
-
   const currentInterestList = [
     ...getValues('interests'),
     ...getValues('myInterests').map(({ myInterest }) => myInterest),
@@ -85,25 +64,25 @@ const AdditionalInfoPage = () => {
     <div className={Styles.container}>
       <Logo />
 
-      <form onSubmit={handleSubmit(submitHander)}>
+      <form onSubmit={handleSubmit(submitHandler)}>
         <FormProvider {...methods}>
           <h1 className={Styles.subTitle}>추가 정보</h1>
           <Field>
             <Field.FieldLabel htmlFor="links">링크 (최대 3개)</Field.FieldLabel>
             <Field.FieldBox className={Styles.linkField}>
-              {linkfields.map((field, index) => (
+              {linkFields.map((field, index) => (
                 <AdditionalLink
                   key={field.id}
                   index={index}
-                  removeHandler={removeLinks}
+                  removeHandler={() => removeLink(index)}
                 />
               ))}
-              {linkfields.length !== LINK_FIELDS_LIMIT && (
+              {linkFields.length !== LINK_FIELDS_LIMIT && (
                 <Button
                   type="button"
                   fill="white"
                   className={Styles.addLinkButton}
-                  onClick={appendLinks}
+                  onClick={() => appendLink({ link: '' })}
                 >
                   <Plus />
                 </Button>
@@ -135,7 +114,7 @@ const AdditionalInfoPage = () => {
                   key={field.id}
                   index={index}
                   checkList={currentInterestList}
-                  onRemove={removeMyInterests}
+                  onRemove={removeMyInterest}
                 />
               ))}
               {myInterestsFields.length !== MY_INTERESTS_FIELDS_LIMIT && (
@@ -143,7 +122,7 @@ const AdditionalInfoPage = () => {
                   type="button"
                   fill="white"
                   className={Styles.addInterestButton}
-                  onClick={appendMyInterests}
+                  onClick={() => appendMyInterest({ myInterest: '' })}
                 >
                   <Plus width="20px" />
                 </Button>
