@@ -4,7 +4,7 @@ import * as Styles from './Button.css';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: 'small' | 'medium' | 'large';
-  fill?: 'blue' | 'red' | 'gray';
+  fill?: 'blue' | 'red' | 'white' | 'gray';
   className?: string;
 }
 

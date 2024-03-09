@@ -23,12 +23,13 @@
     "paths": {
       "@assets/*": ["src/assets/*"],
       "@components/*": ["src/components/*"],
+      "@data/*": ["src/data/*"],
       "@styles/*": ["src/styles/*"],
       "@hooks/*": ["src/hooks/*"],
       "@constants/*": ["src/constants/*"],
       "@utils/*": ["src/utils/*"]
     }
   },
-  "include": ["src", "tests"],
+  "include": ["src/**/*", "tests"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -11,14 +11,14 @@ const defaultButtonStyle = style([
     fontWeight: 'bold',
     textAlign: 'center',
     cursor: 'pointer',
-    transition: '0.1s filter',
+    transition: 'filter 0.1s',
   },
   responsiveStyle({}),
 ]);
 
 const makeButtonStyle = (color: keyof typeof vars.colors) => ({
   backgroundColor: vars.colors[color],
-  color: vars.colors.white,
+  color: color === 'white' ? vars.colors['gray-1'] : vars.colors.white,
   ':hover': {
     filter: 'brightness(115%)',
   },
@@ -43,6 +43,11 @@ export const buttonStyle = recipe({
       blue: [defaultButtonStyle, makeButtonStyle('primary-1')],
       gray: [defaultButtonStyle, makeButtonStyle('gray-2')],
       red: [defaultButtonStyle, makeButtonStyle('red')],
+      white: [
+        defaultButtonStyle,
+        makeButtonStyle('white'),
+        { border: '1px solid black', transition: 'background 0.1s' },
+      ],
     },
     disabled: {
       true: [
