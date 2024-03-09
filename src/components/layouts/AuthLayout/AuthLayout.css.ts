@@ -12,7 +12,6 @@ export const container = style([
   flexCenter,
   {
     width: '100%',
-    backgroundColor: vars.colors['gray-9'],
   },
   responsiveStyle({ desktop: { height: '100%' } }),
 ]);
