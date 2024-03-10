@@ -21,7 +21,7 @@ describe('<GithubSignupPage />', () => {
     const subTitle = screen.getByText('회원가입');
     expect(subTitle).toBeInTheDocument();
 
-    const emailLabel = screen.getByLabelText('*이메일');
+    const emailLabel = screen.getByLabelText(/이메일/);
     expect(emailLabel).toBeInTheDocument();
 
     const requestAuthenticationButton = screen.getByRole('button', {
@@ -29,7 +29,7 @@ describe('<GithubSignupPage />', () => {
     });
     expect(requestAuthenticationButton).toBeInTheDocument();
 
-    const nicknameLabel = screen.getByLabelText('*닉네임');
+    const nicknameLabel = screen.getByLabelText(/닉네임/);
     expect(nicknameLabel).toBeInTheDocument();
 
     const checkDuplicateButton = screen.getByRole('button', {
@@ -58,16 +58,16 @@ describe('<GithubSignupPage />', () => {
         '이메일 주소 형식에 맞게 입력해주세요.',
       );
     });
-  });
-  it('이메일 입력 후 "인증 요청" 버튼을 클릭하면, 버튼이 비활성화 되고 "요청 완료"로 변경됩니다. ', async () => {
-    const emailInput = screen.getByPlaceholderText('이메일을 입력해주세요.');
-    await userEvent.type(emailInput, 'test@naver.com');
+    it('이메일 입력 후 "인증 요청" 버튼을 클릭하면, 버튼이 비활성화 되고 "요청 완료"로 변경됩니다. ', async () => {
+      const emailInput = screen.getByPlaceholderText('이메일을 입력해주세요.');
+      await userEvent.type(emailInput, 'test@naver.com');
 
-    const submitButton = screen.getByRole('button', { name: '인증 요청' });
-    await userEvent.click(submitButton);
+      const submitButton = screen.getByRole('button', { name: '인증 요청' });
+      await userEvent.click(submitButton);
 
-    expect(submitButton).toBeDisabled();
-    expect(submitButton).toHaveTextContent('요청 완료');
+      expect(submitButton).toBeDisabled();
+      expect(submitButton).toHaveTextContent('요청 완료');
+    });
   });
 
   describe('인증 확인 필드', () => {

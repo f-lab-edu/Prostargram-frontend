@@ -27,3 +27,8 @@ globalStyle(`*:not(${[...parentElements, ...childElements].join()})`, {
   boxSizing: 'border-box',
   fontFamily: Pretendard,
 });
+
+// 자동 완성 스타일 초기화
+// globalStyle('input:-webkit-autofill', {
+//   transition: 'background-color 5000s ease-in-out 0s',
+// });

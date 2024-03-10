@@ -16,3 +16,25 @@ export const container = style([
     },
   }),
 ]);
+
+export const form = style({
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'space-between',
+  minHeight: '33rem',
+});
+
+export const subTitle = style([
+  {
+    fontSize: vars.font['bold-20'].fontSize,
+    fontWeight: vars.font['bold-20'].fontWeight,
+  },
+  responsiveStyle({
+    desktop: { marginTop: '3.125rem', marginBottom: '1.5rem' },
+  }),
+]);
+
+export const button = style([
+  {},
+  responsiveStyle({ desktop: { flex: 1, minWidth: 100 } }),
+]);
