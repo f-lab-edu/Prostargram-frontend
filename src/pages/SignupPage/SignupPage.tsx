@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { KeyboardEvent, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import Logo from '@components/common/Logo';
@@ -10,6 +10,17 @@ import validators from '@utils/validate';
 
 import * as Styles from './SignupPage.css';
 
+const CONFIRM_STATES = {
+  PENDING: 'pending',
+  REQUEST: 'request',
+  CONFIRM: 'confirm',
+};
+
+const NICKNAME_STATES = {
+  PENDING: 'pending',
+  CONFIRM: 'confirm',
+};
+
 interface ISignUpFormValueTypes {
   email: string;
   password: string;
@@ -17,9 +28,6 @@ interface ISignUpFormValueTypes {
   nickname: string;
   confirm: string;
 }
-
-type ConfirmStateType = 'pending' | 'request' | 'confirm';
-type NicknameStateType = 'pending' | 'confirm';
 
 const SignupPage = () => {
   const {
@@ -30,9 +38,8 @@ const SignupPage = () => {
     clearErrors,
     formState: { errors },
   } = useForm<ISignUpFormValueTypes>();
-  const [confirmState, setConfirmState] = useState<ConfirmStateType>('pending');
-  const [nicknameState, setNicknameState] =
-    useState<NicknameStateType>('pending');
+  const [confirmState, setConfirmState] = useState(CONFIRM_STATES.PENDING);
+  const [nicknameState, setNicknameState] = useState(NICKNAME_STATES.PENDING);
 
   const requestConfirmNumber = async () => {
     const emailValue = watch('email');
@@ -85,17 +92,38 @@ const SignupPage = () => {
     setConfirmState('confirm');
   };
 
-  const checkNickname = () => {
-    const nicknameValue = watch('nickname');
-    if (!nicknameValue) {
+  const checkNickname = async () => {
+    const nickname = watch('nickname');
+    if (!nickname) {
       setError('nickname', {
         type: 'required',
         message: '닉네임을 입력해주세요.',
       });
       return;
     }
+    if (nickname.length < 2) {
+      setError('nickname', {
+        type: 'minLength',
+        message: '닉네임은 최소 2자 이상 작성해야 합니다.',
+      });
+      return;
+    }
+    if (nickname.length > 16) {
+      setError('nickname', {
+        type: 'maxLength',
+        message: '닉네임은 최대 길이 16자 이하로 작성해야 합니다.',
+      });
+      return;
+    }
+    if (!REG_EXP.NICKNAME.test(nickname)) {
+      setError('nickname', {
+        type: 'validate',
+        message: '닉네임은 영어(소문자),한글,숫자, _, .만 사용 가능합니다.',
+      });
+      return;
+    }
 
-    if (nicknameValue === 'nickname') {
+    if (nickname === 'nickname') {
       setError('nickname', {
         type: 'validate',
         message: '중복된 닉네임입니다.',
@@ -104,18 +132,16 @@ const SignupPage = () => {
     }
 
     clearErrors('nickname');
-    setNicknameState('confirm');
+    setNicknameState(NICKNAME_STATES.CONFIRM);
   };
 
   const onSubmit: SubmitHandler<ISignUpFormValueTypes> = (values) => {
-    if (confirmState === 'confirm') {
-      console.log(values);
-    }
+    console.log(values);
   };
 
-  const isPending = confirmState === 'pending';
-  const isConfirm = confirmState === 'confirm';
-  const nicknameConfirmed = nicknameState === 'confirm';
+  const preventEnter = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') e.preventDefault();
+  };
 
   return (
     <div className={Styles.container}>
@@ -135,17 +161,20 @@ const SignupPage = () => {
               type="text"
               placeholder="이메일을 입력해주세요."
               maxLength={30}
-              disabled={!isPending}
+              disabled={confirmState !== CONFIRM_STATES.PENDING}
               state={(errors.email?.message && 'fail') || 'normal'}
+              onKeyDown={preventEnter}
               {...register('email', validators.email())}
             />
             <Button
               type="button"
               className={Styles.button}
               onClick={requestConfirmNumber}
-              disabled={!isPending}
+              disabled={confirmState !== CONFIRM_STATES.PENDING}
             >
-              {isPending ? '인증 요청' : '요청 완료'}
+              {confirmState === CONFIRM_STATES.PENDING
+                ? '인증 요청'
+                : '요청 완료'}
             </Button>
           </Field.FieldBox>
           <Field.FieldErrorMessage>
@@ -153,7 +182,7 @@ const SignupPage = () => {
           </Field.FieldErrorMessage>
         </Field>
 
-        {!isPending && (
+        {confirmState !== CONFIRM_STATES.PENDING && (
           <Field>
             <Field.FieldLabel htmlFor="confirm">
               <Field.FieldEmphasize>*</Field.FieldEmphasize>
@@ -165,17 +194,23 @@ const SignupPage = () => {
                 type="text"
                 placeholder="인증번호를 입력해주세요."
                 maxLength={6}
-                disabled={isConfirm}
+                disabled={confirmState === CONFIRM_STATES.CONFIRM}
                 state={errors.confirm?.message ? 'fail' : 'normal'}
-                {...register('confirm', validators.confirm(isConfirm))}
+                onKeyDown={preventEnter}
+                {...register(
+                  'confirm',
+                  validators.confirm(confirmState === CONFIRM_STATES.CONFIRM),
+                )}
               />
               <Button
                 type="button"
                 className={Styles.button}
                 onClick={checkConfirmNumber}
-                disabled={isConfirm}
+                disabled={confirmState === CONFIRM_STATES.CONFIRM}
               >
-                {isConfirm ? '인증 완료' : '인증 확인'}
+                {confirmState === CONFIRM_STATES.CONFIRM
+                  ? '인증 완료'
+                  : '인증 확인'}
               </Button>
             </Field.FieldBox>
             <Field.FieldErrorMessage>
@@ -197,6 +232,7 @@ const SignupPage = () => {
               minLength={8}
               maxLength={20}
               state={errors.password?.message ? 'fail' : 'normal'}
+              onKeyDown={preventEnter}
               {...register('password', validators.password())}
             />
           </Field.FieldBox>
@@ -218,6 +254,7 @@ const SignupPage = () => {
               minLength={8}
               maxLength={20}
               state={errors.repassword?.message ? 'fail' : 'normal'}
+              onKeyDown={preventEnter}
               {...register(
                 'repassword',
                 validators.repassword(watch('password')),
@@ -242,14 +279,18 @@ const SignupPage = () => {
               minLength={2}
               maxLength={16}
               state={errors.nickname?.message ? 'fail' : 'normal'}
-              disabled={nicknameConfirmed}
-              {...register('nickname', validators.nickname(nicknameConfirmed))}
+              disabled={nicknameState === NICKNAME_STATES.CONFIRM}
+              onKeyDown={preventEnter}
+              {...register(
+                'nickname',
+                validators.nickname(nicknameState === NICKNAME_STATES.CONFIRM),
+              )}
             />
             <Button
               type="button"
               className={Styles.button}
               onClick={checkNickname}
-              disabled={nicknameConfirmed}
+              disabled={nicknameState === NICKNAME_STATES.CONFIRM}
             >
               중복 확인
             </Button>

@@ -10,13 +10,13 @@ import { REG_EXP } from '@constants/regExp';
 
 import * as Styles from './GithubSignupPage.css';
 
-const ConfirmStates = {
+const CONFIRM_STATES = {
   PENDING: 'pending',
   REQUEST: 'request',
   CONFIRM: 'confirm',
 };
 
-const NicknameStates = {
+const NICKNAME_STATES = {
   PENDING: 'pending',
   CONFIRM: 'confirm',
 };
@@ -28,8 +28,8 @@ interface IGithubSignupFormType {
 }
 
 const GithubSignupPage = () => {
-  const [confirmState, setConfirmState] = useState(ConfirmStates.PENDING);
-  const [nicknameState, setNicknameState] = useState(NicknameStates.PENDING);
+  const [confirmState, setConfirmState] = useState(CONFIRM_STATES.PENDING);
+  const [nicknameState, setNicknameState] = useState(NICKNAME_STATES.PENDING);
 
   const {
     register,
@@ -61,7 +61,7 @@ const GithubSignupPage = () => {
       return;
     }
     clearErrors('email');
-    setConfirmState(ConfirmStates.REQUEST);
+    setConfirmState(CONFIRM_STATES.REQUEST);
   };
 
   const checkConfirmNumber = async () => {
@@ -85,7 +85,7 @@ const GithubSignupPage = () => {
       return;
     }
     clearErrors('confirm');
-    setConfirmState(ConfirmStates.CONFIRM);
+    setConfirmState(CONFIRM_STATES.CONFIRM);
   };
 
   const checkNickname = async () => {
@@ -128,7 +128,7 @@ const GithubSignupPage = () => {
     }
 
     clearErrors('nickname');
-    setNicknameState(NicknameStates.CONFIRM);
+    setNicknameState(NICKNAME_STATES.CONFIRM);
   };
 
   const preventEnter = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -153,7 +153,7 @@ const GithubSignupPage = () => {
                 type="text"
                 placeholder="이메일을 입력해주세요."
                 maxLength={30}
-                disabled={confirmState !== ConfirmStates.PENDING}
+                disabled={confirmState !== CONFIRM_STATES.PENDING}
                 state={(errors.email?.message && 'fail') || 'normal'}
                 onKeyDown={preventEnter}
                 {...register('email', validators.email())}
@@ -162,9 +162,9 @@ const GithubSignupPage = () => {
                 type="button"
                 className={Styles.button}
                 onClick={requestConfirmNumber}
-                disabled={confirmState !== ConfirmStates.PENDING}
+                disabled={confirmState !== CONFIRM_STATES.PENDING}
               >
-                {confirmState === ConfirmStates.PENDING
+                {confirmState === CONFIRM_STATES.PENDING
                   ? '인증 요청'
                   : '요청 완료'}
               </Button>
@@ -174,7 +174,7 @@ const GithubSignupPage = () => {
             </Field.FieldErrorMessage>
           </Field>
 
-          {confirmState !== ConfirmStates.PENDING && (
+          {confirmState !== CONFIRM_STATES.PENDING && (
             <Field>
               <Field.FieldLabel htmlFor="confirm">
                 <Field.FieldEmphasize>*</Field.FieldEmphasize>
@@ -186,21 +186,21 @@ const GithubSignupPage = () => {
                   type="text"
                   placeholder="인증번호를 입력해주세요."
                   maxLength={6}
-                  disabled={confirmState === ConfirmStates.CONFIRM}
+                  disabled={confirmState === CONFIRM_STATES.CONFIRM}
                   state={errors.confirm?.message ? 'fail' : 'normal'}
                   onKeyDown={preventEnter}
                   {...register(
                     'confirm',
-                    validators.confirm(confirmState === ConfirmStates.CONFIRM),
+                    validators.confirm(confirmState === CONFIRM_STATES.CONFIRM),
                   )}
                 />
                 <Button
                   type="button"
                   className={Styles.button}
                   onClick={checkConfirmNumber}
-                  disabled={confirmState === ConfirmStates.CONFIRM}
+                  disabled={confirmState === CONFIRM_STATES.CONFIRM}
                 >
-                  {confirmState === ConfirmStates.CONFIRM
+                  {confirmState === CONFIRM_STATES.CONFIRM
                     ? '인증 완료'
                     : '인증 확인'}
                 </Button>
@@ -222,17 +222,19 @@ const GithubSignupPage = () => {
                 type="text"
                 placeholder="닉네임을 입력해주세요."
                 state={errors.nickname?.message ? 'fail' : 'normal'}
-                disabled={nicknameState === NicknameStates.CONFIRM}
+                disabled={nicknameState === NICKNAME_STATES.CONFIRM}
                 {...register(
                   'nickname',
-                  validators.nickname(nicknameState === NicknameStates.CONFIRM),
+                  validators.nickname(
+                    nicknameState === NICKNAME_STATES.CONFIRM,
+                  ),
                 )}
               />
               <Button
                 type="button"
                 className={Styles.button}
                 onClick={checkNickname}
-                disabled={nicknameState === NicknameStates.CONFIRM}
+                disabled={nicknameState === NICKNAME_STATES.CONFIRM}
               >
                 중복 확인
               </Button>
