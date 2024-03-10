@@ -1,5 +1,5 @@
 import { KeyboardEvent, useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 
 import Logo from '@components/common/Logo';
 import Field from '@components/common/Field';
@@ -10,19 +10,26 @@ import { REG_EXP } from '@constants/regExp';
 
 import * as Styles from './GithubSignupPage.css';
 
+const ConfirmStates = {
+  PENDING: 'pending',
+  REQUEST: 'request',
+  CONFIRM: 'confirm',
+};
+
+const NicknameStates = {
+  PENDING: 'pending',
+  CONFIRM: 'confirm',
+};
+
 interface IGithubSignupFormType {
   email: string;
   nickname: string;
   confirm: string;
 }
 
-type ConfirmStateType = 'pending' | 'request' | 'confirm';
-type NicknameStateType = 'pending' | 'confirm';
-
 const GithubSignupPage = () => {
-  const [confirmState, setConfirmState] = useState<ConfirmStateType>('pending');
-  const [nicknameState, setNicknameState] =
-    useState<NicknameStateType>('pending');
+  const [confirmState, setConfirmState] = useState(ConfirmStates.PENDING);
+  const [nicknameState, setNicknameState] = useState(NicknameStates.PENDING);
 
   const {
     register,
@@ -33,72 +40,86 @@ const GithubSignupPage = () => {
     formState: { errors },
   } = useForm<IGithubSignupFormType>();
 
-  const onSubmit: SubmitHandler<IGithubSignupFormType> = (values) => {
+  const onSubmit = (values: IGithubSignupFormType) => {
     console.log(values);
   };
 
   const requestConfirmNumber = async () => {
-    const emailValue = watch('email');
-    if (!emailValue) {
+    const email = watch('email');
+    if (!email) {
       setError('email', {
         type: 'required',
         message: '이메일을 입력해주세요.',
       });
       return;
     }
-    if (!REG_EXP.EMAIL.test(emailValue)) {
+    if (!REG_EXP.EMAIL.test(email)) {
       setError('email', {
         type: 'validate',
         message: '이메일 형식이 알맞지 않습니다.',
       });
       return;
     }
-
     clearErrors('email');
-    setConfirmState('request');
+    setConfirmState(ConfirmStates.REQUEST);
   };
 
   const checkConfirmNumber = async () => {
-    const confirmValue = watch('confirm');
-    if (!confirmValue) {
+    const confirm = watch('confirm');
+    if (!confirm) {
       setError('confirm', {
         type: 'required',
         message: '인증번호를 입력해주세요.',
       });
       return;
     }
-
-    if (confirmValue.length < 6) {
-      setError('confirm', {
-        type: 'min',
-        message: '인증번호는 6자리 입니다.',
-      });
+    if (confirm.length < 6) {
+      setError('confirm', { type: 'min', message: '인증번호는 6자리 입니다.' });
       return;
     }
-
-    if (!REG_EXP.CONFIRM.test(confirmValue)) {
+    if (!REG_EXP.CONFIRM.test(confirm)) {
       setError('confirm', {
         type: 'validate',
         message: '인증번호는 숫자로만 입력해야 합니다.',
       });
       return;
     }
-
     clearErrors('confirm');
-    setConfirmState('confirm');
+    setConfirmState(ConfirmStates.CONFIRM);
   };
 
-  const checkNickname = () => {
-    const nicknameValue = watch('nickname');
-    if (!nicknameValue) {
+  const checkNickname = async () => {
+    const nickname = watch('nickname');
+    if (!nickname) {
       setError('nickname', {
         type: 'required',
         message: '닉네임을 입력해주세요.',
       });
       return;
     }
+    if (nickname.length < 2) {
+      setError('nickname', {
+        type: 'minLength',
+        message: '닉네임은 최소 2자 이상 작성해야 합니다.',
+      });
+      return;
+    }
+    if (nickname.length > 16) {
+      setError('nickname', {
+        type: 'maxLength',
+        message: '닉네임은 최대 길이 16자 이하로 작성해야 합니다.',
+      });
+      return;
+    }
+    if (!REG_EXP.NICKNAME.test(nickname)) {
+      setError('nickname', {
+        type: 'validate',
+        message: '닉네임은 영어(소문자),한글,숫자, _, .만 사용 가능합니다.',
+      });
+      return;
+    }
 
-    if (nicknameValue === 'nickname') {
+    if (nickname === 'nickname') {
       setError('nickname', {
         type: 'validate',
         message: '중복된 닉네임입니다.',
@@ -107,18 +128,12 @@ const GithubSignupPage = () => {
     }
 
     clearErrors('nickname');
-    setNicknameState('confirm');
+    setNicknameState(NicknameStates.CONFIRM);
   };
 
   const preventEnter = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-    }
+    if (e.key === 'Enter') e.preventDefault();
   };
-
-  const isPending = confirmState === 'pending';
-  const isConfirm = confirmState === 'confirm';
-  const nicknameConfirmed = nicknameState === 'confirm';
 
   return (
     <div className={Styles.container}>
@@ -138,7 +153,7 @@ const GithubSignupPage = () => {
                 type="text"
                 placeholder="이메일을 입력해주세요."
                 maxLength={30}
-                disabled={!isPending}
+                disabled={confirmState !== ConfirmStates.PENDING}
                 state={(errors.email?.message && 'fail') || 'normal'}
                 onKeyDown={preventEnter}
                 {...register('email', validators.email())}
@@ -147,9 +162,11 @@ const GithubSignupPage = () => {
                 type="button"
                 className={Styles.button}
                 onClick={requestConfirmNumber}
-                disabled={!isPending}
+                disabled={confirmState !== ConfirmStates.PENDING}
               >
-                {isPending ? '인증 요청' : '요청 완료'}
+                {confirmState === ConfirmStates.PENDING
+                  ? '인증 요청'
+                  : '요청 완료'}
               </Button>
             </Field.FieldBox>
             <Field.FieldErrorMessage>
@@ -157,7 +174,7 @@ const GithubSignupPage = () => {
             </Field.FieldErrorMessage>
           </Field>
 
-          {!isPending && (
+          {confirmState !== ConfirmStates.PENDING && (
             <Field>
               <Field.FieldLabel htmlFor="confirm">
                 <Field.FieldEmphasize>*</Field.FieldEmphasize>
@@ -169,18 +186,23 @@ const GithubSignupPage = () => {
                   type="text"
                   placeholder="인증번호를 입력해주세요."
                   maxLength={6}
-                  disabled={isConfirm}
+                  disabled={confirmState === ConfirmStates.CONFIRM}
                   state={errors.confirm?.message ? 'fail' : 'normal'}
                   onKeyDown={preventEnter}
-                  {...register('confirm', validators.confirm(isConfirm))}
+                  {...register(
+                    'confirm',
+                    validators.confirm(confirmState === ConfirmStates.CONFIRM),
+                  )}
                 />
                 <Button
                   type="button"
                   className={Styles.button}
                   onClick={checkConfirmNumber}
-                  disabled={isConfirm}
+                  disabled={confirmState === ConfirmStates.CONFIRM}
                 >
-                  {isConfirm ? '인증 완료' : '인증 확인'}
+                  {confirmState === ConfirmStates.CONFIRM
+                    ? '인증 완료'
+                    : '인증 확인'}
                 </Button>
               </Field.FieldBox>
               <Field.FieldErrorMessage>
@@ -200,17 +222,17 @@ const GithubSignupPage = () => {
                 type="text"
                 placeholder="닉네임을 입력해주세요."
                 state={errors.nickname?.message ? 'fail' : 'normal'}
-                disabled={nicknameConfirmed}
+                disabled={nicknameState === NicknameStates.CONFIRM}
                 {...register(
                   'nickname',
-                  validators.nickname(nicknameConfirmed),
+                  validators.nickname(nicknameState === NicknameStates.CONFIRM),
                 )}
               />
               <Button
                 type="button"
                 className={Styles.button}
                 onClick={checkNickname}
-                disabled={nicknameConfirmed}
+                disabled={nicknameState === NicknameStates.CONFIRM}
               >
                 중복 확인
               </Button>

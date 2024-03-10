@@ -71,7 +71,7 @@ const nickname: (isConfirmed: boolean) => RegisterOptions<FieldValues> = (
   validate: {
     nicknameValidate: (v) =>
       REG_EXP.NICKNAME.test(v) ||
-      '닉네임은 영어,한글,숫자, _, .만 사용 가능합니다.',
+      '닉네임은 영어(소문자),한글,숫자, _, .만 사용 가능합니다.',
     nicknameConfirmValidate: () =>
       isConfirmed || '닉네임 중복 확인을 해 주세요.',
   },

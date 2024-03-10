@@ -109,7 +109,7 @@ describe('<GithubSignupPage />', () => {
       const confirmErrorMessage = screen.getByText(/6자리/);
       expect(confirmErrorMessage).toBeInTheDocument();
     });
-    it('인증 번호를 숫자가 아닌 문자를 입력한 뒤 인증 확인을 하면, 에러메시지가 발생합니다.', async () => {
+    it('인증 번호를 문자를 입력한 뒤 인증 확인을 하면, 에러메시지가 발생합니다.', async () => {
       const emailInput = screen.getByPlaceholderText('이메일을 입력해주세요.');
       await userEvent.type(emailInput, 'test@naver.com');
 
@@ -119,6 +119,23 @@ describe('<GithubSignupPage />', () => {
       const confirmInput =
         screen.getByPlaceholderText('인증번호를 입력해주세요.');
       await userEvent.type(confirmInput, 'aaaaaa');
+
+      const confirmButton = getButtonByName('인증 확인');
+      await userEvent.click(confirmButton);
+
+      const confirmErrorMessage = screen.getByText(/숫자로만/);
+      expect(confirmErrorMessage).toBeInTheDocument();
+    });
+    it('인증 번호를 숫자와 문자를 함께 입력한 뒤 인증 확인을 하면, 에러메시지가 발생합니다.', async () => {
+      const emailInput = screen.getByPlaceholderText('이메일을 입력해주세요.');
+      await userEvent.type(emailInput, 'test@naver.com');
+
+      const requestConfirmButton = getButtonByName('인증 요청');
+      await userEvent.click(requestConfirmButton);
+
+      const confirmInput =
+        screen.getByPlaceholderText('인증번호를 입력해주세요.');
+      await userEvent.type(confirmInput, 'aaaaa1');
 
       const confirmButton = getButtonByName('인증 확인');
       await userEvent.click(confirmButton);
@@ -146,7 +163,7 @@ describe('<GithubSignupPage />', () => {
       await userEvent.click(submitButton);
 
       const nicknameErrorMessage = screen.getByText(
-        '닉네임은 영어,한글,숫자, _, .만 사용 가능합니다.',
+        '닉네임은 영어(소문자),한글,숫자, _, .만 사용 가능합니다.',
       );
       expect(nicknameErrorMessage).toBeInTheDocument();
     });
