@@ -172,7 +172,7 @@ const GithubSignupPage = () => {
                   disabled={isConfirm}
                   state={errors.confirm?.message ? 'fail' : 'normal'}
                   onKeyDown={preventEnter}
-                  {...register('confirm', validators.confirm())}
+                  {...register('confirm', validators.confirm(isConfirm))}
                 />
                 <Button
                   type="button"
@@ -189,7 +189,7 @@ const GithubSignupPage = () => {
             </Field>
           )}
 
-          <Field>
+          <Field className={Styles.lastField}>
             <Field.FieldLabel htmlFor="nickname">
               <Field.FieldEmphasize>*</Field.FieldEmphasize>
               닉네임
@@ -199,11 +199,12 @@ const GithubSignupPage = () => {
                 id="nickname"
                 type="text"
                 placeholder="닉네임을 입력해주세요."
-                minLength={2}
-                maxLength={16}
                 state={errors.nickname?.message ? 'fail' : 'normal'}
                 disabled={nicknameConfirmed}
-                {...register('nickname', validators.nickname())}
+                {...register(
+                  'nickname',
+                  validators.nickname(nicknameConfirmed),
+                )}
               />
               <Button
                 type="button"

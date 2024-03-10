@@ -167,7 +167,7 @@ const SignupPage = () => {
                 maxLength={6}
                 disabled={isConfirm}
                 state={errors.confirm?.message ? 'fail' : 'normal'}
-                {...register('confirm', validators.confirm())}
+                {...register('confirm', validators.confirm(isConfirm))}
               />
               <Button
                 type="button"
@@ -243,7 +243,7 @@ const SignupPage = () => {
               maxLength={16}
               state={errors.nickname?.message ? 'fail' : 'normal'}
               disabled={nicknameConfirmed}
-              {...register('nickname', validators.nickname())}
+              {...register('nickname', validators.nickname(nicknameConfirmed))}
             />
             <Button
               type="button"

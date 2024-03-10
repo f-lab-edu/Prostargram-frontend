@@ -17,24 +17,38 @@ export const container = style([
   }),
 ]);
 
-export const form = style({
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'space-between',
-  minHeight: '33rem',
-});
+export const form = style([
+  {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    minHeight: '22.75rem',
+  },
+  responsiveStyle({
+    desktop: {
+      minHeight: '33rem',
+    },
+  }),
+]);
 
 export const subTitle = style([
   {
     fontSize: vars.font['bold-20'].fontSize,
     fontWeight: vars.font['bold-20'].fontWeight,
+    marginTop: '2.5rem',
+    marginBottom: '1.25rem',
   },
   responsiveStyle({
     desktop: { marginTop: '3.125rem', marginBottom: '1.5rem' },
   }),
 ]);
 
-export const button = style([
-  {},
+export const button = style(
   responsiveStyle({ desktop: { flex: 1, minWidth: 100 } }),
+);
+
+export const lastField = style([
+  {
+    marginBottom: '3.75rem',
+  },
 ]);
