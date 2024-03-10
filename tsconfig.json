@@ -27,6 +27,7 @@
       "@styles/*": ["src/styles/*"],
       "@hooks/*": ["src/hooks/*"],
       "@constants/*": ["src/constants/*"],
+      "@pages/*": ["src/pages/*"],
       "@utils/*": ["src/utils/*"]
     }
   },
