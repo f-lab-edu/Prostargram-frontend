@@ -2,13 +2,10 @@ import { responsiveStyle } from '@styles/styles.css';
 import { vars } from '@styles/theme.css';
 import { style } from '@vanilla-extract/css';
 
-export const fieldContainer = style([
-  {
-    width: '100%',
-    marginBottom: 20,
-  },
-  responsiveStyle({ desktop: { marginBottom: 30 } }),
-]);
+export const fieldContainer = style({
+  width: '100%',
+  marginBottom: 20,
+});
 
 export const label = style({
   display: 'inline-block',

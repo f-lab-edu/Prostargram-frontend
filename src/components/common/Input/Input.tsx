@@ -29,7 +29,13 @@ const Input = forwardRef(
           variants,
         })}
       >
-        <input className={Styles.inputStyle} ref={ref} {...props} />
+        <input
+          className={Styles.inputStyle}
+          autoComplete="off"
+          disabled={disabled}
+          ref={ref}
+          {...props}
+        />
         {postfix}
       </div>
     );
