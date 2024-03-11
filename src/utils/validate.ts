@@ -1,7 +1,9 @@
 import { FieldValues, RegisterOptions } from 'react-hook-form';
 import { REG_EXP } from '@constants/regExp';
 
-const email: () => RegisterOptions<FieldValues> = () => ({
+const email: (isRequested: boolean) => RegisterOptions<FieldValues> = (
+  isRequested,
+) => ({
   required: '이메일은 필수 입력 사항입니다.',
   maxLength: {
     value: 30,
@@ -10,6 +12,8 @@ const email: () => RegisterOptions<FieldValues> = () => ({
   validate: {
     emailValidate: (v) =>
       REG_EXP.EMAIL.test(v) || '이메일 주소 형식에 맞게 입력해주세요.',
+    isRequestConfirmedValidate: () =>
+      isRequested || '이메일 인증을 완료해 주세요.',
   },
 });
 

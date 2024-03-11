@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import Logo from '@components/common/Logo';
@@ -19,6 +19,8 @@ interface IFormInput {
 }
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -48,7 +50,7 @@ const LoginPage = () => {
             maxLength={30}
             placeholder="이메일을 입력해주세요."
             errorMessage={isDirty ? errors.email?.message : undefined}
-            {...register('email', validator.email())}
+            {...register('email', validator.email(true))}
           />
           <ToggleWrapper>
             {({ isToggle, toggleHandler }) => (
@@ -92,7 +94,9 @@ const LoginPage = () => {
         <span className={Styles.orSpan}>OR</span>
       </div>
 
-      <Button fill="gray">GitHub 로그인</Button>
+      <Button fill="gray" onClick={() => navigate('github')}>
+        GitHub 로그인
+      </Button>
 
       <Typo as="p" fontSize="body-14" marginTop={45} textAlign="center">
         계정이 없으신가요?{' '}

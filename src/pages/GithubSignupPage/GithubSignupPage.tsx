@@ -1,5 +1,6 @@
-import { KeyboardEvent, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { KeyboardEvent, useState } from 'react';
 
 import Logo from '@components/common/Logo';
 import Field from '@components/common/Field';
@@ -28,6 +29,7 @@ interface IGithubSignupFormType {
 }
 
 const GithubSignupPage = () => {
+  const navigate = useNavigate();
   const [confirmState, setConfirmState] = useState(CONFIRM_STATES.PENDING);
   const [nicknameState, setNicknameState] = useState(NICKNAME_STATES.PENDING);
 
@@ -42,6 +44,7 @@ const GithubSignupPage = () => {
 
   const onSubmit = (values: IGithubSignupFormType) => {
     console.log(values);
+    navigate('/auth/info');
   };
 
   const requestConfirmNumber = async () => {
@@ -156,7 +159,10 @@ const GithubSignupPage = () => {
                 disabled={confirmState !== CONFIRM_STATES.PENDING}
                 state={(errors.email?.message && 'fail') || 'normal'}
                 onKeyDown={preventEnter}
-                {...register('email', validators.email())}
+                {...register(
+                  'email',
+                  validators.email(confirmState === CONFIRM_STATES.REQUEST),
+                )}
               />
               <Button
                 type="button"

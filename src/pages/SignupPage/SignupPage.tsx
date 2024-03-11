@@ -1,5 +1,6 @@
-import { KeyboardEvent, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { KeyboardEvent, useState } from 'react';
 
 import Logo from '@components/common/Logo';
 import Input from '@components/common/Input';
@@ -30,6 +31,8 @@ interface ISignUpFormValueTypes {
 }
 
 const SignupPage = () => {
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -137,6 +140,7 @@ const SignupPage = () => {
 
   const onSubmit: SubmitHandler<ISignUpFormValueTypes> = (values) => {
     console.log(values);
+    navigate('/auth/info');
   };
 
   const preventEnter = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -164,7 +168,10 @@ const SignupPage = () => {
               disabled={confirmState !== CONFIRM_STATES.PENDING}
               state={(errors.email?.message && 'fail') || 'normal'}
               onKeyDown={preventEnter}
-              {...register('email', validators.email())}
+              {...register(
+                'email',
+                validators.email(confirmState === CONFIRM_STATES.REQUEST),
+              )}
             />
             <Button
               type="button"
