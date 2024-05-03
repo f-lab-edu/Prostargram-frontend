@@ -1,5 +1,5 @@
-const MypagePage = () => {
-  return <div>MypagePage</div>;
+const MyFeedPage = () => {
+  return <div>MyFeedPage</div>;
 };
 
-export default MypagePage;
+export default MyFeedPage;

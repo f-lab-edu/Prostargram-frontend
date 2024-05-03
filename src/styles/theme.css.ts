@@ -41,6 +41,10 @@ export const vars = createThemeContract({
       fontSize: '',
       fontWeight: '',
     },
+    'bold-16': {
+      fontSize: '',
+      fontWeight: '',
+    },
     'bold-18': {
       fontSize: '',
       fontWeight: '',
@@ -103,6 +107,10 @@ export const lightTheme = createTheme(vars, {
     },
     'bold-14': {
       fontSize: '14px',
+      fontWeight: 'bold',
+    },
+    'bold-16': {
+      fontSize: '16px',
       fontWeight: 'bold',
     },
     'bold-18': {
