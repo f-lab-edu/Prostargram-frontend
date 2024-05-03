@@ -8,6 +8,7 @@ import {
 import Follow from '../Follow';
 import MyLink from '../MyLink';
 import FeedCount from '../FeedCount';
+import MyInterest from '../MyInterest';
 import MyInformation from '../MyInformation';
 
 import * as Styles from './Mypage.css';
@@ -72,10 +73,13 @@ const MyPage = ({ children, myData }: MyPageProps) => {
         </div>
       </div>
       <div className={Styles.flex}>
-        <div className={Styles.interest}>
-          {interests.map((interest) => (
-            <p key={interest}>{interest}</p>
-          ))}
+        <div className={Styles.myInterestWrapper}>
+          <p>관심사</p>
+          <div className={Styles.myInterestList}>
+            {interests.map((interest) => (
+              <MyInterest key={interest}>{interest}</MyInterest>
+            ))}
+          </div>
         </div>
         <div className={Styles.changeableArea}>{children}</div>
       </div>

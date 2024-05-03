@@ -74,14 +74,23 @@ export const linkWrapper = style([
   }),
 ]);
 
-export const interest = style([
+export const myInterestWrapper = style([
   borderBlack,
   responsiveStyle({
     desktop: {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '0.75rem',
       width: '18.75rem',
       padding: '2.8125rem',
       borderRight: '1px solid',
     },
+  }),
+]);
+
+export const myInterestList = style([
+  responsiveStyle({
+    desktop: { display: 'flex', gap: '5px', flexWrap: 'wrap' },
   }),
 ]);
 
