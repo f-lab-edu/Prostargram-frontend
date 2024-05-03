@@ -25,7 +25,7 @@ export const userBackground = style([
   }),
 ]);
 
-export const profileWrapper = style([
+export const profileAndFollowWrapper = style([
   responsiveStyle({
     desktop: {
       width: '18.75rem',
@@ -36,11 +36,12 @@ export const profileWrapper = style([
   }),
 ]);
 
-export const profile = style([
+export const profileWrapper = style([
   flexCenter,
   borderBlack,
   responsiveStyle({
     desktop: {
+      position: 'relative',
       width: '100%',
       height: '10.875rem',
       borderRight: `1px solid`,

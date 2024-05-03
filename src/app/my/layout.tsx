@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 
 import Mypage from './components/Mypage';
+
 import * as Styles from './Mypage.css';
 
 const MOCK_DATA_FOR_MY_PAGE = {
@@ -12,6 +13,8 @@ const MOCK_DATA_FOR_MY_PAGE = {
   feeds: 15186,
   links: ['http://www.naver.com', 'http://github.com'],
   interests: ['javascript', 'java', 'react', 'front'],
+  profileUrl:
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4vkwPhD-NHO6sV_3ailgWXjiP_WPM24J3IhkB3xZ-bQ&s',
 };
 
 interface MypageLayoutProps {

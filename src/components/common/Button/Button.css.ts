@@ -6,10 +6,12 @@ import { vars } from '@/styles/theme.css';
 
 const defaultButtonStyle = style([
   {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
     width: '100%',
     borderRadius: '10px',
     fontWeight: 'bold',
-    textAlign: 'center',
     cursor: 'pointer',
     transition: 'filter 0.1s',
   },

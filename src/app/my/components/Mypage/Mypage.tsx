@@ -5,8 +5,13 @@ import {
   digitNumberFormatter,
 } from '@/utils/formatter';
 
+import FollowIcon from '@/assets/icons/follow.svg';
+import UnfollowIcon from '@/assets/icons/unfollow.svg';
+
+import Button from '@/components/common/Button';
 import Follow from '../Follow';
 import MyLink from '../MyLink';
+import Profile from '../Profile';
 import FeedCount from '../FeedCount';
 import MyInterest from '../MyInterest';
 import MyInformation from '../MyInformation';
@@ -16,6 +21,7 @@ import * as Styles from './Mypage.css';
 interface MyPageProps {
   children?: ReactNode;
   myData: {
+    profileUrl: string;
     nickname: string;
     currentState: string;
     description: string;
@@ -27,6 +33,8 @@ interface MyPageProps {
   };
 }
 
+const isFollow = false;
+
 const MyPage = ({ children, myData }: MyPageProps) => {
   const {
     followers,
@@ -37,20 +45,53 @@ const MyPage = ({ children, myData }: MyPageProps) => {
     nickname,
     currentState,
     description,
+    profileUrl,
   } = myData;
+
+  const formattedFollowers = compactNumberFormatter(
+    followers ?? 0,
+  ).toLowerCase();
+
+  const formattedFollowings = compactNumberFormatter(
+    followings ?? 0,
+  ).toLowerCase();
+
+  const formattedFeedCounts = digitNumberFormatter(feeds ?? 0);
 
   return (
     <>
       <div className={Styles.userBackground}>백그라운드 이미지</div>
       <div className={Styles.flex}>
-        <div className={Styles.profileWrapper}>
-          <div className={Styles.profile}>프로필 이미지</div>
+        <div className={Styles.profileAndFollowWrapper}>
+          <div className={Styles.profileWrapper}>
+            <Profile profileUrl={profileUrl}>
+              {isFollow ? (
+                <Button fill="red">
+                  <UnfollowIcon
+                    width="20"
+                    height="20"
+                    style={{ marginLeft: -5, marginRight: 5 }}
+                  />
+                  언팔로우
+                </Button>
+              ) : (
+                <Button>
+                  <FollowIcon
+                    width="20"
+                    height="20"
+                    style={{ marginLeft: -5, marginRight: 5 }}
+                  />
+                  팔로우
+                </Button>
+              )}
+            </Profile>
+          </div>
           <div className={Styles.flex}>
             <Follow title="팔로워" href="/my/follower">
-              {compactNumberFormatter(followers ?? 0).toLowerCase()}
+              {formattedFollowers}
             </Follow>
             <Follow title="팔로잉" href="/my/following">
-              {compactNumberFormatter(followings ?? 0).toLowerCase()}
+              {formattedFollowings}
             </Follow>
           </div>
         </div>
@@ -64,7 +105,7 @@ const MyPage = ({ children, myData }: MyPageProps) => {
       </div>
       <div className={Styles.flex}>
         <FeedCount title="피드 작성 개수" href="/my">
-          {digitNumberFormatter(feeds ?? 0)}
+          {formattedFeedCounts}
         </FeedCount>
         <div className={Styles.linkWrapper}>
           {links.map((link) => (
