@@ -3,7 +3,7 @@ import * as Styles from './Input.css';
 
 interface InputProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
-  size?: 'small' | 'medium';
+  size?: 'small' | 'medium' | 'large';
   state?: 'normal' | 'fail';
   variants?: 'border' | 'noneBorder';
   postfix?: ReactNode;
@@ -12,7 +12,7 @@ interface InputProps
 const Input = forwardRef(
   (
     {
-      size,
+      size = 'large',
       state = 'normal',
       postfix,
       variants,

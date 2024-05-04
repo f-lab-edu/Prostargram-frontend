@@ -1,7 +1,8 @@
-import { responsiveStyle } from '@/styles/styles.css';
-import { vars } from '@/styles/theme.css';
 import { style } from '@vanilla-extract/css';
 import { recipe } from '@vanilla-extract/recipes';
+
+import { vars } from '@/styles/theme.css';
+import { responsiveStyle } from '@/styles/styles.css';
 
 const defaultWrapperStyle = style([
   {
@@ -10,7 +11,6 @@ const defaultWrapperStyle = style([
     justifyContent: 'center',
     gap: '10px',
     width: '100%',
-    height: 38,
     minWidth: 150,
     padding: '0 10px',
     borderStyle: 'solid',
@@ -19,7 +19,6 @@ const defaultWrapperStyle = style([
   },
   responsiveStyle({
     desktop: {
-      height: 48,
       fontSize: 16,
     },
   }),
@@ -48,7 +47,12 @@ export const wrapperStyles = recipe({
     size: {
       small: { height: 32 },
       medium: { height: 38 },
-      large: { height: 48 },
+      large: [
+        {
+          height: 38,
+        },
+        responsiveStyle({ desktop: { height: 48 } }),
+      ],
     },
   },
 });
