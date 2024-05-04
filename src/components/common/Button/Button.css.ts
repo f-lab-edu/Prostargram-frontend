@@ -22,10 +22,10 @@ const makeButtonStyle = (color: keyof typeof vars.colors) => ({
   backgroundColor: vars.colors[color],
   color: color === 'white' ? vars.colors['gray-1'] : vars.colors.white,
   ':hover': {
-    filter: 'brightness(115%)',
+    filter: 'brightness(107%)',
   },
   ':active': {
-    filter: 'brightness(85%)',
+    filter: 'brightness(95%)',
   },
 });
 
