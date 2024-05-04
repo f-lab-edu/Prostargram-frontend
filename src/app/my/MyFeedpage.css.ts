@@ -11,7 +11,7 @@ export const container = style([
       borderColor: vars.colors['gray-3'],
       borderRadius: '10px',
       background: vars.colors.white,
-      margin: '1.875rem auto',
+      margin: '1.875rem auto 10rem auto',
       overflow: 'hidden',
     },
   }),

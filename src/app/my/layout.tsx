@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 
 import Mypage from './components/Mypage';
 
-import * as Styles from './Mypage.css';
+import * as Styles from './MyFeedpage.css';
 
 const MOCK_DATA_FOR_MY_PAGE = {
   nickname: '닉네임',
