@@ -11,6 +11,48 @@ import * as Styles from './MyLink.css';
 
 const ICON_LIST = ['github', 'naver'];
 
+interface SocialAccountProps {
+  link: string;
+  isEdit: boolean;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+}
+
+const SocialAccount = ({ link, isEdit, onChange }: SocialAccountProps) => {
+  const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    onChange(e);
+  };
+
+  return (
+    <li key={link} className={Styles.myLinkInputWrapper}>
+      <i className={flexCenter}>
+        {ICON_LIST.find((target) => link.includes(target)) || 'default'}
+      </i>
+      {isEdit ? (
+        <>
+          <Input
+            variants="noneBorder"
+            size="small"
+            className={Styles.myLinkInput}
+            onChange={changeHandler}
+            defaultValue={link}
+          />
+          <Button
+            type="button"
+            fill="red"
+            className={`${flexCenter} ${Styles.remoteButton}`}
+          >
+            X
+          </Button>
+        </>
+      ) : (
+        <Link className={Styles.myLink} href={link}>
+          <p>{link}</p>
+        </Link>
+      )}
+    </li>
+  );
+};
+
 interface MyLinkProps {
   links: string[];
 }
@@ -34,29 +76,16 @@ const MyLink = ({ links }: MyLinkProps) => {
     setMyLinks(next);
   };
 
-  return isEdit ? (
+  return (
     <form className={Styles.myLinkContainer} onSubmit={saveLinks}>
       <ul className={Styles.iconWithMyLinkWrapper}>
         {myLinks.map((link, index) => (
-          <li key={link} className={Styles.myLinkInputWrapper}>
-            <i className={flexCenter}>
-              {ICON_LIST.find((target) => link?.includes(target)) || 'default'}
-            </i>
-            <Input
-              variants="noneBorder"
-              size="small"
-              className={Styles.myLinkInput}
-              onChange={(e) => changeHandler(e, index)}
-              defaultValue={link}
-            />
-            <Button
-              type="button"
-              fill="red"
-              className={`${flexCenter} ${Styles.remoteButton}`}
-            >
-              X
-            </Button>
-          </li>
+          <SocialAccount
+            key="link"
+            link={link}
+            isEdit={isEdit}
+            onChange={(e) => changeHandler(e, index)}
+          />
         ))}
 
         {myLinks.length < 3 && (
@@ -65,41 +94,28 @@ const MyLink = ({ links }: MyLinkProps) => {
           </Button>
         )}
       </ul>
+
       <div className={Styles.editButtonWrapper}>
-        <Button type="submit" className={Styles.editButton}>
-          저장
-        </Button>
-        <Button
-          type="button"
-          className={Styles.editButton}
-          onClick={toggleEdit}
-        >
-          취소
-        </Button>
-      </div>
-    </form>
-  ) : (
-    <div className={Styles.myLinkContainer}>
-      <ul className={Styles.iconWithMyLinkWrapper}>
-        {myLinks.map((link) => (
-          <li key={link} className={Styles.myLinkInputWrapper}>
-            <i className={flexCenter}>
-              {ICON_LIST.find((target) => link?.includes(target)) || 'default'}
-            </i>
-            <Link className={Styles.myLink} href={link}>
-              <p>{link}</p>
-            </Link>
-          </li>
-        ))}
-      </ul>
-      <div className={Styles.editButtonWrapper}>
-        {isMine && (
+        {isMine && isEdit ? (
+          <>
+            <Button type="submit" className={Styles.editButton}>
+              저장
+            </Button>
+            <Button
+              type="button"
+              className={Styles.editButton}
+              onClick={toggleEdit}
+            >
+              취소
+            </Button>
+          </>
+        ) : (
           <Button className={Styles.editButton} onClick={toggleEdit}>
             수정
           </Button>
         )}
       </div>
-    </div>
+    </form>
   );
 };
 
