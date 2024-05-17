@@ -107,10 +107,8 @@ const MyPage = ({ children, myData }: MyPageProps) => {
         <FeedCount title="피드 작성 개수" href="/my">
           {formattedFeedCounts}
         </FeedCount>
-        <div className={Styles.linkWrapper}>
-          {links.map((link) => (
-            <MyLink key={link}>{link}</MyLink>
-          ))}
+        <div className={Styles.myLinkWrapper}>
+          <MyLink links={links} />
         </div>
       </div>
       <div className={Styles.flex}>

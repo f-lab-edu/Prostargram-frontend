@@ -57,19 +57,21 @@ export const myInformationWrapper = style([
       flex: 1,
       display: 'flex',
       flexDirection: 'column',
-      padding: '4rem',
+      padding: '2.5rem',
       gap: '1rem',
       borderBottom: '1px solid',
     },
   }),
 ]);
 
-export const linkWrapper = style([
+export const myLinkWrapper = style([
   borderBlack,
   responsiveStyle({
     desktop: {
       flex: 1,
-      padding: '4rem',
+      display: 'flex',
+      height: '10rem',
+      padding: '1.25rem 2.5rem',
       borderBottom: '1px solid',
     },
   }),
@@ -98,6 +100,7 @@ export const myInterestList = style([
 export const changeableArea = style([
   responsiveStyle({
     desktop: {
+      minHeight: '50rem',
       padding: '2.5rem 4.375rem 0 4.375rem',
     },
   }),
