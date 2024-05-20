@@ -2,20 +2,20 @@ import { PropsWithChildren, useMemo, useState } from 'react';
 import { MyLinkContext } from './MyLinkContext';
 
 const MyLinkProvider = ({ children }: PropsWithChildren) => {
-  const [isModify, setModify] = useState<boolean>(false);
+  const [isEdit, setEdit] = useState<boolean>(false);
   const [myLinks, setMyLinks] = useState<string[]>([]);
 
   const updateMyLinks = (links: string[]) => setMyLinks(links);
-  const toggleIsModify = () => setModify((prev) => !prev);
+  const toggleIsEdit = () => setEdit((prev) => !prev);
 
   const value = useMemo(
     () => ({
-      isModify,
+      isEdit,
       myLinks,
       updateMyLinks,
-      toggleIsModify,
+      toggleIsEdit,
     }),
-    [isModify, myLinks],
+    [isEdit, myLinks],
   );
 
   return (

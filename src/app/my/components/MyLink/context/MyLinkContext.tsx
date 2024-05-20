@@ -1,10 +1,10 @@
 import { createContext, useContext } from 'react';
 
 export interface MyLinkContextType {
-  isModify: boolean;
+  isEdit: boolean;
   myLinks: string[];
   updateMyLinks: (links: string[]) => void;
-  toggleIsModify: () => void;
+  toggleIsEdit: () => void;
 }
 
 export const MyLinkContext = createContext<MyLinkContextType | null>(null);
@@ -13,7 +13,9 @@ const useMyLinkContext = () => {
   const context = useContext(MyLinkContext);
 
   if (!context) {
-    throw new Error('There is not in MyLinkContext Scope');
+    throw new Error(
+      'There is a React Component that is not children of MyLinkContext',
+    );
   }
 
   return context;
