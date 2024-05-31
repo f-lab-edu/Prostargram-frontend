@@ -9,6 +9,7 @@ import FollowIcon from '@/assets/icons/follow.svg';
 import UnfollowIcon from '@/assets/icons/unfollow.svg';
 
 import Button from '@/components/common/Button';
+import { UserType } from '../../@types/my';
 import Follow from '../Follow';
 import MyLink from '../MyLink';
 import Profile from '../Profile';
@@ -20,17 +21,7 @@ import * as Styles from './Mypage.css';
 
 interface MyPageProps {
   children?: ReactNode;
-  myData: {
-    profileUrl: string;
-    nickname: string;
-    currentState: string;
-    description: string;
-    followers: number;
-    followings: number;
-    feeds: number;
-    links: string[];
-    interests: string[];
-  };
+  myData: UserType;
 }
 
 const isFollow = false;
