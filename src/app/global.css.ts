@@ -11,6 +11,7 @@ globalStyle(`*:not(${[...parentElements, ...childElements].join()})`, {
   all: 'unset',
   display: 'revert',
   boxSizing: 'border-box',
+  listStyle: 'none',
 });
 
 export const container = style({

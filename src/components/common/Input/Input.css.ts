@@ -30,7 +30,7 @@ export const wrapperStyles = recipe({
   variants: {
     variants: {
       border: { borderWidth: '1px' },
-      noneBorder: { borderWidth: '0' },
+      noneBorder: { border: '0px none' },
     },
     state: {
       normal: [
