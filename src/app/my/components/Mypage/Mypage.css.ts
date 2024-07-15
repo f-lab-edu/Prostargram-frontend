@@ -70,7 +70,7 @@ export const myLinkWrapper = style([
     desktop: {
       flex: 1,
       display: 'flex',
-      height: '10rem',
+      minHeight: '11.25rem',
       padding: '1.25rem 2.5rem',
       borderBottom: '1px solid',
     },
