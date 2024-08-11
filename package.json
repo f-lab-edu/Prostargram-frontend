@@ -19,6 +19,9 @@
     ]
   },
   "dependencies": {
+    "@emotion/react": "^11.13.0",
+    "@emotion/styled": "^11.13.0",
+    "@tanstack/react-query": "^5.51.23",
     "@vanilla-extract/css": "^1.15.1",
     "@vanilla-extract/recipes": "^0.5.2",
     "@vanilla-extract/sprinkles": "^1.6.1",
