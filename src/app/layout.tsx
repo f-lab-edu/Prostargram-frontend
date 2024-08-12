@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 
 import { lightTheme } from '@/styles/theme.css';
+import GlobalStyles from '@/styles/global';
 import * as Styles from './global.css';
 
 const pretendard = localFont({
@@ -27,6 +28,7 @@ const RootLayout = ({
       <body
         className={`${pretendard.className} ${Styles.container} ${lightTheme}`}
       >
+        <GlobalStyles />
         {children}
       </body>
     </html>
