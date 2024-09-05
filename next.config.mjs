@@ -31,6 +31,9 @@ const nextConfig = {
 
     return config;
   },
+  sassOptions: {
+    includePaths: ['styles'],
+  },
 };
 
 export default withVanillaExtract(nextConfig);
