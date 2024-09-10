@@ -1,0 +1,93 @@
+@use '../../../styles/helpers/index' as *;
+
+@mixin button {
+  padding: 5px 15px;
+  border: 1px solid $COLOR_GRAY_1;
+
+  &:hover {
+    background-color: $COLOR_PRIMARY_1;
+    color: $COLOR_GRAY_9;
+    border-color: $COLOR_PRIMARY_1;
+  }
+
+  &:active {
+    background-color: $COLOR_PRIMARY_1;
+    color: $COLOR_GRAY_9;
+    border-color: $COLOR_PRIMARY_1;
+  }
+
+  @include res--desktop {
+    padding: 10px 15px;
+  }
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+  padding: 50px 30px;
+  background-color: $COLOR_WHITE;
+
+  @include res--desktop {
+    padding: 100px;
+  }
+
+  .sub_title {
+    font-size: $FONT_SIZE_20;
+    font-weight: bold;
+    margin-top: 40px;
+    margin-bottom: 20px;
+
+    @include res--desktop {
+      margin-top: 50px;
+      margin-bottom: 30px;
+    }
+  }
+
+  .link_field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+
+    @include res--desktop {
+      margin-bottom: 30px;
+    }
+  }
+
+  .link_button {
+    height: 1.75rem;
+
+    @include button;
+    @include res--desktop {
+      height: 2.5rem;
+    }
+  }
+
+  .field_box {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .interest_field_box {
+    gap: 10px;
+  }
+
+  .interest_error {
+    margin-bottom: 10px;
+    font-size: $FONT_SIZE_12;
+    color: $COLOR_RED;
+  }
+
+  .my_interest_field_box {
+    margin-bottom: 60px;
+
+    @include res--desktop {
+      margin-bottom: 120px;
+    }
+  }
+
+  .interest_button {
+    @include button;
+    width: 4.625rem;
+    height: 41px;
+  }
+}

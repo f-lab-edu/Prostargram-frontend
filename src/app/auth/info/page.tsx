@@ -1,5 +1,6 @@
 'use client';
 
+import clsx from 'clsx';
 import { FormProvider, SubmitHandler } from 'react-hook-form';
 
 import { RECOMMANED_INTERESTS } from '@/data/mock';
@@ -15,7 +16,7 @@ import { IAddionalInfoType } from './types/AdditionalInfoTypes';
 import useAdditionalInfoForm from './hooks/useAdditionalInfoForm';
 import useAdditionalInfoFieldArray from './hooks/useAdditionalInfoFieldArray';
 
-import * as Styles from './AdditionalInfoPage.css';
+import styles from './page.module.scss';
 
 const LINK_FIELDS_LIMIT = 3;
 const MY_INTERESTS_FIELDS_LIMIT = 10;
@@ -63,15 +64,15 @@ const AdditionalInfoPage = () => {
   ];
 
   return (
-    <div className={Styles.container}>
+    <div className={styles.container}>
       <Logo />
 
       <form onSubmit={handleSubmit(submitHandler)}>
         <FormProvider {...methods}>
-          <h1 className={Styles.subTitle}>추가 정보</h1>
+          <h1 className={styles.sub_title}>추가 정보</h1>
           <Field>
             <Field.FieldLabel htmlFor="links">링크 (최대 3개)</Field.FieldLabel>
-            <Field.FieldBox className={Styles.linkField}>
+            <Field.FieldBox className={styles.link_field}>
               {linkFields.map((field, index) => (
                 <AdditionalLink
                   key={field.id}
@@ -83,7 +84,7 @@ const AdditionalInfoPage = () => {
                 <Button
                   type="button"
                   fill="white"
-                  className={Styles.addLinkButton}
+                  className={styles.link_button}
                   onClick={() => appendLink({ link: '' })}
                 >
                   <PlusIcon width="20" />
@@ -94,7 +95,9 @@ const AdditionalInfoPage = () => {
 
           <Field>
             <Field.FieldLabel>추천 관심사</Field.FieldLabel>
-            <Field.FieldBox className={Styles.interestsFieldBox}>
+            <Field.FieldBox
+              className={clsx(styles.field_box, styles.interest_field_box)}
+            >
               {RECOMMANED_INTERESTS.map((interest) => (
                 <InterestCheckbox key={interest} value={interest} />
               ))}
@@ -106,11 +109,13 @@ const AdditionalInfoPage = () => {
               나만의 관심사를 추가해보세요! (최대 10개)
             </Field.FieldLabel>
             {errors.myInterests && (
-              <p className={Styles.myInterestErrorMessage}>
+              <p className={styles.interest_error}>
                 {errors.myInterests.message}
               </p>
             )}
-            <Field.FieldBox className={Styles.myInterestFieldBox}>
+            <Field.FieldBox
+              className={clsx(styles.field_box, styles.my_interest_field_box)}
+            >
               {myInterestsFields.map((field, index) => (
                 <MyInterestField
                   key={field.id}
@@ -123,7 +128,7 @@ const AdditionalInfoPage = () => {
                 <Button
                   type="button"
                   fill="white"
-                  className={Styles.addInterestButton}
+                  className={styles.interest_button}
                   onClick={() => appendMyInterest({ myInterest: '' })}
                 >
                   <PlusIcon width="20" />
