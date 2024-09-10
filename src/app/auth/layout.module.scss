@@ -1,4 +1,4 @@
-@import '../../styles/helpers/index';
+@use '../../styles/helpers/index' as *;
 
 @mixin box {
   flex: 1;

@@ -1,5 +1,5 @@
-@import './base/index';
-@import './helpers/index';
+@use './base/index' as *;
+@use './helpers/index' as *;
 
 *,
 *::before,

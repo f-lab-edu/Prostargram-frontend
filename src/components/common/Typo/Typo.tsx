@@ -1,12 +1,45 @@
+import clsx from 'clsx';
 import { CSSProperties, ReactNode } from 'react';
-import { vars } from '@/styles/theme.css';
-import * as Styles from './Typo.css';
+
+import styles from './Typo.module.scss';
+
+const colors = {
+  'primary-0': 'primary-0',
+  'primary-1': 'primary-1',
+  'primary-2': 'primary-2',
+  'primary-3': 'primary-3',
+  'primary-4': 'primary-4',
+  'primary-5': 'primary-5',
+  'gray-1': 'gray-1',
+  'gray-2': 'gray-2',
+  'gray-3': 'gray-3',
+  'gray-4': 'gray-4',
+  'gray-5': 'gray-5',
+  'gray-6': 'gray-6',
+  'gray-7': 'gray-7',
+  'gray-8': 'gray-8',
+  'gray-9': 'gray-9',
+  white: 'white',
+  yellow: 'yellow',
+  red: 'red',
+} as const;
+
+const fontSizes = {
+  'body-12': 'body-12',
+  'body-14': 'body-14',
+  'body-16': 'body-16',
+  'body-20': 'body-20',
+  'body-24': 'body-24',
+  'body-28': 'body-28',
+  'body-30': 'body-30',
+  'body-32': 'body-32',
+} as const;
 
 interface TypoProps {
   children?: ReactNode;
   as: 'span' | 'div' | 'p' | 'h1' | 'h2' | 'h3';
-  fontSize?: keyof typeof vars.font;
-  color?: keyof typeof vars.colors;
+  fontSize?: keyof typeof fontSizes;
+  color?: keyof typeof colors;
   underline?: boolean;
   textAlign?: CSSProperties['textAlign'];
   margin?: CSSProperties['margin'];
@@ -43,10 +76,8 @@ const Typo = ({
         cursor,
         wordBreak: 'keep-all',
       }}
-      className={Styles.typography({
-        fontSize,
-        color,
-        textDecoration: underline ? 'underline' : undefined,
+      className={clsx(styles.typography, styles[color], styles[fontSize], {
+        [styles.underline]: underline,
       })}
     >
       {children}

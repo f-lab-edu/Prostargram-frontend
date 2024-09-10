@@ -85,7 +85,7 @@ const LoginPage = () => {
         <Typo
           as="span"
           color="gray-3"
-          fontSize="body-12"
+          fontSize="body-14"
           textAlign="right"
           marginTop={10}
           marginBottom={40}
