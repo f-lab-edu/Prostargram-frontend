@@ -1,0 +1,55 @@
+@import '../../styles/helpers/index';
+
+@mixin box {
+  flex: 1;
+  @include flex-center;
+}
+
+.container {
+  width: 100%;
+
+  @include flex-center;
+  @include res--desktop {
+    height: 100%;
+  }
+
+  .inner_container {
+    width: 100%;
+    min-width: 290px;
+    max-width: 380px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+    margin: 20px 15px;
+    overflow: hidden;
+    background: var(--color-white);
+    box-shadow: 10px 10px 30px var(--color-gray-5);
+
+    @include res--desktop {
+      max-width: 1200px;
+      flex-direction: row;
+    }
+  }
+
+  .left_box {
+    @include box;
+  }
+
+  .right_box {
+    @include box;
+
+    display: none;
+    background-color: var(--color-primary-5);
+
+    @include res--desktop {
+      display: flex;
+      padding: 0 90px;
+    }
+  }
+
+  .group_image {
+    width: 100%;
+    height: auto;
+    object-fit: 'contain';
+  }
+}

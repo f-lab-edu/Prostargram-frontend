@@ -1,0 +1,40 @@
+@import './base/index';
+@import './helpers/index';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  // Colors
+  --color-primary-0: #{$COLOR_PRIMARY_0};
+  --color-primary-1: #{$COLOR_PRIMARY_1};
+  --color-primary-2: #{$COLOR_PRIMARY_2};
+  --color-primary-3: #{$COLOR_PRIMARY_3};
+  --color-primary-4: #{$COLOR_PRIMARY_4};
+  --color-primary-5: #{$COLOR_PRIMARY_5};
+  --color-gray-1: #{$COLOR_GRAY_1};
+  --color-gray-2: #{$COLOR_GRAY_2};
+  --color-gray-3: #{$COLOR_GRAY_3};
+  --color-gray-4: #{$COLOR_GRAY_4};
+  --color-gray-5: #{$COLOR_GRAY_5};
+  --color-gray-6: #{$COLOR_GRAY_6};
+  --color-gray-7: #{$COLOR_GRAY_7};
+  --color-gray-8: #{$COLOR_GRAY_8};
+  --color-gray-9: #{$COLOR_GRAY_9};
+  --color-white: #{$COLOR_WHITE};
+  --color-yellow: #{$COLOR_YELLOW};
+  --color-red: #{$COLOR_RED};
+
+  // Font size
+  --font-size-12: #{$FONT_SIZE_12};
+  --font-size-14: #{$FONT_SIZE_14};
+  --font-size-16: #{$FONT_SIZE_16};
+  --font-size-20: #{$FONT_SIZE_20};
+  --font-size-24: #{$FONT_SIZE_24};
+  --font-size-28: #{$FONT_SIZE_28};
+  --font-size-30: #{$FONT_SIZE_30};
+  --font-size-32: #{$FONT_SIZE_32};
+}

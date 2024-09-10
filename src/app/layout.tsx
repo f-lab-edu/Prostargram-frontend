@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 
 import { lightTheme } from '@/styles/theme.css';
+import '@/styles/global.scss';
 import * as Styles from './global.css';
 
 const pretendard = localFont({
