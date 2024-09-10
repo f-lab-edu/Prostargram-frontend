@@ -14,7 +14,7 @@ import validator from '@/utils/validate';
 import OpenEyeIcon from '@/assets/icons/open-eye.svg';
 import CloseEyeIcon from '@/assets/icons/close-eye.svg';
 
-import * as Styles from './LoginPage.css';
+import styles from './page.module.scss';
 
 interface IFormInput {
   email: string;
@@ -27,7 +27,6 @@ const LoginPage = () => {
   const {
     register,
     handleSubmit,
-
     formState: { errors, isDirty },
   } = useForm<IFormInput>({
     defaultValues: { email: '', password: '' },
@@ -39,13 +38,13 @@ const LoginPage = () => {
   };
 
   return (
-    <div className={Styles.container}>
-      <form onSubmit={handleSubmit(onSubmit)} className={Styles.form}>
+    <div className={styles.container}>
+      <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
         <div style={{ marginBottom: 40 }}>
           <Logo />
         </div>
 
-        <div className={Styles.inputWrapper}>
+        <div className={styles.input_wrapper}>
           <InputField
             id="email"
             type="text"
@@ -97,9 +96,9 @@ const LoginPage = () => {
         <Button>로그인</Button>
       </form>
 
-      <div className={Styles.orLine}>
-        <hr className={Styles.horizontalLine} />
-        <span className={Styles.orSpan}>OR</span>
+      <div className={styles.or_line}>
+        <hr className={styles.horizontal_line} />
+        <span className={styles.or_span}>OR</span>
       </div>
 
       <Button fill="gray" onClick={() => router.push('/auth/github')}>
