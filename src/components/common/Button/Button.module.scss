@@ -1,0 +1,67 @@
+@import '../../../styles/helpers/index';
+
+@mixin make_button($bg_color: $COLOR_PRIMARY_1, $color: $COLOR_WHITE) {
+  background-color: $bg_color;
+  color: $color;
+}
+
+.button {
+  width: 100%;
+  border-radius: 10px;
+  font-weight: bold;
+  text-align: center;
+  transition: filter 0.1s;
+  cursor: pointer;
+
+  &:hover {
+    filter: brightness(115%);
+  }
+
+  &:active {
+    filter: brightness(85%);
+  }
+
+  &.small {
+    height: 38px;
+  }
+
+  &.medium {
+    height: 45px;
+  }
+
+  &.large {
+    height: 38px;
+    font-size: $FONT_SIZE_14;
+
+    @include res--desktop {
+      height: 48px;
+      font-size: $FONT_SIZE_16;
+    }
+  }
+
+  &.blue {
+    @include make_button($COLOR_PRIMARY_1, $COLOR_WHITE);
+  }
+
+  &.gray {
+    @include make_button($COLOR_GRAY_2, $COLOR_WHITE);
+  }
+
+  &.red {
+    @include make_button($COLOR_RED, $COLOR_WHITE);
+  }
+
+  &.white {
+    @include make_button($COLOR_WHITE, $COLOR_GRAY_1);
+  }
+
+  &:disabled {
+    &:active,
+    &:hover {
+      filter: none;
+    }
+
+    background-color: $COLOR_GRAY_6;
+    cursor: default;
+  }
+}
