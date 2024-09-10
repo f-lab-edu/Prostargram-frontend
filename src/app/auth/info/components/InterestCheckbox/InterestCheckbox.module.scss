@@ -1,0 +1,27 @@
+@use '../../../../../styles/helpers/index' as *;
+
+.checkbox {
+  width: fit-content;
+  padding: 10px 15px;
+  border: 1px solid $COLOR_GRAY_1;
+  border-radius: 10px;
+  font-size: $FONT_SIZE_14;
+  cursor: pointer;
+  transition: background 0.1s;
+
+  @include res--desktop {
+    font-size: $FONT_SIZE_16;
+  }
+
+  &.checked {
+    background-color: $COLOR_PRIMARY_1;
+    border-color: $COLOR_PRIMARY_1;
+    color: $COLOR_GRAY_9;
+  }
+
+  &:hover {
+    background-color: $COLOR_PRIMARY_2;
+    border-color: $COLOR_PRIMARY_2;
+    color: $COLOR_GRAY_9;
+  }
+}
