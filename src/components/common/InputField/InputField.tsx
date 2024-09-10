@@ -7,10 +7,11 @@ import {
   forwardRef,
 } from 'react';
 
-import Image from 'next/image';
+import CautionIcon from '@/assets/icons/caution.svg';
 import Input from '../Input';
 import Typo from '../Typo';
-import * as Styles from './InputField.css';
+
+import styles from './InputField.module.scss';
 
 interface InputFieldProps extends HTMLAttributes<HTMLInputElement> {
   id: string;
@@ -44,8 +45,8 @@ const InputField = forwardRef(
     ref: Ref<HTMLInputElement>,
   ) => {
     return (
-      <div className={Styles.container}>
-        <label htmlFor={id} className={Styles.label}>
+      <div className={styles.container}>
+        <label htmlFor={id} className={styles.label}>
           {labelPrefix}
           {label}
         </label>
@@ -64,13 +65,8 @@ const InputField = forwardRef(
         />
 
         {errorMessage && (
-          <div className={Styles.inputWrapper}>
-            <Image
-              src="assets/icons/caution.svg"
-              width="16"
-              height="16"
-              alt="caution-image"
-            />
+          <div className={styles.caution_wrapper}>
+            <CautionIcon width="16" height="16" alt="caution-image" />
             <Typo as="span" fontSize="body-12" color="red">
               {errorMessage}
             </Typo>
