@@ -10,7 +10,7 @@ import Button from '@/components/common/Button';
 import validators from '@/utils/validate';
 import useSignUpState, { ISignUpFormValueType } from '@/hooks/useSignUpState';
 
-import * as Styles from './GithubSignupPage.css';
+import styles from './page.module.scss';
 
 const GithubSignupPage = () => {
   const router = useRouter();
@@ -36,12 +36,12 @@ const GithubSignupPage = () => {
   };
 
   return (
-    <div className={Styles.container}>
+    <div className={styles.container}>
       <Logo />
 
-      <form onSubmit={handleSubmit(onSubmit)} className={Styles.form}>
+      <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
         <div>
-          <p className={Styles.subTitle}>회원가입</p>
+          <p className={styles.sub_title}>회원가입</p>
           <Field>
             <Field.FieldLabel htmlFor="email">
               <Field.FieldEmphasize>*</Field.FieldEmphasize>
@@ -60,7 +60,7 @@ const GithubSignupPage = () => {
               />
               <Button
                 type="button"
-                className={Styles.button}
+                className={styles.button}
                 onClick={requestConfirmNumber}
                 disabled={!isEmailPending}
               >
@@ -91,7 +91,7 @@ const GithubSignupPage = () => {
                 />
                 <Button
                   type="button"
-                  className={Styles.button}
+                  className={styles.button}
                   onClick={checkConfirmNumber}
                   disabled={isEmailConfirmed}
                 >
@@ -104,7 +104,7 @@ const GithubSignupPage = () => {
             </Field>
           )}
 
-          <Field className={Styles.lastField}>
+          <Field className={styles.last_field}>
             <Field.FieldLabel htmlFor="nickname">
               <Field.FieldEmphasize>*</Field.FieldEmphasize>
               닉네임
@@ -123,7 +123,7 @@ const GithubSignupPage = () => {
               />
               <Button
                 type="button"
-                className={Styles.button}
+                className={styles.button}
                 onClick={checkNickname}
                 disabled={isNicknameConfirmed}
               >
