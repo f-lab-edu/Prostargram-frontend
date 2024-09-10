@@ -22,8 +22,8 @@
     border-radius: 20px;
     margin: 20px 15px;
     overflow: hidden;
-    background: var(--color-white);
-    box-shadow: 10px 10px 30px var(--color-gray-5);
+    background: $COLOR_WHITE;
+    box-shadow: 10px 10px 30px $COLOR_GRAY_5;
 
     @include res--desktop {
       max-width: 1200px;
@@ -39,7 +39,7 @@
     @include box;
 
     display: none;
-    background-color: var(--color-primary-5);
+    background-color: $COLOR_PRIMARY_5;
 
     @include res--desktop {
       display: flex;

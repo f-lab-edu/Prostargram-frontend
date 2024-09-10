@@ -3,7 +3,6 @@ import localFont from 'next/font/local';
 
 import { lightTheme } from '@/styles/theme.css';
 import '@/styles/global.scss';
-import * as Styles from './global.css';
 
 const pretendard = localFont({
   src: [
@@ -25,9 +24,7 @@ const RootLayout = ({
 }>) => {
   return (
     <html lang="ko">
-      <body
-        className={`${pretendard.className} ${Styles.container} ${lightTheme}`}
-      >
+      <body className={`${pretendard.className} ${lightTheme}`}>
         {children}
       </body>
     </html>
