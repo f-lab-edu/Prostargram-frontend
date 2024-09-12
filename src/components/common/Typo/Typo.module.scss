@@ -1,0 +1,90 @@
+@use '../../../styles/helpers/index' as *;
+
+.typography {
+  width: 100%;
+
+  &.underline {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  &.primary-0 {
+    color: $COLOR_PRIMARY_0;
+  }
+  &.primary-1 {
+    color: $COLOR_PRIMARY_1;
+  }
+  &.primary-2 {
+    color: $COLOR_PRIMARY_2;
+  }
+  &.primary-3 {
+    color: $COLOR_PRIMARY_3;
+  }
+  &.primary-4 {
+    color: $COLOR_PRIMARY_4;
+  }
+  &.primary-5 {
+    color: $COLOR_PRIMARY_5;
+  }
+  &.gray-1 {
+    color: $COLOR_GRAY_1;
+  }
+  &.gray-2 {
+    color: $COLOR_GRAY_2;
+  }
+  &.gray-3 {
+    color: $COLOR_GRAY_3;
+  }
+  &.gray-4 {
+    color: $COLOR_GRAY_4;
+  }
+  &.gray-5 {
+    color: $COLOR_GRAY_5;
+  }
+  &.gray-6 {
+    color: $COLOR_GRAY_6;
+  }
+  &.gray-7 {
+    color: $COLOR_GRAY_7;
+  }
+  &.gray-8 {
+    color: $COLOR_GRAY_8;
+  }
+  &.gray-9 {
+    color: $COLOR_GRAY_9;
+  }
+  &.white {
+    color: $COLOR_WHITE;
+  }
+  &.yellow {
+    color: $COLOR_YELLOW;
+  }
+  &.red {
+    color: $COLOR_RED;
+  }
+
+  &.body-12 {
+    font-size: $FONT_SIZE_12;
+  }
+  &.body-14 {
+    font-size: $FONT_SIZE_14;
+  }
+  &.body-16 {
+    font-size: $FONT_SIZE_16;
+  }
+  &.body-20 {
+    font-size: $FONT_SIZE_20;
+  }
+  &.body-24 {
+    font-size: $FONT_SIZE_24;
+  }
+  &.body-28 {
+    font-size: $FONT_SIZE_28;
+  }
+  &.body-30 {
+    font-size: $FONT_SIZE_30;
+  }
+  &.body-32 {
+    font-size: $FONT_SIZE_32;
+  }
+}

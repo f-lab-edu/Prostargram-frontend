@@ -1,0 +1,34 @@
+@use '../../../styles/helpers/index' as *;
+
+.container {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.label {
+  display: inline-block;
+  margin-bottom: 5px;
+  font-size: $FONT_SIZE_14;
+  color: $COLOR_GRAY_2;
+  cursor: default;
+}
+
+.emphasize {
+  color: $COLOR_RED;
+}
+
+.field_box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  @include res--desktop {
+    flex-direction: row;
+  }
+}
+
+.error {
+  display: flex;
+  gap: 5px;
+  margin-top: 5px;
+}

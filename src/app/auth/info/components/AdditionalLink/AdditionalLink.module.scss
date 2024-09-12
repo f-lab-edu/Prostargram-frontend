@@ -1,0 +1,11 @@
+@use '../../../../../styles/helpers/index' as *;
+
+.remove_link_button {
+  display: flex;
+  width: 1rem;
+  cursor: pointer;
+
+  @include res--desktop {
+    width: 1.5rem;
+  }
+}

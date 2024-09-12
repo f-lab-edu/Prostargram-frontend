@@ -1,0 +1,46 @@
+@use '../../../../../styles/helpers/index' as *;
+
+.button {
+  position: relative;
+  padding: 10px 15px;
+  border: 1px solid $COLOR_GRAY_1;
+  border-radius: 10px;
+  font-size: $FONT_SIZE_14;
+
+  @include res--desktop {
+    font-size: $FONT_SIZE_16;
+  }
+
+  &.editing {
+    background-color: $COLOR_GRAY_9;
+    &:focus-within {
+      border-color: $COLOR_PRIMARY_1;
+      border-width: 2px;
+    }
+  }
+
+  &.completed {
+    background-color: $COLOR_PRIMARY_1;
+    border-color: $COLOR_PRIMARY_1;
+    color: $COLOR_GRAY_9;
+    transition: background 0.1s;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $COLOR_PRIMARY_2;
+      border-color: $COLOR_PRIMARY_2;
+    }
+  }
+
+  .input {
+    width: 3rem;
+    text-align: center;
+  }
+
+  .close_icon {
+    display: block;
+    position: absolute;
+    left: 2px;
+    top: 2px;
+  }
+}

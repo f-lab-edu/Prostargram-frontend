@@ -5,17 +5,17 @@ import { usePathname } from 'next/navigation';
 
 import GitHubIcon from '@/assets/icons/github.svg';
 
-import * as Styles from './Logo.css';
+import styles from './Logo.module.scss';
 
 const Logo = () => {
   const pathname = usePathname();
 
   return (
-    <Link href="/" className={Styles.link}>
-      <span className={Styles.logo}>
+    <Link href="/" className={styles.link}>
+      <span className={styles.logo}>
         Prostargram
         {pathname === '/auth/github' && (
-          <GitHubIcon className={Styles.github} />
+          <GitHubIcon className={styles.github} />
         )}
       </span>
     </Link>

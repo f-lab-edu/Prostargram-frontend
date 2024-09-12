@@ -1,6 +1,7 @@
+import clsx from 'clsx';
 import { ButtonHTMLAttributes } from 'react';
 
-import * as Styles from './Button.css';
+import styles from './Button.module.scss';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: 'small' | 'medium' | 'large';
@@ -18,14 +19,15 @@ const Button = ({
 }: ButtonProps) => {
   return (
     <button
-      className={[
-        Styles.buttonStyle({
-          fill,
-          size,
+      className={clsx(
+        styles.button,
+        styles[size],
+        styles[fill],
+        {
           disabled,
-        }),
+        },
         className,
-      ].join(' ')}
+      )}
       disabled={disabled}
       {...props}
     >

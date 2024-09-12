@@ -1,5 +1,6 @@
 'use client';
 
+import clsx from 'clsx';
 import {
   useState,
   FocusEvent,
@@ -14,7 +15,7 @@ import { calculateWidth } from '@/utils/dynamicWidth';
 import CircleCloseIcon from '@/assets/icons/circle-close.svg';
 import { IAddionalInfoType } from '../../types/AdditionalInfoTypes';
 
-import * as Styles from './MyInterestField.css';
+import styles from './MyInterestField.module.scss';
 
 interface MyInterestFieldProps
   extends Omit<HTMLAttributes<HTMLInputElement>, 'onClick'> {
@@ -93,13 +94,16 @@ const MyInterestField = ({
   return (
     <button
       type="button"
-      className={isEditing ? Styles.editing : Styles.completed}
+      className={clsx(styles.button, {
+        [styles.editing]: isEditing,
+        [styles.completed]: !isEditing,
+      })}
       onClick={clickHandler}
     >
       <input
         type={isEditing ? 'text' : 'hidden'}
         value={word}
-        className={Styles.myInterestInput}
+        className={styles.input}
         style={{ width: inputWidth }}
         maxLength={15}
         onChange={changeHandler}
@@ -110,7 +114,7 @@ const MyInterestField = ({
       />
       {!isEditing && (
         <>
-          <CircleCloseIcon />
+          <CircleCloseIcon className={styles.close_icon} />
           <span>#{word}</span>
         </>
       )}

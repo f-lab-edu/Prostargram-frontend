@@ -1,9 +1,10 @@
 'use client';
 
-import { HTMLAttributes, useState } from 'react';
+import clsx from 'clsx';
 import { useFormContext } from 'react-hook-form';
+import { HTMLAttributes, useState } from 'react';
 
-import * as Styles from './InterestCheckbox.css';
+import styles from './InterestCheckbox.module.scss';
 
 interface InterestCheckboxType extends HTMLAttributes<HTMLInputElement> {
   value: string;
@@ -20,7 +21,9 @@ const InterestCheckbox = ({ value, ...props }: InterestCheckboxType) => {
   return (
     <label
       htmlFor={value}
-      className={isChecked ? Styles.checkedBox : Styles.uncheckedBox}
+      className={clsx(styles.checkbox, {
+        [styles.checked]: isChecked,
+      })}
       onChange={handleChange}
     >
       <input
