@@ -98,6 +98,7 @@ const Navigation = () => {
         {menus.map((menu, idx) => {
           return (
             <li
+              key={`${menu.name}`}
               className={clsx(styles.menu_item, {
                 [styles.active]: activeMenu === idx && menu.type === 'page',
               })}
