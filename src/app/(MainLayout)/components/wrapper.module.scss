@@ -1,9 +1,9 @@
 @use '../../../styles/helpers/index' as *;
 
 .wrapper {
+  display: flex;
   width: 100%;
   height: 100%;
   background-color: $COLOR_GRAY_9;
   box-sizing: border-box;
-  padding: 30px 14vw 30px 30vw;
 }
