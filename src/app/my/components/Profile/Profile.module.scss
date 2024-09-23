@@ -1,0 +1,23 @@
+@use '../../../../styles/helpers/index' as *;
+
+.profile_content {
+  @include res--desktop {
+    width: 100%;
+    padding: 2.5rem 5.25rem 0 5.25rem;
+  }
+}
+
+.profile_image {
+  @include res--desktop {
+    position: absolute;
+    left: 50%;
+    top: -50%;
+    transform: translateX(-50%);
+    aspect-ratio: 1 / 1;
+    background-color: $COLOR_GRAY_9;
+    border: 1px solid $COLOR_GRAY_4;
+    border-radius: 9999px;
+    object-fit: contain;
+    overflow: hidden;
+  }
+}

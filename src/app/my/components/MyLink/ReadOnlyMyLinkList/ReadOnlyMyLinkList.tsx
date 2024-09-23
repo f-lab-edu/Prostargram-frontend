@@ -1,7 +1,7 @@
 import { createUniqueId } from '@/utils/create';
 import MyLinkInputStateItem from '../MyLinkInputStateItem';
 
-import * as Styles from './ReadOnlyMyLinkList.css';
+import styles from './ReadOnlyMyLinkList.module.scss';
 
 interface ReadOnlyMyLinkListProps {
   links: string[];
@@ -33,7 +33,7 @@ const ReadOnlyMyLinkList = ({ links }: ReadOnlyMyLinkListProps) => {
             {() => (
               <button
                 type="button"
-                className={Styles.myLink}
+                className={styles.my_link}
                 onClick={() => handleClick(link)}
               >
                 {link}

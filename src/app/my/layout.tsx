@@ -1,9 +1,9 @@
 import { ReactNode } from 'react';
 
+import { UserType } from './@types/my';
 import Mypage from './components/Mypage';
 
-import * as Styles from './MyFeedpage.css';
-import { UserType } from './@types/my';
+import styles from './layout.module.scss';
 
 interface MypageLayoutProps {
   children?: ReactNode;
@@ -14,7 +14,7 @@ const MypageLayout = async ({ children }: MypageLayoutProps) => {
   const userData = (await result.json()) as { data: UserType };
 
   return (
-    <div className={Styles.container}>
+    <div className={styles.container}>
       <Mypage myData={userData.data}>{children}</Mypage>
     </div>
   );

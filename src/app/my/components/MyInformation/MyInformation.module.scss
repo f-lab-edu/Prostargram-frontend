@@ -1,0 +1,21 @@
+@use '../../../../styles/helpers/index' as *;
+
+.nickname {
+  @include res--desktop {
+    font-size: $FONT_SIZE_32;
+    font-weight: bold;
+  }
+}
+
+.current_state {
+  @include res--desktop {
+    margin-bottom: 1.25rem;
+    font-weight: bold;
+  }
+}
+
+.description {
+  @include res--desktop {
+    font-size: $FONT_SIZE_14;
+  }
+}

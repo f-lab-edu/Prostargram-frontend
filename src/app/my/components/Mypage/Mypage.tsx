@@ -17,7 +17,7 @@ import FeedCount from '../FeedCount';
 import MyInterest from '../MyInterest';
 import MyInformation from '../MyInformation';
 
-import * as Styles from './Mypage.css';
+import styles from './Mypage.module.scss';
 
 interface MyPageProps {
   children?: ReactNode;
@@ -51,13 +51,13 @@ const MyPage = ({ children, myData }: MyPageProps) => {
 
   return (
     <>
-      <div className={Styles.userBackground}>백그라운드 이미지</div>
-      <div className={Styles.flex}>
-        <div className={Styles.profileAndFollowWrapper}>
-          <div className={Styles.profileWrapper}>
+      <div className={styles.user_background}>백그라운드 이미지</div>
+      <div className={styles.display_flex}>
+        <div className={styles.profile_and_follow_wrapper}>
+          <div className={styles.profile_wrapper}>
             <Profile profileUrl={profileUrl}>
               {isFollow ? (
-                <Button fill="red">
+                <Button size="large" fill="red">
                   <UnfollowIcon
                     width="20"
                     height="20"
@@ -66,7 +66,7 @@ const MyPage = ({ children, myData }: MyPageProps) => {
                   언팔로우
                 </Button>
               ) : (
-                <Button>
+                <Button size="large">
                   <FollowIcon
                     width="20"
                     height="20"
@@ -77,7 +77,7 @@ const MyPage = ({ children, myData }: MyPageProps) => {
               )}
             </Profile>
           </div>
-          <div className={Styles.flex}>
+          <div className={styles.display_flex}>
             <Follow title="팔로워" href="/my/follower">
               {formattedFollowers}
             </Follow>
@@ -86,7 +86,7 @@ const MyPage = ({ children, myData }: MyPageProps) => {
             </Follow>
           </div>
         </div>
-        <div className={Styles.myInformationWrapper}>
+        <div className={styles.my_information_wrapper}>
           <MyInformation
             nickname={nickname}
             currentState={currentState}
@@ -94,24 +94,24 @@ const MyPage = ({ children, myData }: MyPageProps) => {
           />
         </div>
       </div>
-      <div className={Styles.flex}>
+      <div className={styles.display_flex}>
         <FeedCount title="피드 작성 개수" href="/my">
           {formattedFeedCounts}
         </FeedCount>
-        <div className={Styles.myLinkWrapper}>
+        <div className={styles.my_link_wrapper}>
           <MyLink links={links} />
         </div>
       </div>
-      <div className={Styles.flex}>
-        <div className={Styles.myInterestWrapper}>
+      <div className={styles.display_flex}>
+        <div className={styles.my_interest_wrapper}>
           <p>관심사</p>
-          <div className={Styles.myInterestList}>
+          <div className={styles.my_interest_list}>
             {interests.map((interest) => (
               <MyInterest key={interest}>{interest}</MyInterest>
             ))}
           </div>
         </div>
-        <div className={Styles.changeableArea}>{children}</div>
+        <div className={styles.changeable_area}>{children}</div>
       </div>
     </>
   );

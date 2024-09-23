@@ -10,7 +10,7 @@ import Button from '@/components/common/Button';
 import validators from '@/utils/validate';
 import useSignUpState, { ISignUpFormValueType } from '@/hooks/useSignUpState';
 
-import * as Styles from './SignupPage.css';
+import styles from './page.module.scss';
 
 const SignupPage = () => {
   const router = useRouter();
@@ -39,12 +39,12 @@ const SignupPage = () => {
   };
 
   return (
-    <div className={Styles.container}>
-      <div className={Styles.logoBox}>
+    <div className={styles.container}>
+      <div className={styles.logo_box}>
         <Logo />
       </div>
 
-      <form className={Styles.form} onSubmit={handleSubmit(onSubmit)}>
+      <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
         <Field>
           <Field.FieldLabel htmlFor="email">
             <Field.FieldEmphasize>*</Field.FieldEmphasize>
@@ -63,7 +63,7 @@ const SignupPage = () => {
             />
             <Button
               type="button"
-              className={Styles.button}
+              className={styles.button}
               onClick={requestConfirmNumber}
               disabled={!isEmailPending}
             >
@@ -94,7 +94,7 @@ const SignupPage = () => {
               />
               <Button
                 type="button"
-                className={Styles.button}
+                className={styles.button}
                 onClick={checkConfirmNumber}
                 disabled={isEmailConfirmed}
               >
@@ -176,7 +176,7 @@ const SignupPage = () => {
             />
             <Button
               type="button"
-              className={Styles.button}
+              className={styles.button}
               onClick={checkNickname}
               disabled={isNicknameConfirmed}
             >
@@ -187,7 +187,7 @@ const SignupPage = () => {
             {errors.nickname?.message}
           </Field.FieldErrorMessage>
         </Field>
-        <Button className={Styles.nextButton}>다음 단계로</Button>
+        <Button className={styles.next_button}>다음 단계로</Button>
       </form>
     </div>
   );

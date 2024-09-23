@@ -1,0 +1,75 @@
+@use '../../../styles/helpers/index' as *;
+
+.wrapper {
+  @include flex-center;
+
+  gap: 10px;
+  width: 100%;
+  height: 38px;
+  min-width: 150px;
+  padding: 0 10px;
+  border: 1px solid $COLOR_GRAY_1;
+  border-radius: 10px;
+
+  &.border {
+    border-width: 1px;
+  }
+
+  &.noneBorder {
+    border-width: 0;
+    &:focus-within {
+      border: none;
+    }
+  }
+
+  &.normal {
+    &:focus-within {
+      border-color: $COLOR_PRIMARY_1;
+      border-width: 2px;
+    }
+  }
+
+  &.fail {
+    border-color: $COLOR_RED;
+    border-width: 2px;
+  }
+
+  &.disabled {
+    background-color: $COLOR_GRAY_8;
+  }
+
+  &.small {
+    height: 32px;
+  }
+
+  &.medium {
+    height: 38px;
+
+    @include res--desktop {
+      height: 48px;
+      font-size: $FONT_SIZE_16;
+    }
+  }
+}
+
+.input {
+  width: 100%;
+  font-size: $FONT_SIZE_14;
+
+  &::placeholder {
+    font-size: 12;
+  }
+
+  &:disabled {
+    color: $COLOR_GRAY_3;
+  }
+
+  @include res--desktop {
+    height: 48px;
+    font-size: $FONT_SIZE_16;
+
+    &::placeholder {
+      font-size: $FONT_SIZE_16;
+    }
+  }
+}

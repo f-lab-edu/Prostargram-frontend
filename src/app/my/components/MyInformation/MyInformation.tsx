@@ -1,4 +1,4 @@
-import * as Styles from './MyInformation.css';
+import styles from './MyInformation.module.scss';
 
 interface MyInformationProps {
   nickname: string;
@@ -12,9 +12,9 @@ const MyInformation = ({
   description,
 }: MyInformationProps) => (
   <>
-    <p className={Styles.nickname}>{nickname}</p>
-    <p className={Styles.currentState}>{currentState}</p>
-    <p className={Styles.description}>{description}</p>
+    <p className={styles.nickname}>{nickname}</p>
+    <p className={styles.current_state}>{currentState}</p>
+    <p className={styles.description}>{description}</p>
   </>
 );
 

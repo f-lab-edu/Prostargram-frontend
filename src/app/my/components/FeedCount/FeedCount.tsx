@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { ReactNode } from 'react';
 
-import * as Styles from './FeedCount.css';
+import styles from './FeedCount.module.scss';
 
 interface FeedCountProps {
   title: string;
@@ -11,10 +11,10 @@ interface FeedCountProps {
 
 const FeedCount = ({ title, href, children }: FeedCountProps) => {
   return (
-    <div className={Styles.feed}>
+    <div className={styles.feed}>
       <p>{title}</p>
       <Link href={href}>
-        <p className={Styles.textBlue}>{children}</p>
+        <p className={styles.text_blue}>{children}</p>
       </Link>
     </div>
   );

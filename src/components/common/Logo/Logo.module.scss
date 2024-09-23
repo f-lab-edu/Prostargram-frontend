@@ -1,0 +1,35 @@
+@use '../../../styles/helpers/index' as *;
+
+.link {
+  display: block;
+  text-align: center;
+
+  .logo {
+    position: relative;
+    font-size: $FONT_SIZE_32;
+    font-weight: bold;
+    color: $COLOR_PRIMARY_1;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+
+    @include res--desktop {
+      font-size: 60px;
+    }
+  }
+
+  .github {
+    position: absolute;
+    width: 1.875rem;
+    height: 1.875rem;
+    top: -10px;
+    right: -20px;
+    transform: rotate(30deg);
+
+    @include res--desktop {
+      width: 4.375rem;
+      height: 4.375rem;
+      top: -30px;
+      right: -40px;
+    }
+  }
+}

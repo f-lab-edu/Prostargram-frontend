@@ -1,9 +1,9 @@
 import { PropsWithChildren } from 'react';
 
-import * as Styles from './MyInterest.css';
+import styles from './MyInterest.module.scss';
 
 const MyInterest = ({ children }: PropsWithChildren) => (
-  <span className={Styles.myInterest}>#{children}</span>
+  <span className={styles.my_interest}>#{children}</span>
 );
 
 export default MyInterest;

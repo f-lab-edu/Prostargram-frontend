@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { ReactNode } from 'react';
 
-import * as Styles from './Follow.css';
+import styles from './Follow.module.scss';
 
 interface FollowProps {
   title: string;
@@ -11,10 +11,10 @@ interface FollowProps {
 
 const Follow = ({ title, href, children }: FollowProps) => {
   return (
-    <div className={Styles.follow}>
+    <div className={styles.follow}>
       <p>{title}</p>
       <Link href={href}>
-        <p className={Styles.textBlue}>{children}</p>
+        <p className={styles.text_blue}>{children}</p>
       </Link>
     </div>
   );

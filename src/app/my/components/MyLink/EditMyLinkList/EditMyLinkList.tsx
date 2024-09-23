@@ -2,11 +2,10 @@ import { useState } from 'react';
 
 import Input from '@/components/common/Input';
 import Button from '@/components/common/Button';
-import { flexCenter } from '@/styles/common.css';
 import { createUniqueId } from '@/utils/create';
 import MyLinkInputStateItem from '../MyLinkInputStateItem';
 
-import * as Styles from './EditMyLinkList.css';
+import styles from './EditMyLinkList.module.scss';
 
 interface EditMyLinksProps {
   links: string[];
@@ -37,14 +36,15 @@ const EditMyLinkList = ({ links }: EditMyLinksProps) => {
                 variants="noneBorder"
                 size="small"
                 name={`myLinks-${id}`}
-                className={Styles.myLinkInput}
+                className={styles.my_link_input}
                 onChange={inputStateChangeHandler}
                 value={inputState}
               />
               <Button
                 type="button"
                 fill="red"
-                className={`${flexCenter} ${Styles.removeButton}`}
+                size="none"
+                className={styles.remove_button}
                 onClick={() => removeLink(id)}
               >
                 X

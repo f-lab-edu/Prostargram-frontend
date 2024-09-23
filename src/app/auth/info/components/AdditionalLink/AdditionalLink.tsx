@@ -2,10 +2,9 @@ import { KeyboardEvent } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import Input from '@/components/common/Input';
-
 import RemoveIcon from '@/assets/icons/close.svg';
 
-import * as Styles from './AdditionalLink.css';
+import styles from './AdditionalLink.module.scss';
 
 interface AdditionalLinkProps {
   index: number;
@@ -30,7 +29,7 @@ const AdditionalLink = ({ index, removeHandler }: AdditionalLinkProps) => {
         index !== 0 && (
           <button
             type="button"
-            className={Styles.removeLinkButton}
+            className={styles.remove_link_button}
             onClick={() => removeHandler(index)}
             aria-label="remove-link"
           >

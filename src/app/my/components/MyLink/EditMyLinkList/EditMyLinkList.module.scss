@@ -1,0 +1,22 @@
+@use '../../../../../styles/helpers/index' as *;
+
+.my_link_input {
+  @include res--desktop {
+    flex: 1;
+    margin: 0;
+    padding: 0;
+    font-size: $FONT_SIZE_14;
+    border-bottom: 1px solid;
+    border-color: $COLOR_GRAY_3;
+  }
+}
+
+.remove_button {
+  @include flex-center;
+  @include res--desktop {
+    width: 2rem;
+    height: 2rem;
+    padding: 1rem;
+    font-size: 0.75rem;
+  }
+}

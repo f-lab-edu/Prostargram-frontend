@@ -1,0 +1,18 @@
+@use '../../../../styles/helpers/index' as *;
+
+.my_interest {
+  @include res--desktop {
+    padding: 10px 20px;
+    background-color: $COLOR_GRAY_9;
+    border: 1px solid $COLOR_GRAY_1;
+    border-radius: 10px;
+    transition: background 0.1s;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $COLOR_PRIMARY_2;
+      border-color: $COLOR_PRIMARY_2;
+      color: $COLOR_GRAY_9;
+    }
+  }
+}

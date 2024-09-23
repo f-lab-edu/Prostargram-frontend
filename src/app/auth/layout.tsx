@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 
 import GroupImg from '@/assets/img/group1.png';
 
-import * as Styles from './AuthLayout.css';
+import styles from './layout.module.scss';
 
 interface AuthLayoutProps {
   children?: ReactNode;
@@ -11,17 +11,12 @@ interface AuthLayoutProps {
 
 const AuthLayout = ({ children }: AuthLayoutProps) => {
   return (
-    <div className={Styles.container}>
-      <main className={Styles.innerContainer}>
-        <div className={Styles.leftBox}>{children}</div>
+    <div className={styles.container}>
+      <main className={styles.inner_container}>
+        <div className={styles.left_box}>{children}</div>
 
-        <div className={Styles.rightBox}>
-          <Image
-            src={GroupImg}
-            className={Styles.groupImg}
-            alt="group-image"
-            priority
-          />
+        <div className={styles.right_box}>
+          <Image src={GroupImg} alt="group-image" priority />
         </div>
       </main>
     </div>

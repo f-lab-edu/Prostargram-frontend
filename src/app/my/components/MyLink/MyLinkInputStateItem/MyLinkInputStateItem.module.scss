@@ -1,0 +1,13 @@
+@use '../../../../../styles/helpers/index' as *;
+
+.edit_link_input_wrapper {
+  @include res--desktop {
+    display: flex;
+    height: 2.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+  i {
+    @include flex-center;
+  }
+}

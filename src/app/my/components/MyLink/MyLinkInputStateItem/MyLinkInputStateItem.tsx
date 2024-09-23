@@ -1,7 +1,6 @@
 import { ChangeEvent, ReactNode, useState } from 'react';
 
-import { flexCenter } from '@/styles/common.css';
-import * as Styles from './MyLinkInputStateItem.css';
+import styles from './MyLinkInputStateItem.module.scss';
 
 const ICON_LIST = ['github', 'naver'];
 
@@ -28,8 +27,8 @@ const MyLinkInputStateItem = ({
     ICON_LIST.find((target) => inputState.includes(target)) || 'default';
 
   return (
-    <div className={Styles.editLinkInputWrapper}>
-      <i className={flexCenter}>{linkIcon}</i>
+    <div className={styles.edit_link_input_wrapper}>
+      <i>{linkIcon}</i>
       {children({ inputState, inputStateChangeHandler })}
     </div>
   );

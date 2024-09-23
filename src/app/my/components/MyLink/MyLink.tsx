@@ -7,7 +7,7 @@ import Button from '@/components/common/Button';
 import EditMyLinkList from './EditMyLinkList';
 import ReadOnlyMyLinkList from './ReadOnlyMyLinkList';
 
-import * as Styles from './MyLink.css';
+import styles from './MyLink.module.scss';
 
 interface MyLinkProps {
   links: string[];
@@ -34,19 +34,19 @@ const MyLink = ({ links }: MyLinkProps) => {
   };
 
   return (
-    <form onSubmit={saveLinks} className={Styles.myLinkContainer}>
+    <form onSubmit={saveLinks} className={styles.my_link_container}>
       {isEdit && (
         <>
-          <ul className={Styles.iconWithMyLinkWrapper}>
+          <ul className={styles.icon_with_my_link_wrapper}>
             <EditMyLinkList links={myLinks} />
           </ul>
-          <div className={Styles.editButtonWrapper}>
-            <Button type="submit" className={Styles.editButton}>
+          <div className={styles.edit_button_wrapper}>
+            <Button type="submit" className={styles.edit_button}>
               저장
             </Button>
             <Button
               type="button"
-              className={Styles.editButton}
+              className={styles.edit_button}
               onClick={toggleEdit}
             >
               취소
@@ -57,14 +57,14 @@ const MyLink = ({ links }: MyLinkProps) => {
 
       {!isEdit && (
         <>
-          <ul className={Styles.iconWithMyLinkWrapper}>
+          <ul className={styles.icon_with_my_link_wrapper}>
             <ReadOnlyMyLinkList links={myLinks} />
           </ul>
-          <div className={Styles.editButtonWrapper}>
+          <div className={styles.edit_button_wrapper}>
             <Button
               key="editButton"
               type="button"
-              className={Styles.editButton}
+              className={styles.edit_button}
               onClick={toggleEdit}
             >
               수정

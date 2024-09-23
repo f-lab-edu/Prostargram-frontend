@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 
 import DefaultAvatar from '@/assets/icons/default_avatar.svg';
 
-import * as Styles from './Profile.css';
+import styles from './Profile.module.scss';
 
 interface ProfileProps {
   profileUrl?: string;
@@ -12,8 +12,8 @@ interface ProfileProps {
 
 const Profile = ({ children, profileUrl }: ProfileProps) => {
   return (
-    <div className={Styles.profileContent}>
-      <div className={Styles.profileImage}>
+    <div className={styles.profile_content}>
+      <div className={styles.profile_image}>
         {profileUrl ? (
           <Image
             src={profileUrl}
