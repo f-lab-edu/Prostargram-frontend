@@ -3,6 +3,7 @@
 import { ChangeEvent, useState } from 'react';
 
 import { updateMyLinks } from '@/api/my';
+import If from '@/components/common/If';
 import Button from '@/components/common/Button';
 import EditMyLinkList from './EditMyLinkList';
 import ReadOnlyMyLinkList from './ReadOnlyMyLinkList';
@@ -25,22 +26,27 @@ const MyLink = ({ links }: MyLinkProps) => {
     const formData = new FormData(e.currentTarget);
     const submittedValue = [...formData.values()].filter((v) => Boolean(v));
 
-    if (submittedValue.length) {
-      const result = await updateMyLinks(submittedValue);
-      setMyLinks(result);
-    }
+    const result = await updateMyLinks(submittedValue);
+    setMyLinks(result);
 
     toggleEdit();
   };
 
   return (
     <form onSubmit={saveLinks} className={styles.my_link_container}>
-      {isEdit && (
-        <>
-          <ul className={styles.icon_with_my_link_wrapper}>
+      <ul className={styles.icon_with_my_link_wrapper}>
+        <If condition={isEdit}>
+          <If.True>
             <EditMyLinkList links={myLinks} />
-          </ul>
-          <div className={styles.edit_button_wrapper}>
+          </If.True>
+          <If.False>
+            <ReadOnlyMyLinkList links={myLinks} />
+          </If.False>
+        </If>
+      </ul>
+      <div className={styles.edit_button_wrapper}>
+        <If condition={isEdit}>
+          <If.True>
             <Button type="submit" className={styles.edit_button}>
               저장
             </Button>
@@ -51,16 +57,8 @@ const MyLink = ({ links }: MyLinkProps) => {
             >
               취소
             </Button>
-          </div>
-        </>
-      )}
-
-      {!isEdit && (
-        <>
-          <ul className={styles.icon_with_my_link_wrapper}>
-            <ReadOnlyMyLinkList links={myLinks} />
-          </ul>
-          <div className={styles.edit_button_wrapper}>
+          </If.True>
+          <If.False>
             <Button
               key="editButton"
               type="button"
@@ -69,9 +67,9 @@ const MyLink = ({ links }: MyLinkProps) => {
             >
               수정
             </Button>
-          </div>
-        </>
-      )}
+          </If.False>
+        </If>
+      </div>
     </form>
   );
 };

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import If from '@/components/common/If';
 import Input from '@/components/common/Input';
 import Button from '@/components/common/Button';
 import { createUniqueId } from '@/utils/create';
@@ -26,7 +27,11 @@ const EditMyLinkList = ({ links }: EditMyLinksProps) => {
 
   return (
     <li>
-      {myLinks.length === 0 && <p>아래 + 버튼을 눌러 링크를 추가해보세요!</p>}
+      <If condition={myLinks.length === 0}>
+        <If.True>
+          <p>아래 + 버튼을 눌러 링크를 추가해보세요!</p>
+        </If.True>
+      </If>
 
       {myLinks.map(({ id, link }) => (
         <MyLinkInputStateItem key={id} link={link}>
@@ -54,11 +59,13 @@ const EditMyLinkList = ({ links }: EditMyLinksProps) => {
         </MyLinkInputStateItem>
       ))}
 
-      {myLinks.length < 3 && (
-        <Button type="button" fill="white" size="small" onClick={addLink}>
-          +
-        </Button>
-      )}
+      <If condition={myLinks.length < 3}>
+        <If.True>
+          <Button type="button" fill="white" size="small" onClick={addLink}>
+            +
+          </Button>
+        </If.True>
+      </If>
     </li>
   );
 };

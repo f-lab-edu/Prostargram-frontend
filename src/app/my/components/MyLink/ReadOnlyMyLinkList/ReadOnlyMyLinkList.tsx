@@ -1,4 +1,5 @@
 import { createUniqueId } from '@/utils/create';
+import If from '@/components/common/If';
 import MyLinkInputStateItem from '../MyLinkInputStateItem';
 
 import styles from './ReadOnlyMyLinkList.module.scss';
@@ -21,26 +22,31 @@ const ReadOnlyMyLinkList = ({ links }: ReadOnlyMyLinkListProps) => {
     window.open(openLink, '_blank', 'noopener,noreferrer');
   };
 
+  const isEmptyLinks = linksWithUniqueId.length === 0;
+
   return (
     <li>
-      {linksWithUniqueId.length === 0 && (
-        <p>수정 버튼을 눌러 링크를 추가해 보세요.</p>
-      )}
+      <If condition={isEmptyLinks}>
+        <If.True>
+          <p>수정 버튼을 눌러 링크를 추가해 보세요.</p>
+        </If.True>
 
-      {linksWithUniqueId.length !== 0 &&
-        linksWithUniqueId.map(({ id, link }) => (
-          <MyLinkInputStateItem key={id} link={link}>
-            {() => (
-              <button
-                type="button"
-                className={styles.my_link}
-                onClick={() => handleClick(link)}
-              >
-                {link}
-              </button>
-            )}
-          </MyLinkInputStateItem>
-        ))}
+        <If.False>
+          {linksWithUniqueId.map(({ id, link }) => (
+            <MyLinkInputStateItem key={id} link={link}>
+              {() => (
+                <button
+                  type="button"
+                  className={styles.my_link}
+                  onClick={() => handleClick(link)}
+                >
+                  {link}
+                </button>
+              )}
+            </MyLinkInputStateItem>
+          ))}
+        </If.False>
+      </If>
     </li>
   );
 };
