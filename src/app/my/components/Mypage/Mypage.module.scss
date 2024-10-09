@@ -71,14 +71,6 @@
   }
 }
 
-.my_interest_list {
-  @include res--desktop {
-    display: flex;
-    gap: 5px;
-    flex-wrap: wrap;
-  }
-}
-
 .changeable_area {
   @include res--desktop {
     min-height: 50rem;

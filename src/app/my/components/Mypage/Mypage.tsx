@@ -87,11 +87,7 @@ const MyPage = ({ children, myData }: MyPageProps) => {
       <div className={styles.display_flex}>
         <div className={styles.my_interest_wrapper}>
           <p>관심사</p>
-          <div className={styles.my_interest_list}>
-            {interests.map((interest) => (
-              <MyInterest key={interest}>{interest}</MyInterest>
-            ))}
-          </div>
+          <MyInterest isMine={isMine} interests={interests} />
         </div>
         <div className={styles.changeable_area}>{children}</div>
       </div>

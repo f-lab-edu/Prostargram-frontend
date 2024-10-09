@@ -1,0 +1,41 @@
+@use '../../../../../styles/helpers/index' as *;
+
+.my_interest {
+  @include res--desktop {
+    position: relative;
+    padding: 10px 20px;
+    background-color: $COLOR_GRAY_9;
+    border: 1px solid $COLOR_GRAY_1;
+    border-radius: 10px;
+    transition: background 0.1s;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $COLOR_PRIMARY_2;
+      border-color: $COLOR_PRIMARY_2;
+      color: $COLOR_GRAY_9;
+    }
+  }
+
+  i {
+    position: absolute;
+    left: 1px;
+    top: 1px;
+  }
+}
+
+.interest_input {
+  display: block;
+  width: 5rem;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid $COLOR_GRAY_1;
+}
+
+.plus_button {
+  @extend .my_interest;
+
+  padding: 10px 0;
+  width: 5rem;
+  text-align: center;
+}

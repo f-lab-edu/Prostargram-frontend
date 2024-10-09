@@ -6,7 +6,7 @@ const calculateWidth = (length: number) => {
     return `${BASE_WIDTH + length * WIDTH_PER_CHAR}px`;
   }
 
-  return `${BASE_WIDTH}px`;
+  return `5rem`;
 };
 
 export { calculateWidth };
