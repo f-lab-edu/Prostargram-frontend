@@ -93,6 +93,7 @@ const MyInterestFieldForMyPage = ({
           onChange={changeHandler}
           onKeyDown={keydownHandler}
           onBlur={blurHandler}
+          maxLength={15}
           {...props}
         />
       )}

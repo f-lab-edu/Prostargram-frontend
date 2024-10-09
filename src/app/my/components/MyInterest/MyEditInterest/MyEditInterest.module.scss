@@ -1,5 +1,12 @@
 @use '../../../../../styles/helpers/index' as *;
 
+.my_interest_list {
+  display: flex;
+  width: 100%;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
 .my_interest {
   @include res--desktop {
     position: relative;

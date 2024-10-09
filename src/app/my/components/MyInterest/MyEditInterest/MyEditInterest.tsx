@@ -2,11 +2,12 @@
 
 import { useState } from 'react';
 
+import If from '@/components/common/If';
 import Button from '@/components/common/Button';
-
 import CircleCloseIcon from '@/assets/icons/circle-close-gray.svg';
-import styles from './MyEditInterest.module.scss';
 import MyInterestFieldForMyPage from '../MyInterestFieldForMyPage';
+
+import styles from './MyEditInterest.module.scss';
 
 interface MyEditInterestProps {
   interests: string[];
@@ -35,22 +36,28 @@ const MyEditInterest = ({
 
   return (
     <>
-      {nextInterests.map((interest, index) => (
-        <button
-          key={interest}
-          className={styles.my_interest}
-          onClick={() => removeInterest(index)}
-        >
-          #{interest}
-          <i>
-            <CircleCloseIcon />
-          </i>
-        </button>
-      ))}
-      <MyInterestFieldForMyPage
-        checkList={nextInterests}
-        addInterestHandler={addInterest}
-      />
+      <ul className={styles.my_interest_list}>
+        {nextInterests.map((interest, index) => (
+          <button
+            key={interest}
+            className={styles.my_interest}
+            onClick={() => removeInterest(index)}
+          >
+            #{interest}
+            <i>
+              <CircleCloseIcon />
+            </i>
+          </button>
+        ))}
+        <If condition={nextInterests.length < 10}>
+          <If.True>
+            <MyInterestFieldForMyPage
+              checkList={nextInterests}
+              addInterestHandler={addInterest}
+            />
+          </If.True>
+        </If>
+      </ul>
       <div className={styles.edit_button_wrapper}>
         <Button onClick={confirmNextInterests}>확인</Button>
         <Button fill="gray" onClick={toggleHandler}>
