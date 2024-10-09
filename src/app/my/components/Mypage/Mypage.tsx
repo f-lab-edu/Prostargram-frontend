@@ -20,7 +20,7 @@ interface MyPageProps {
   myData: UserType;
 }
 
-const isFollow = true;
+const isFollow = false;
 const isMine = false;
 
 const MyPage = ({ children, myData }: MyPageProps) => {
@@ -80,7 +80,7 @@ const MyPage = ({ children, myData }: MyPageProps) => {
           {formattedFeedCounts}
         </FeedCount>
         <div className={styles.my_link_wrapper}>
-          <MyLink links={links} />
+          <MyLink links={links} isMine={isMine} />
         </div>
       </div>
       <div className={styles.display_flex}>

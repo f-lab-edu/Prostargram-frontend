@@ -12,9 +12,10 @@ import styles from './MyLink.module.scss';
 
 interface MyLinkProps {
   links: string[];
+  isMine: boolean;
 }
 
-const MyLink = ({ links }: MyLinkProps) => {
+const MyLink = ({ links, isMine }: MyLinkProps) => {
   const [myLinks, setMyLinks] = useState(links);
   const [isEdit, setIsEdit] = useState<boolean>(false);
 
@@ -45,29 +46,33 @@ const MyLink = ({ links }: MyLinkProps) => {
         </If>
       </ul>
       <div className={styles.edit_button_wrapper}>
-        <If condition={isEdit}>
+        <If condition={isMine}>
           <If.True>
-            <Button type="submit" className={styles.edit_button}>
-              저장
-            </Button>
-            <Button
-              type="button"
-              className={styles.edit_button}
-              onClick={toggleEdit}
-            >
-              취소
-            </Button>
+            <If condition={isEdit}>
+              <If.True>
+                <Button type="submit" className={styles.edit_button}>
+                  저장
+                </Button>
+                <Button
+                  type="button"
+                  className={styles.edit_button}
+                  onClick={toggleEdit}
+                >
+                  취소
+                </Button>
+              </If.True>
+              <If.False>
+                <Button
+                  key="editButton"
+                  type="button"
+                  className={styles.edit_button}
+                  onClick={toggleEdit}
+                >
+                  수정
+                </Button>
+              </If.False>
+            </If>
           </If.True>
-          <If.False>
-            <Button
-              key="editButton"
-              type="button"
-              className={styles.edit_button}
-              onClick={toggleEdit}
-            >
-              수정
-            </Button>
-          </If.False>
         </If>
       </div>
     </form>
