@@ -5,10 +5,6 @@ import {
   digitNumberFormatter,
 } from '@/utils/formatter';
 
-import FollowIcon from '@/assets/icons/follow.svg';
-import UnfollowIcon from '@/assets/icons/unfollow.svg';
-
-import Button from '@/components/common/Button';
 import { UserType } from '../../@types/my';
 import Follow from '../Follow';
 import MyLink from '../MyLink';
@@ -24,7 +20,8 @@ interface MyPageProps {
   myData: UserType;
 }
 
-const isFollow = false;
+const isFollow = true;
+const isMine = false;
 
 const MyPage = ({ children, myData }: MyPageProps) => {
   const {
@@ -55,27 +52,11 @@ const MyPage = ({ children, myData }: MyPageProps) => {
       <div className={styles.display_flex}>
         <div className={styles.profile_and_follow_wrapper}>
           <div className={styles.profile_wrapper}>
-            <Profile profileUrl={profileUrl}>
-              {isFollow ? (
-                <Button size="large" fill="red">
-                  <UnfollowIcon
-                    width="20"
-                    height="20"
-                    style={{ marginLeft: -5, marginRight: 5 }}
-                  />
-                  언팔로우
-                </Button>
-              ) : (
-                <Button size="large">
-                  <FollowIcon
-                    width="20"
-                    height="20"
-                    style={{ marginLeft: -5, marginRight: 5 }}
-                  />
-                  팔로우
-                </Button>
-              )}
-            </Profile>
+            <Profile
+              isFollow={isFollow}
+              isMine={isMine}
+              profileUrl={profileUrl}
+            />
           </div>
           <div className={styles.display_flex}>
             <Follow title="팔로워" href="/my/follower">
