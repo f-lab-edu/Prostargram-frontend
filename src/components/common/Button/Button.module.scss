@@ -50,7 +50,7 @@
   }
 
   &.gray {
-    @include make_button($COLOR_GRAY_2, $COLOR_WHITE);
+    @include make_button($COLOR_GRAY_4, $COLOR_WHITE);
   }
 
   &.red {

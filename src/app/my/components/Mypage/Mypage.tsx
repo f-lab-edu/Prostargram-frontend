@@ -21,7 +21,7 @@ interface MyPageProps {
 }
 
 const isFollow = false;
-const isMine = false;
+const isMine = true;
 
 const MyPage = ({ children, myData }: MyPageProps) => {
   const {
@@ -49,7 +49,7 @@ const MyPage = ({ children, myData }: MyPageProps) => {
   return (
     <>
       <div className={styles.user_background}>백그라운드 이미지</div>
-      <div className={styles.display_flex}>
+      <div className={styles.profile_follow_my_information_wrapper}>
         <div className={styles.profile_and_follow_wrapper}>
           <div className={styles.profile_wrapper}>
             <Profile
@@ -69,6 +69,7 @@ const MyPage = ({ children, myData }: MyPageProps) => {
         </div>
         <div className={styles.my_information_wrapper}>
           <MyInformation
+            isMine={isMine}
             nickname={nickname}
             currentState={currentState}
             description={description}

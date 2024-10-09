@@ -2,14 +2,21 @@
 
 .nickname {
   @include res--desktop {
+    display: flex;
+    justify-content: space-between;
     font-size: $FONT_SIZE_32;
     font-weight: bold;
+
+    button {
+      width: 3.25rem;
+    }
   }
 }
 
 .current_state {
   @include res--desktop {
     margin-bottom: 1.25rem;
+    color: $COLOR_GRAY_3;
     font-weight: bold;
   }
 }
