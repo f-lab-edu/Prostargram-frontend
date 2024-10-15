@@ -1,62 +1,65 @@
 'use client';
 
-import { ReactNode, SetStateAction, useState } from 'react';
-import Link from 'next/link';
-import clsx from 'clsx';
+import { useState } from 'react';
 import HomeIcon from '@/assets/icons/nav-home.svg';
 import ProfileIcon from '@/assets/icons/nav-profile.svg';
 import SettingIcon from '@/assets/icons/nav-setting.svg';
 import DiscussionFeedIcon from '@/assets/icons/nav-discussion-feed.svg';
 import CommonFeedIcon from '@/assets/icons/nav-common-feed.svg';
 import Modal from '@/components/common/Modal';
-import styles from './navigation.module.scss';
+import styles from './Navigation.module.scss';
+import Menu from './Menu';
+import ModalMenu from './ModalMenu';
+import { MenuType, ModalMenuType } from './MenuType';
 
-type MenuType = {
-  name: string;
-  type: string;
-  url: string;
-  icon: ReactNode;
-  component?: ReactNode;
-  modalStatus?: boolean;
-  setComponentStatus?: React.Dispatch<SetStateAction<boolean>>;
-};
+type CombinedMenuType = MenuType | ModalMenuType;
 
 const Navigation = () => {
-  const [disscussionModal, setDisscussionModal] = useState(false);
-  const [commonModal, setCommonModal] = useState(false);
-
-  const closeDisscussionModal = () => {
-    setDisscussionModal(false);
-  };
-
-  const closeCommonModal = () => {
-    setCommonModal(false);
-  };
-
-  // TODO: 추후 menu url 수정 필요, 모달 대체 필요
+  // TODO: 추후 menu url 수정 필요
   const menus: MenuType[] = [
     {
       name: '홈',
       type: 'page',
       url: '/',
       icon: <HomeIcon />,
+      order: 1,
     },
     {
       name: '프로필',
       type: 'page',
-      url: '/',
+      url: '/profile',
       icon: <ProfileIcon />,
+      order: 2,
     },
+    {
+      name: '설정',
+      type: 'page',
+      url: '/settings',
+      icon: <SettingIcon />,
+      order: 5,
+    },
+  ];
+
+  const [feedModal, setFeedModal] = useState<boolean | string>(false);
+
+  const changeFeedModalStatus = (modalName: string) => {
+    setFeedModal(modalName);
+  };
+
+  const closeModal = () => {
+    setFeedModal(false);
+  };
+
+  const modalMenus: ModalMenuType[] = [
     {
       name: '일반 피드 작성',
       type: 'modal',
       url: '/',
       icon: <CommonFeedIcon />,
-      component: (
-        <Modal onClose={closeCommonModal}>일반피드로 대체 예정입니다</Modal>
-      ),
-      modalStatus: commonModal,
-      setComponentStatus: setCommonModal,
+      component: <Modal onClose={closeModal}>일반피드로 대체 예정입니다</Modal>,
+      modalStatus: feedModal === '일반 피드 작성',
+      setComponentStatus: changeFeedModalStatus,
+      order: 3,
     },
     {
       name: '토론 피드 작성',
@@ -64,54 +67,34 @@ const Navigation = () => {
       url: '/',
       icon: <DiscussionFeedIcon />,
       component: (
-        <Modal onClose={closeDisscussionModal}>
-          토론 피드로 대체 예정입니다
-        </Modal>
+        <Modal onClose={closeModal}>토론 피드로 대체 예정입니다</Modal>
       ),
-      modalStatus: disscussionModal,
-      setComponentStatus: setDisscussionModal,
-    },
-    {
-      name: '설정',
-      type: 'page',
-      url: '/',
-      icon: <SettingIcon />,
+      modalStatus: feedModal === '토론 피드 작성',
+      setComponentStatus: changeFeedModalStatus,
+      order: 4,
     },
   ];
 
-  const [activeMenu, setActiveMenu] = useState(0);
-
-  const handleMenuClick = (menu: MenuType, idx: number) => {
-    if (menu.type === 'modal' && menu.setComponentStatus) {
-      menu.setComponentStatus(true);
-    }
-
-    if (menu.type === 'page') {
-      setActiveMenu(idx);
-    }
-  };
+  const combinedMenus: CombinedMenuType[] = [...menus, ...modalMenus].sort(
+    (a, b) => a.order - b.order,
+  );
 
   return (
     <nav className={styles.nav}>
       <div className={styles.logo}>Prostagram</div>
-      <ul className={styles.menu}>
-        {menus.map((menu, idx) => {
-          return (
-            <li
-              key={`${menu.name}`}
-              className={clsx(styles.menu_item, {
-                [styles.active]: activeMenu === idx && menu.type === 'page',
-              })}
-            >
-              <Link href={menu.url} onClick={() => handleMenuClick(menu, idx)}>
-                {menu.icon}
-                <span>{menu.name}</span>
-              </Link>
-              {menu.type === 'modal' && menu.modalStatus && menu.component}
-            </li>
-          );
-        })}
-      </ul>
+      {combinedMenus.map((menu) => {
+        if (menu.type === 'page') {
+          const pageMenu = menu as MenuType;
+          // 페이지 메뉴일 경우 Menu 컴포넌트로 출력
+          return <Menu key={menu.name} menus={[pageMenu]} />;
+        }
+        if (menu.type === 'modal') {
+          // 모달 메뉴일 경우 ModalMenu 컴포넌트로 출력
+          const modalMenu = menu as ModalMenuType;
+          return <ModalMenu key={modalMenu.name} modalMenus={[modalMenu]} />;
+        }
+        return null;
+      })}
     </nav>
   );
 };
