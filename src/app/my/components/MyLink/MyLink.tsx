@@ -55,6 +55,7 @@ const MyLink = ({ links, isMine }: MyLinkProps) => {
                 </Button>
                 <Button
                   type="button"
+                  fill="gray"
                   className={styles.edit_button}
                   onClick={toggleEdit}
                 >
