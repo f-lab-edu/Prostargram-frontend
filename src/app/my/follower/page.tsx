@@ -8,14 +8,14 @@ const MOCK_PROFILES = [
     description: '프론트엔드 개발자 입니다.',
     profileUrl:
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4vkwPhD-NHO6sV_3ailgWXjiP_WPM24J3IhkB3xZ-bQ&s',
-    isFollow: true,
+    isFollow: false,
   },
   {
     username: '김철수',
     description: '백엔드 개발자 입니다.',
     profileUrl:
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4vkwPhD-NHO6sV_3ailgWXjiP_WPM24J3IhkB3xZ-bQ&s',
-    isFollow: true,
+    isFollow: false,
   },
 ];
 
