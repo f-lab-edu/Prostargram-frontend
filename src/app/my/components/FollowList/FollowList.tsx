@@ -1,23 +1,22 @@
 import Image from 'next/image';
 
-import ProfileFollowButton from '@/app/my/components/Profile/ProfileFollowButton';
+import ProfileFollowButton from '../Profile/ProfileFollowButton';
 
-import styles from './OtherProfile.module.scss';
+import styles from './FollowList.module.scss';
 
-interface OtherProfileProps {
-  isFollow: boolean;
-  profileUrl?: string;
+interface FollowProflieType {
   username: string;
   description: string;
+  isFollow: boolean;
+  profileUrl?: string;
 }
 
-const OtherProfile = ({
-  isFollow,
-  profileUrl,
-  username,
-  description,
-}: OtherProfileProps) => {
-  return (
+interface FollowListProps {
+  profileList: FollowProflieType[];
+}
+
+const FollowList = ({ profileList }: FollowListProps) => {
+  return profileList.map(({ username, description, isFollow, profileUrl }) => (
     <div className={styles.container}>
       <div className={styles.profile_wrapper}>
         <div className={styles.profile_image}>
@@ -39,7 +38,7 @@ const OtherProfile = ({
       </div>
       <ProfileFollowButton isFollow={isFollow} />
     </div>
-  );
+  ));
 };
 
-export default OtherProfile;
+export default FollowList;
