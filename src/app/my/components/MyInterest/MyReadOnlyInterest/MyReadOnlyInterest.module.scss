@@ -1,0 +1,43 @@
+@use '../../../../../styles/helpers/index' as *;
+
+.my_interest_list {
+  display: flex;
+  width: 100%;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.my_interest {
+  @include res--desktop {
+    position: relative;
+    padding: 10px 20px;
+    background-color: $COLOR_GRAY_9;
+    border: 1px solid $COLOR_GRAY_1;
+    border-radius: 10px;
+    transition: background 0.1s;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $COLOR_PRIMARY_2;
+      border-color: $COLOR_PRIMARY_2;
+      color: $COLOR_GRAY_9;
+    }
+  }
+
+  i {
+    position: absolute;
+    left: 1px;
+    top: 1px;
+  }
+}
+
+.edit_button_wrapper {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  gap: 5px;
+
+  button {
+    width: 3.5rem;
+  }
+}

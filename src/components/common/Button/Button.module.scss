@@ -6,6 +6,9 @@
 }
 
 .button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   border-radius: 10px;
   font-weight: bold;
@@ -19,6 +22,10 @@
 
   &:active {
     filter: brightness(85%);
+  }
+
+  &.none {
+    height: inherit;
   }
 
   &.small {
@@ -44,7 +51,7 @@
   }
 
   &.gray {
-    @include make_button($COLOR_GRAY_2, $COLOR_WHITE);
+    @include make_button($COLOR_GRAY_4, $COLOR_WHITE);
   }
 
   &.red {
@@ -53,6 +60,7 @@
 
   &.white {
     @include make_button($COLOR_WHITE, $COLOR_GRAY_1);
+    border: 1px solid $COLOR_GRAY_3;
   }
 
   &:disabled {

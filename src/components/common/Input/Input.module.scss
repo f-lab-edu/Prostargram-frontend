@@ -17,6 +17,9 @@
 
   &.noneBorder {
     border-width: 0;
+    &:focus-within {
+      border: none;
+    }
   }
 
   &.normal {

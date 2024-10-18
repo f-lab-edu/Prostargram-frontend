@@ -1,0 +1,14 @@
+@use '../../../styles//helpers/index' as *;
+
+.follower_page_subject {
+  margin-bottom: 30px;
+  font-size: 32px;
+  font-weight: bold;
+  color: $COLOR_GRAY_1;
+}
+
+.profile_list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}

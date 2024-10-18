@@ -1,0 +1,28 @@
+@use '../../../../styles/helpers/index' as *;
+
+.follow {
+  @include flex-center;
+  @include res--desktop {
+    flex: 1;
+    min-height: 10rem;
+    flex-direction: column;
+    border-right: 1px solid;
+  }
+
+  &:last-of-type {
+    border-right: none;
+  }
+}
+
+.text_blue {
+  @include res--desktop {
+    color: $COLOR_PRIMARY_2;
+    font-size: $FONT_SIZE_28;
+    cursor: pointer;
+
+    &:hover {
+      color: $COLOR_PRIMARY_1;
+      text-decoration: underline;
+    }
+  }
+}

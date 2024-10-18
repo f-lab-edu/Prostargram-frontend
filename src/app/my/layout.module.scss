@@ -1,0 +1,12 @@
+@use '../../styles/helpers/index' as *;
+
+.container {
+  @include res--desktop {
+    width: 66.875rem;
+    border: 1px solid $COLOR_GRAY_3;
+    border-radius: 10px;
+    background-color: $COLOR_WHITE;
+    margin: 1.875rem auto 10rem auto;
+    overflow: hidden;
+  }
+}

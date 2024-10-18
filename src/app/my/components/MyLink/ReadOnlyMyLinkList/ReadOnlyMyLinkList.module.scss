@@ -1,0 +1,12 @@
+@use '../../../../../styles/helpers/index' as *;
+
+.my_link {
+  @include res--desktop {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+    gap: 10px;
+    font-size: $FONT_SIZE_14;
+    cursor: pointer;
+  }
+}

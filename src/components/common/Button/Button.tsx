@@ -4,7 +4,7 @@ import { ButtonHTMLAttributes } from 'react';
 import styles from './Button.module.scss';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  size?: 'small' | 'medium' | 'large';
+  size?: 'none' | 'small' | 'medium' | 'large';
   fill?: 'blue' | 'red' | 'white' | 'gray';
   className?: string;
 }
