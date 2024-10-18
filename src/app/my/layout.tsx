@@ -1,12 +1,10 @@
-import { ReactNode } from 'react';
-
 import { UserType } from './@types/my';
 import Mypage from './components/Mypage';
 
 import styles from './layout.module.scss';
 
 interface MypageLayoutProps {
-  children?: ReactNode;
+  children?: React.ReactNode;
 }
 
 const MypageLayout = async ({ children }: MypageLayoutProps) => {
