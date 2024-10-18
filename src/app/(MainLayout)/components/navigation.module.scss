@@ -1,0 +1,18 @@
+@use '../../../styles/helpers/index' as *;
+
+.nav {
+  background-color: $COLOR_WHITE;
+  width: 300px;
+  height: 100vh;
+  border-right: 1px solid $COLOR_GRAY_3;
+
+  .logo {
+    box-sizing: border-box;
+    padding: 40px 62px;
+    color: $COLOR_PRIMARY_1;
+    font-size: $FONT_SIZE_30;
+    font-weight: 700;
+    text-align: center;
+    border-bottom: 1px solid $COLOR_GRAY_7;
+  }
+}
