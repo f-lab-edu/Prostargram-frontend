@@ -8,9 +8,9 @@ import DiscussionFeedIcon from '@/assets/icons/nav-discussion-feed.svg';
 import CommonFeedIcon from '@/assets/icons/nav-common-feed.svg';
 import Modal from '@/components/common/Modal';
 import styles from './Navigation.module.scss';
-import Menu from './Menu';
-import ModalMenu from './ModalMenu';
-import { MenuType, ModalMenuType } from './MenuType';
+import Menu from '../Menu/Menu';
+import ModalMenu from '../ModalMenu/ModalMenu';
+import { MenuType, ModalMenuType } from '../../@types/main';
 
 type CombinedMenuType = MenuType | ModalMenuType;
 

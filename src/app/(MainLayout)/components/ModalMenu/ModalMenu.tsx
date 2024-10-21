@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import Link from 'next/link';
-import { ModalMenuType } from './MenuType';
-import styles from './Menu.module.scss';
+import { ModalMenuType } from '../../@types/main';
+import styles from '../Menu/Menu.module.scss';
 
 type ModalMenuProps = {
   modalMenus: ModalMenuType[];

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
 import styles from './Menu.module.scss';
-import { MenuType } from './MenuType';
+import { MenuType } from '../../@types/main';
 
 type MenuProps = {
   menus: MenuType[];
