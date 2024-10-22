@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import Link from 'next/link';
 import { ModalMenuType } from '../../@types/main';
 import styles from '../Menu/Menu.module.scss';
 
@@ -12,8 +11,7 @@ const ModalMenu = ({ modalMenus }: ModalMenuProps) => {
     <ul className={styles.menu}>
       {modalMenus.map((menu) => {
         return (
-          <Link
-            href={menu.url}
+          <button
             key={`${menu.name}`}
             onClick={() => {
               if (!menu.modalStatus && menu.setComponentStatus)
@@ -25,7 +23,7 @@ const ModalMenu = ({ modalMenus }: ModalMenuProps) => {
               <span>{menu.name}</span>
               {menu.modalStatus && menu.component}
             </li>
-          </Link>
+          </button>
         );
       })}
     </ul>
