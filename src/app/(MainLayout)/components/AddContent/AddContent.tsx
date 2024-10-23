@@ -1,7 +1,10 @@
-import { SetStateAction } from 'react';
+import { SetStateAction, useState } from 'react';
 import Image from 'next/image';
 import Button from '@/components/common/Button';
 import Typo from '@/components/common/Typo';
+import CircleCloseIcon from '@/assets/icons/circle-close-gray.svg';
+import MyInterestFieldForMyPage from '@/app/my/components/MyInterest/MyInterestFieldForMyPage';
+import If from '@/components/common/If';
 import { FeedImage } from '../../@types/commonFeed';
 import ImagePreview from '../ImagePreview/ImagePreview';
 import styles from './AddContent.module.scss';
@@ -21,6 +24,16 @@ const AddContent = ({
   currentImage,
   setCurrentImage,
 }: AddContentProps) => {
+  const [nextInterests, setNextInterests] = useState<string[]>([]);
+
+  const removeInterest = (index: number) => {
+    setNextInterests((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const addInterest = (interest: string) => {
+    setNextInterests((prev) => [...prev, interest]);
+  };
+
   return (
     <>
       {/* 좌측 영역 */}
@@ -54,8 +67,29 @@ const AddContent = ({
               (최대 5개)
             </Typo>
           </Typo>
+          <ul className={styles.my_interest_list}>
+            {nextInterests.map((interest, index) => (
+              <button
+                key={interest}
+                className={styles.my_interest}
+                onClick={() => removeInterest(index)}
+              >
+                #{interest}
+                <i>
+                  <CircleCloseIcon />
+                </i>
+              </button>
+            ))}
+            <If condition={nextInterests.length < 5}>
+              <If.True>
+                <MyInterestFieldForMyPage
+                  checkList={nextInterests}
+                  addInterestHandler={addInterest}
+                />
+              </If.True>
+            </If>
+          </ul>
         </div>
-
         <div>
           <Button className={styles.prev_btn} fill="gray" onClick={onPrev}>
             이전 단계로
