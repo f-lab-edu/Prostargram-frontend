@@ -1,5 +1,6 @@
 import { FormEvent, SetStateAction } from 'react';
 import Plus from '@/assets/icons/plus.svg';
+import Remove from '@/assets/icons/remove.svg';
 import Button from '@/components/common/Button';
 import styles from './AddImage.module.scss';
 import ImagePreview from '../ImagePreview/ImagePreview';
@@ -11,6 +12,7 @@ type AddImageProps = {
   currentImage: FeedImage | null;
   setCurrentImage: React.Dispatch<SetStateAction<FeedImage | null>>;
   selectImageFile: (e: FormEvent<HTMLInputElement>) => void;
+  removeImage: (idx: number) => void;
 };
 
 const AddImage = ({
@@ -19,6 +21,7 @@ const AddImage = ({
   currentImage,
   setCurrentImage,
   selectImageFile,
+  removeImage,
 }: AddImageProps) => {
   return (
     <>
@@ -36,14 +39,20 @@ const AddImage = ({
         <div className={styles.image_upload_wrapper}>
           {images && (
             <>
-              {images.map((image) => {
+              {images.map((image, idx) => {
                 return (
-                  <img
-                    key={image.name}
-                    src={image.src}
-                    className={styles.feed_image_preview}
-                    alt="feed_image_preview"
-                  />
+                  <div className={styles.image_preview_box}>
+                    <img
+                      key={image.name}
+                      src={image.src}
+                      className={styles.feed_image_preview}
+                      alt="feed_image_preview"
+                    />
+                    <Remove
+                      className={styles.image_remove}
+                      onClick={() => removeImage(idx)}
+                    />
+                  </div>
                 );
               })}
               {images.length < 6 && (

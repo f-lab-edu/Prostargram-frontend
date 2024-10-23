@@ -9,8 +9,13 @@ type CommonFeedStep = '이미지추가' | '게시글작성';
 
 const CommonFeed = () => {
   const [step, setStep] = useState<CommonFeedStep>('이미지추가');
-  const { images, currentImage, selectImageFile, setCurrentImage } =
-    useImageUpload();
+  const {
+    images,
+    currentImage,
+    selectImageFile,
+    setCurrentImage,
+    removeImage,
+  } = useImageUpload();
 
   return (
     <Modal width="900px" onClose={() => {}}>
@@ -21,6 +26,7 @@ const CommonFeed = () => {
             currentImage={currentImage}
             selectImageFile={selectImageFile}
             setCurrentImage={setCurrentImage}
+            removeImage={removeImage}
             onNext={() => {
               setStep('게시글작성');
             }}

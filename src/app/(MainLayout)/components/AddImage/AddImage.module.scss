@@ -21,12 +21,25 @@
     @include flex-row;
     flex-wrap: wrap;
 
-    .feed_image_preview {
-      border: 1px solid $COLOR_GRAY_1;
-      border-radius: 10px;
-      width: 100px;
-      height: 100px;
-      object-fit: cover;
+    .image_preview_box {
+      position: relative;
+
+      .feed_image_preview {
+        border: 1px solid $COLOR_GRAY_1;
+        border-radius: 10px;
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+      }
+
+      .image_remove {
+        position: absolute;
+        width: 14px;
+        height: 14px;
+        left: 6px;
+        top: 6px;
+        cursor: pointer;
+      }
     }
 
     .image_upload {

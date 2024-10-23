@@ -31,6 +31,34 @@ const useImageUpload = () => {
     }
   };
 
+  const changeCurrentImage = (idx: number, newImages: Image[]) => {
+    if (idx === 0 && newImages.length === 0) {
+      setCurrentImage(null);
+    }
+
+    if (idx === 0 && newImages.length > 0) {
+      setCurrentImage(newImages[idx + 1]);
+    }
+
+    if (idx !== 0 && newImages.length > 0) {
+      setCurrentImage(newImages[idx - 1]);
+    }
+  };
+
+  const removeImage = (idx: number) => {
+    let newImages = images.filter((image) => image.index !== idx);
+
+    newImages = newImages.map((image, index) => ({
+      name: image.name,
+      src: image.src,
+      size: image.size,
+      index,
+    }));
+
+    setImages(newImages);
+    changeCurrentImage(idx, newImages);
+  };
+
   useEffect(() => {
     initCurrentImage();
   }, [images]);
@@ -40,6 +68,7 @@ const useImageUpload = () => {
     currentImage,
     selectImageFile,
     setCurrentImage,
+    removeImage,
   };
 };
 
