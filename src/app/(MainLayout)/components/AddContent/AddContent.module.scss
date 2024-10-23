@@ -1,0 +1,56 @@
+@use '../../../../styles/helpers/index' as *;
+
+.right_content {
+  width: 399px;
+  height: 100%;
+
+  .nickname {
+    padding: 20px;
+    border-bottom: 1px solid $COLOR_GRAY_1;
+    font-size: $FONT_SIZE_20;
+    height: 12%;
+    @include flex-start-center;
+    font-weight: 700;
+
+    img {
+      border-radius: 50%;
+      background-color: $COLOR_GRAY_7;
+    }
+    span {
+      position: relative;
+      top: 5px;
+      height: 32px;
+    }
+  }
+
+  .feed_content {
+    padding: 17px;
+
+    p {
+      font-weight: 700;
+    }
+
+    textarea {
+      width: 100%;
+      height: 150px;
+      margin-top: 15px;
+      font-size: $FONT_SIZE_14;
+    }
+  }
+
+  .prev_btn {
+    position: absolute;
+    width: 175px;
+    height: 50px;
+    bottom: 17px;
+    right: 207px;
+  }
+
+  .next_btn {
+    position: absolute;
+    width: 175px;
+    height: 50px;
+    bottom: 17px;
+    right: 17px;
+  }
+}

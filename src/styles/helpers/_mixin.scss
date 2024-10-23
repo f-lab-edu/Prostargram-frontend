@@ -14,6 +14,12 @@
   flex-direction: row;
 }
 
+@mixin flex-start-center {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+}
+
 @mixin flex-space-between {
   justify-content: space-between;
 }

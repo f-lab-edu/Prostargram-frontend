@@ -1,94 +1,33 @@
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, SetStateAction } from 'react';
 import Plus from '@/assets/icons/plus.svg';
 import Button from '@/components/common/Button';
-import EmptyImage from '@/assets/icons/empty-image.svg';
-import LeftArrow from '@/assets/icons/left_arrow.svg';
-import RightArrow from '@/assets/icons/right_arrow.svg';
 import styles from './AddImage.module.scss';
+import ImagePreview from '../ImagePreview/ImagePreview';
+import { FeedImage } from '../../@types/commonFeed';
 
 type AddImageProps = {
   onNext?: () => void;
+  images: FeedImage[];
+  currentImage: FeedImage | null;
+  setCurrentImage: React.Dispatch<SetStateAction<FeedImage | null>>;
+  selectImageFile: (e: FormEvent<HTMLInputElement>) => void;
 };
 
-type Image = { name: string; size: number; src: string; index: number };
-
-const AddImage = ({ onNext }: AddImageProps) => {
-  const [images, setImages] = useState<Image[]>([]);
-  const [currentImage, setCurrentImage] = useState<Image>();
-
-  const selectImageFile = (e: FormEvent<HTMLInputElement>) => {
-    const { files } = e.target as HTMLInputElement;
-
-    if (files !== null && files[0]) {
-      const reader = new FileReader();
-
-      reader.onloadend = () => {
-        const img = {
-          index: images.length,
-          name: files[0].name,
-          size: files[0].size,
-          src: reader.result as string,
-        };
-        setImages((prev) => [...prev, img]);
-      };
-      reader.readAsDataURL(files[0]); // 파일을 Data URL 형식으로 읽기
-    }
-  };
-
-  const initCurrentImage = () => {
-    if (images.length === 1) {
-      setCurrentImage(images[0]);
-    }
-  };
-
-  useEffect(() => {
-    initCurrentImage();
-  }, [images, currentImage]);
-
-  const onClickPrevImage = () => {
-    if (currentImage) setCurrentImage(images[currentImage.index - 1]);
-  };
-
-  const onClickNextImage = () => {
-    if (currentImage) setCurrentImage(images[currentImage.index + 1]);
-  };
-
+const AddImage = ({
+  onNext,
+  images,
+  currentImage,
+  setCurrentImage,
+  selectImageFile,
+}: AddImageProps) => {
   return (
     <>
       {/* 좌측 영역 */}
-      <div className={styles.left_content}>
-        {images.length === 0 && <EmptyImage />}
-        {currentImage && (
-          <img
-            key={`feed_image_${currentImage.index}`}
-            src={currentImage.src}
-            className={styles.feed_image}
-            alt="feed_image"
-          />
-        )}
-        {images.length > 1 && (
-          <>
-            {currentImage && currentImage.index !== 0 && (
-              <button
-                className={styles.left_button}
-                onClick={onClickPrevImage}
-                aria-label="prev-image-button"
-              >
-                <LeftArrow />
-              </button>
-            )}
-            {currentImage && currentImage.index !== images.length - 1 && (
-              <button
-                className={styles.right_button}
-                onClick={onClickNextImage}
-                aria-label="next-image-button"
-              >
-                <RightArrow />
-              </button>
-            )}
-          </>
-        )}
-      </div>
+      <ImagePreview
+        images={images}
+        currentImage={currentImage!}
+        setCurrentImage={setCurrentImage}
+      />
       {/* 우측 영역 */}
       <div className={styles.right_content}>
         <div className={styles.add_img_title}>
@@ -118,7 +57,7 @@ const AddImage = ({ onNext }: AddImageProps) => {
                     className={styles.file_input}
                     type="file"
                     id="file-input"
-                    onInput={(e) => selectImageFile(e)}
+                    onInput={selectImageFile}
                   />
                 </div>
               )}
