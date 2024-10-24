@@ -4,8 +4,7 @@ import useImageUpload from '@/hooks/useImageUpload';
 import style from './CommonFeed.module.scss';
 import AddImage from '../AddImage/AddImage';
 import AddContent from '../AddContent/AddContent';
-
-type CommonFeedStep = '이미지추가' | '게시글작성';
+import { CommonFeedData, CommonFeedStep } from '../../@types/commonFeed';
 
 const CommonFeed = () => {
   const [step, setStep] = useState<CommonFeedStep>('이미지추가');
@@ -16,6 +15,16 @@ const CommonFeed = () => {
     setCurrentImage,
     removeImage,
   } = useImageUpload();
+  const [data, setData] = useState<CommonFeedData>({
+    images,
+    content: '',
+    hashtag: [],
+  });
+
+  const createCommonFeed = () => {
+    // TODO: 일반피드 작성 서버 API 연동
+    console.log('데이터', data);
+  };
 
   return (
     <Modal width="900px" onClose={() => {}}>
@@ -27,6 +36,7 @@ const CommonFeed = () => {
             selectImageFile={selectImageFile}
             setCurrentImage={setCurrentImage}
             removeImage={removeImage}
+            setData={setData}
             onNext={() => {
               setStep('게시글작성');
             }}
@@ -37,12 +47,12 @@ const CommonFeed = () => {
             images={images}
             currentImage={currentImage}
             setCurrentImage={setCurrentImage}
+            data={data}
+            setData={setData}
             onPrev={() => {
               setStep('이미지추가');
             }}
-            onNext={() => {
-              console.log('게시');
-            }}
+            onNext={createCommonFeed}
           />
         )}
       </div>

@@ -1,11 +1,11 @@
-import { SetStateAction, useState } from 'react';
+import { ChangeEvent, SetStateAction, useEffect, useState } from 'react';
 import Image from 'next/image';
 import Button from '@/components/common/Button';
 import Typo from '@/components/common/Typo';
 import CircleCloseIcon from '@/assets/icons/circle-close-gray.svg';
 import MyInterestFieldForMyPage from '@/app/my/components/MyInterest/MyInterestFieldForMyPage';
 import If from '@/components/common/If';
-import { FeedImage } from '../../@types/commonFeed';
+import { CommonFeedData, FeedImage } from '../../@types/commonFeed';
 import ImagePreview from '../ImagePreview/ImagePreview';
 import styles from './AddContent.module.scss';
 
@@ -15,6 +15,8 @@ type AddContentProps = {
   images: FeedImage[];
   currentImage: FeedImage | null;
   setCurrentImage: React.Dispatch<SetStateAction<FeedImage | null>>;
+  data: CommonFeedData;
+  setData: React.Dispatch<SetStateAction<CommonFeedData>>;
 };
 
 const AddContent = ({
@@ -23,6 +25,8 @@ const AddContent = ({
   images,
   currentImage,
   setCurrentImage,
+  data,
+  setData,
 }: AddContentProps) => {
   const [nextInterests, setNextInterests] = useState<string[]>([]);
 
@@ -32,6 +36,20 @@ const AddContent = ({
 
   const addInterest = (interest: string) => {
     setNextInterests((prev) => [...prev, interest]);
+  };
+
+  useEffect(() => {
+    setData((prev) => ({
+      ...prev,
+      hashtag: nextInterests,
+    }));
+  }, [nextInterests]);
+
+  const onChangeTextarea = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setData((prev) => ({
+      ...prev,
+      content: e.target.value,
+    }));
   };
 
   return (
@@ -60,7 +78,14 @@ const AddContent = ({
             게시글 작성
           </Typo>
           {/* 컴포넌트화 */}
-          <textarea placeholder="문구 작성 ..." maxLength={2000} />
+          <textarea
+            value={data?.content}
+            onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
+              onChangeTextarea(e)
+            }
+            placeholder="문구 작성 ..."
+            maxLength={2000}
+          />
           <Typo as="p" color="gray-2" fontSize="body-20">
             해시태그 작성
             <Typo as="span" color="gray-4" fontSize="body-20">
