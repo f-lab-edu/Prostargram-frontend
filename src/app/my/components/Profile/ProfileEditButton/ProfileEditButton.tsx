@@ -20,7 +20,7 @@ const ProfileEditButton = ({
         <Button size="large" onClick={onSave}>
           저장
         </Button>
-        <Button size="large" onClick={onCancel}>
+        <Button fill="gray" size="large" onClick={onCancel}>
           취소
         </Button>
       </If.True>
