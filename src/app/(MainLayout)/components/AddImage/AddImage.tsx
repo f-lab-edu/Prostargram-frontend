@@ -1,4 +1,5 @@
 import { FormEvent, SetStateAction, useEffect } from 'react';
+import Image from 'next/image';
 import Plus from '@/assets/icons/plus.svg';
 import Remove from '@/assets/icons/remove.svg';
 import Button from '@/components/common/Button';
@@ -30,7 +31,7 @@ const AddImage = ({
       ...prev,
       images,
     }));
-  }, [images]);
+  }, [images, setData]);
 
   return (
     <>
@@ -51,10 +52,12 @@ const AddImage = ({
               {images.map((image, idx) => {
                 return (
                   <div className={styles.image_preview_box}>
-                    <img
+                    <Image
                       key={image.name}
                       src={image.src}
                       className={styles.feed_image_preview}
+                      width={100}
+                      height={100}
                       alt="feed_image_preview"
                     />
                     <Remove

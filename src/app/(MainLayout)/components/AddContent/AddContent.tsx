@@ -43,7 +43,7 @@ const AddContent = ({
       ...prev,
       hashtag: nextInterests,
     }));
-  }, [nextInterests]);
+  }, [nextInterests, setData]);
 
   const onChangeTextarea = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setData((prev) => ({
@@ -64,7 +64,7 @@ const AddContent = ({
       <div className={styles.right_content}>
         <div className={styles.nickname}>
           <Image
-            src="../../../../assets/icons/caution.svg"
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4vkwPhD-NHO6sV_3ailgWXjiP_WPM24J3IhkB3xZ-bQ&s"
             alt=""
             width="32"
             height="32"
@@ -119,7 +119,11 @@ const AddContent = ({
           <Button className={styles.prev_btn} fill="gray" onClick={onPrev}>
             이전 단계로
           </Button>
-          <Button className={styles.next_btn} onClick={onNext}>
+          <Button
+            disabled={data.content.length === 0}
+            className={styles.next_btn}
+            onClick={onNext}
+          >
             게시
           </Button>
         </div>

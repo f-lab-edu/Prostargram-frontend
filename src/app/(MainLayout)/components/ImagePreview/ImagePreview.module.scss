@@ -16,10 +16,10 @@
   width: calc(100% - 399px);
   height: 100%;
   border-right: 1px solid $COLOR_GRAY_1;
-  padding: 100px;
 
   .feed_image {
-    width: 100%;
+    padding: 100px;
+    box-sizing: border-box;
   }
 
   .left_button {

@@ -1,4 +1,5 @@
 import { SetStateAction } from 'react';
+import Image from 'next/image';
 import EmptyImage from '@/assets/icons/empty-image.svg';
 import LeftArrow from '@/assets/icons/left_arrow.svg';
 import RightArrow from '@/assets/icons/right_arrow.svg';
@@ -28,11 +29,12 @@ const ImagePreview = ({
     <div className={styles.left_content}>
       {images.length === 0 && <EmptyImage />}
       {currentImage && (
-        <img
+        <Image
           key={`feed_image_${currentImage.index}`}
           src={currentImage.src}
           className={styles.feed_image}
           alt="feed_image"
+          fill
         />
       )}
       {images.length > 1 && (
