@@ -8,9 +8,10 @@ import DiscussionFeedIcon from '@/assets/icons/nav-discussion-feed.svg';
 import CommonFeedIcon from '@/assets/icons/nav-common-feed.svg';
 import Modal from '@/components/common/Modal';
 import styles from './Navigation.module.scss';
-import Menu from './Menu';
-import ModalMenu from './ModalMenu';
-import { MenuType, ModalMenuType } from './MenuType';
+import Menu from '../Menu/Menu';
+import ModalMenu from '../ModalMenu/ModalMenu';
+import { MenuType, ModalMenuType } from '../../@types/main';
+import CommonFeed from '../CommonFeed/CommonFeed';
 
 type CombinedMenuType = MenuType | ModalMenuType;
 
@@ -56,7 +57,9 @@ const Navigation = () => {
       type: 'modal',
       url: '/',
       icon: <CommonFeedIcon />,
-      component: <Modal onClose={closeModal}>일반피드로 대체 예정입니다</Modal>,
+      component: (
+        <CommonFeed modalStatus={feedModal} setModalStauts={setFeedModal} />
+      ),
       modalStatus: feedModal === '일반 피드 작성',
       setComponentStatus: changeFeedModalStatus,
       order: 3,

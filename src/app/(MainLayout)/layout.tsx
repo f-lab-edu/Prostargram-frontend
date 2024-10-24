@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
-import Wrapper from './components/Wrapper';
-import Navigation from './components/Navigation';
+import Wrapper from './components/Wrapper/Wrapper';
+import Navigation from './components/Navigation/Navigation';
 
 interface MainLayoutProps {
   children?: ReactNode;
