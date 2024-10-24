@@ -1,11 +1,16 @@
-import { SetStateAction, useState } from 'react';
+import React, { SetStateAction, useState } from 'react';
 import Modal from '@/components/common/Modal';
 import useImageUpload from '@/hooks/useImageUpload';
 import ConfirmPopup from '@/components/common/Popup/ConfirmPopup/ConfirmPopup';
 import style from './CommonFeed.module.scss';
 import AddImage from '../AddImage/AddImage';
 import AddContent from '../AddContent/AddContent';
-import { CommonFeedData, CommonFeedStep } from '../../@types/commonFeed';
+import {
+  CommonFeedData,
+  CommonFeedPopup,
+  CommonFeedStep,
+  FeedImage,
+} from '../../@types/commonFeed';
 
 type CommonFeedProps = {
   modalStatus: boolean | string;
@@ -27,33 +32,49 @@ const CommonFeed = ({ modalStatus, setModalStauts }: CommonFeedProps) => {
     hashtag: [],
   });
 
-  const [publishPopupOn, setPublisgPopupOn] = useState(false);
+  const updateImages = (newImages: FeedImage[]) => {
+    setData((prev) => ({
+      ...prev,
+      images: newImages,
+    }));
+  };
+
+  const updateContents = (newContents: string) => {
+    setData((prev) => ({
+      ...prev,
+      content: newContents,
+    }));
+  };
+
+  const updateHashTags = (newHashtags: string[]) => {
+    setData((prev) => ({
+      ...prev,
+      hashtag: newHashtags,
+    }));
+  };
+
+  const [popupState, setPopupState] = useState<CommonFeedPopup>(null);
+
+  const handleCloseModal = () => setPopupState('confirm');
+  const handleOpenPublishPopup = () => setPopupState('publish');
+  const handleClosePopup = () => setPopupState(null);
 
   const createCommonFeed = () => {
     // TODO: 일반피드 작성 서버 API 연동
     console.log('데이터', data);
-    setPublisgPopupOn(false);
+    handleClosePopup();
     setModalStauts(false);
   };
 
-  const [confirmPopupOn, setConfirmPopupOn] = useState(false);
-
-  const deleteFeedHandler = () => {
+  const handleDeleteFeed = () => {
     setModalStauts(false);
-    setConfirmPopupOn(false);
+    handleClosePopup();
   };
 
-  const onCancelConfirmPopup = () => {
-    setConfirmPopupOn(false);
-  };
-
-  const onCancelPublishPopup = () => {
-    setPublisgPopupOn(false);
-  };
   return (
     <>
       {modalStatus === '일반 피드 작성' && (
-        <Modal width="900px" onClose={() => setConfirmPopupOn(true)}>
+        <Modal width="900px" onClose={() => handleCloseModal()}>
           <div className={style.content_wrapper}>
             {step === '이미지추가' && (
               <AddImage
@@ -62,7 +83,7 @@ const CommonFeed = ({ modalStatus, setModalStauts }: CommonFeedProps) => {
                 selectImageFile={selectImageFile}
                 setCurrentImage={setCurrentImage}
                 removeImage={removeImage}
-                setData={setData}
+                updateImages={updateImages}
                 onNext={() => {
                   setStep('게시글작성');
                 }}
@@ -74,17 +95,18 @@ const CommonFeed = ({ modalStatus, setModalStauts }: CommonFeedProps) => {
                 currentImage={currentImage}
                 setCurrentImage={setCurrentImage}
                 data={data}
-                setData={setData}
+                updateContents={updateContents}
+                updateHashtags={updateHashTags}
                 onPrev={() => {
                   setStep('이미지추가');
                 }}
-                onNext={() => setPublisgPopupOn(true)}
+                onNext={() => handleOpenPublishPopup()}
               />
             )}
           </div>
         </Modal>
       )}
-      {confirmPopupOn && (
+      {popupState === 'confirm' && (
         <ConfirmPopup
           leftBtnColor="red"
           rightBtnColor="gray"
@@ -92,11 +114,11 @@ const CommonFeed = ({ modalStatus, setModalStauts }: CommonFeedProps) => {
           subText="지금 나가면, 수정 내용이 저장되지 않습니다."
           leftBtnText="삭제"
           rightBtnText="취소"
-          onAction={deleteFeedHandler}
-          onCancel={onCancelConfirmPopup}
+          onAction={handleDeleteFeed}
+          onCancel={handleClosePopup}
         />
       )}
-      {publishPopupOn && (
+      {popupState === 'publish' && (
         <ConfirmPopup
           leftBtnColor="blue"
           rightBtnColor="gray"
@@ -104,7 +126,7 @@ const CommonFeed = ({ modalStatus, setModalStauts }: CommonFeedProps) => {
           leftBtnText="게시"
           rightBtnText="취소"
           onAction={createCommonFeed}
-          onCancel={onCancelPublishPopup}
+          onCancel={handleClosePopup}
         />
       )}
     </>

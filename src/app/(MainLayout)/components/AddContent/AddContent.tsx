@@ -16,7 +16,8 @@ type AddContentProps = {
   currentImage: FeedImage | null;
   setCurrentImage: React.Dispatch<SetStateAction<FeedImage | null>>;
   data: CommonFeedData;
-  setData: React.Dispatch<SetStateAction<CommonFeedData>>;
+  updateContents: (contents: string) => void;
+  updateHashtags: (hashtags: string[]) => void;
 };
 
 const AddContent = ({
@@ -26,30 +27,25 @@ const AddContent = ({
   currentImage,
   setCurrentImage,
   data,
-  setData,
+  updateContents,
+  updateHashtags,
 }: AddContentProps) => {
-  const [nextInterests, setNextInterests] = useState<string[]>([]);
+  const [hashtags, setHashtags] = useState<string[]>([]);
 
   const removeInterest = (index: number) => {
-    setNextInterests((prev) => prev.filter((_, i) => i !== index));
+    setHashtags((prev) => prev.filter((_, i) => i !== index));
   };
 
   const addInterest = (interest: string) => {
-    setNextInterests((prev) => [...prev, interest]);
+    setHashtags((prev) => [...prev, interest]);
   };
 
   useEffect(() => {
-    setData((prev) => ({
-      ...prev,
-      hashtag: nextInterests,
-    }));
-  }, [nextInterests, setData]);
+    updateHashtags(hashtags);
+  }, [hashtags]);
 
   const onChangeTextarea = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setData((prev) => ({
-      ...prev,
-      content: e.target.value,
-    }));
+    updateContents(e.target.value);
   };
 
   return (
@@ -93,22 +89,22 @@ const AddContent = ({
             </Typo>
           </Typo>
           <ul className={styles.my_interest_list}>
-            {nextInterests.map((interest, index) => (
+            {hashtags.map((hashtag, index) => (
               <button
-                key={interest}
+                key={hashtag}
                 className={styles.my_interest}
                 onClick={() => removeInterest(index)}
               >
-                #{interest}
+                #{hashtag}
                 <i>
                   <CircleCloseIcon />
                 </i>
               </button>
             ))}
-            <If condition={nextInterests.length < 5}>
+            <If condition={hashtags.length < 5}>
               <If.True>
                 <MyInterestFieldForMyPage
-                  checkList={nextInterests}
+                  checkList={hashtags}
                   addInterestHandler={addInterest}
                 />
               </If.True>

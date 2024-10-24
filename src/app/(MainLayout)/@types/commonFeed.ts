@@ -12,4 +12,6 @@ type CommonFeedData = {
   hashtag: string[];
 };
 
-export type { CommonFeedStep, FeedImage, CommonFeedData };
+type CommonFeedPopup = 'confirm' | 'publish' | null;
+
+export type { CommonFeedStep, FeedImage, CommonFeedData, CommonFeedPopup };

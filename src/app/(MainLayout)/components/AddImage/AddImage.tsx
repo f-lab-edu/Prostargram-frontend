@@ -5,7 +5,7 @@ import Remove from '@/assets/icons/remove.svg';
 import Button from '@/components/common/Button';
 import styles from './AddImage.module.scss';
 import ImagePreview from '../ImagePreview/ImagePreview';
-import { CommonFeedData, FeedImage } from '../../@types/commonFeed';
+import { FeedImage } from '../../@types/commonFeed';
 
 type AddImageProps = {
   onNext?: () => void;
@@ -14,7 +14,7 @@ type AddImageProps = {
   setCurrentImage: React.Dispatch<SetStateAction<FeedImage | null>>;
   selectImageFile: (e: FormEvent<HTMLInputElement>) => void;
   removeImage: (idx: number) => void;
-  setData: React.Dispatch<SetStateAction<CommonFeedData>>;
+  updateImages: (images: FeedImage[]) => void;
 };
 
 const AddImage = ({
@@ -24,14 +24,11 @@ const AddImage = ({
   setCurrentImage,
   selectImageFile,
   removeImage,
-  setData,
+  updateImages,
 }: AddImageProps) => {
   useEffect(() => {
-    setData((prev) => ({
-      ...prev,
-      images,
-    }));
-  }, [images, setData]);
+    updateImages(images);
+  }, [images]);
 
   return (
     <>
@@ -61,6 +58,7 @@ const AddImage = ({
                       alt="feed_image_preview"
                     />
                     <Remove
+                      key={`${image.name}_remove`}
                       className={styles.image_remove}
                       onClick={() => removeImage(idx)}
                     />
