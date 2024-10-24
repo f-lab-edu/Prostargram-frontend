@@ -57,7 +57,9 @@ const Navigation = () => {
       type: 'modal',
       url: '/',
       icon: <CommonFeedIcon />,
-      component: <CommonFeed />,
+      component: (
+        <CommonFeed modalStatus={feedModal} setModalStauts={setFeedModal} />
+      ),
       modalStatus: feedModal === '일반 피드 작성',
       setComponentStatus: changeFeedModalStatus,
       order: 3,

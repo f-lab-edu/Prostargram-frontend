@@ -32,10 +32,11 @@ const ConfirmPopup = ({
         <Typo as="h1" fontSize="body-20" color="gray-2">
           {mainText}
         </Typo>
-        <Typo as="h2" fontSize="body-14" color="gray-4">
-          {subText}
-        </Typo>
-
+        {subText && (
+          <Typo as="h2" fontSize="body-14" color="gray-4">
+            {subText}
+          </Typo>
+        )}
         <div className={styles.button_box}>
           <Button fill={leftBtnColor} size="medium" onClick={onAction}>
             {leftBtnText}

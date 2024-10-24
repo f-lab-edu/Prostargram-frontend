@@ -4,7 +4,7 @@ import styles from './modal.module.scss';
 type ModalProps = {
   children?: ReactNode;
   width?: CSSProperties['width'];
-  onClose: (status: boolean) => void;
+  onClose?: (status: boolean) => void;
 };
 
 const Modal = ({ children, width = '800px', onClose }: ModalProps) => {
@@ -13,7 +13,7 @@ const Modal = ({ children, width = '800px', onClose }: ModalProps) => {
   };
 
   const handleWrapperClick = () => {
-    onClose(false);
+    if (onClose) onClose(false);
   };
 
   return (
