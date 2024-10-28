@@ -5,7 +5,7 @@ import Remove from '@/assets/icons/remove.svg';
 import Button from '@/components/common/Button';
 import styles from './AddImage.module.scss';
 import ImagePreview from '../ImagePreview/ImagePreview';
-import { FeedImage } from '../../@types/commonFeed';
+import { FeedImage } from '../../@types/feed';
 
 type AddImageProps = {
   onNext?: () => void;
@@ -82,15 +82,15 @@ const AddImage = ({
               )}
             </>
           )}
-        </div>
 
-        <Button
-          disabled={images.length === 0}
-          className={styles.next_btn}
-          onClick={onNext}
-        >
-          다음 단계로
-        </Button>
+          <Button
+            disabled={images.length === 0}
+            className={styles.next_btn}
+            onClick={onNext}
+          >
+            다음 단계로
+          </Button>
+        </div>
       </div>
     </>
   );

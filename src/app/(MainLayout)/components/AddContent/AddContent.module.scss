@@ -1,6 +1,7 @@
 @use '../../../../styles/helpers/index' as *;
 
 .right_content {
+  position: relative;
   width: 399px;
   height: 100%;
 
@@ -24,8 +25,9 @@
   }
 
   .feed_content {
+    position: relative;
     padding: 17px;
-
+    height: 88%;
     p {
       font-weight: 700;
     }
@@ -36,22 +38,22 @@
       margin: 15px 0;
       font-size: $FONT_SIZE_14;
     }
-  }
 
-  .prev_btn {
-    position: absolute;
-    width: 175px;
-    height: 50px;
-    bottom: 17px;
-    right: 207px;
-  }
+    .flex_box {
+      @include flex-center;
+      width: calc(100% - 34px);
+      position: absolute;
+      bottom: 17px;
+      gap: 15px;
 
-  .next_btn {
-    position: absolute;
-    width: 175px;
-    height: 50px;
-    bottom: 17px;
-    right: 17px;
+      .prev_btn {
+        height: 50px;
+      }
+
+      .next_btn {
+        height: 50px;
+      }
+    }
   }
 }
 

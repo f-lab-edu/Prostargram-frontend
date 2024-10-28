@@ -5,30 +5,43 @@ import Typo from '@/components/common/Typo';
 import CircleCloseIcon from '@/assets/icons/circle-close-gray.svg';
 import MyInterestFieldForMyPage from '@/app/my/components/MyInterest/MyInterestFieldForMyPage';
 import If from '@/components/common/If';
-import { CommonFeedData, FeedImage } from '../../@types/commonFeed';
+import {
+  CommonFeedData,
+  DiscussionFeedData,
+  FeedImage,
+} from '../../@types/feed';
 import ImagePreview from '../ImagePreview/ImagePreview';
 import styles from './AddContent.module.scss';
+import DiscussionSubject from '../\bDiscussionSubject/DiscussionSubject';
 
 type AddContentProps = {
+  feedType: 'common' | 'discussion';
   onPrev?: () => void;
   onNext?: () => void;
-  images: FeedImage[];
-  currentImage: FeedImage | null;
-  setCurrentImage: React.Dispatch<SetStateAction<FeedImage | null>>;
-  data: CommonFeedData;
+  images?: FeedImage[];
+  currentImage?: FeedImage | null;
+  setCurrentImage?: React.Dispatch<SetStateAction<FeedImage | null>>;
+  commonFeedData?: CommonFeedData;
+  discussionFeedData?: DiscussionFeedData;
   updateContents: (contents: string) => void;
   updateHashtags: (hashtags: string[]) => void;
+  updateSubject1?: (sub1: string) => void;
+  updateSubject2?: (sub2: string) => void;
 };
 
 const AddContent = ({
+  feedType,
   onPrev,
   onNext,
   images,
   currentImage,
   setCurrentImage,
-  data,
+  discussionFeedData,
+  commonFeedData,
   updateContents,
   updateHashtags,
+  updateSubject1,
+  updateSubject2,
 }: AddContentProps) => {
   const [hashtags, setHashtags] = useState<string[]>([]);
 
@@ -51,11 +64,20 @@ const AddContent = ({
   return (
     <>
       {/* 좌측 영역 */}
-      <ImagePreview
-        images={images}
-        currentImage={currentImage!}
-        setCurrentImage={setCurrentImage}
-      />
+      {feedType === 'common' && images && setCurrentImage && (
+        <ImagePreview
+          images={images}
+          currentImage={currentImage!}
+          setCurrentImage={setCurrentImage}
+        />
+      )}
+      {feedType === 'discussion' && (
+        <DiscussionSubject
+          updateSubject1={(value: string) => updateSubject1?.(value)}
+          updateSubject2={(value: string) => updateSubject2?.(value)}
+        />
+      )}
+
       {/* 우측 영역 */}
       <div className={styles.right_content}>
         <div className={styles.nickname}>
@@ -75,7 +97,11 @@ const AddContent = ({
           </Typo>
           {/* 컴포넌트화 */}
           <textarea
-            value={data?.content}
+            value={
+              feedType === 'common'
+                ? commonFeedData?.content
+                : discussionFeedData?.content
+            }
             onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
               onChangeTextarea(e)
             }
@@ -110,18 +136,27 @@ const AddContent = ({
               </If.True>
             </If>
           </ul>
-        </div>
-        <div>
-          <Button className={styles.prev_btn} fill="gray" onClick={onPrev}>
-            이전 단계로
-          </Button>
-          <Button
-            disabled={data.content.length === 0}
-            className={styles.next_btn}
-            onClick={onNext}
-          >
-            게시
-          </Button>
+
+          <div className={styles.flex_box}>
+            {feedType === 'common' && (
+              <Button className={styles.prev_btn} fill="gray" onClick={onPrev}>
+                이전 단계로
+              </Button>
+            )}
+            <Button
+              disabled={
+                feedType === 'common'
+                  ? commonFeedData?.content.length === 0
+                  : discussionFeedData?.content.length === 0 ||
+                    discussionFeedData?.subject1.length === 0 ||
+                    discussionFeedData?.subject2.length === 0
+              }
+              className={styles.next_btn}
+              onClick={onNext}
+            >
+              게시
+            </Button>
+          </div>
         </div>
       </div>
     </>

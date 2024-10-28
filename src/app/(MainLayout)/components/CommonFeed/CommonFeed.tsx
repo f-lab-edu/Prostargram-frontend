@@ -7,17 +7,17 @@ import AddImage from '../AddImage/AddImage';
 import AddContent from '../AddContent/AddContent';
 import {
   CommonFeedData,
-  CommonFeedPopup,
+  FeedPopup,
   CommonFeedStep,
   FeedImage,
-} from '../../@types/commonFeed';
+} from '../../@types/feed';
 
 type CommonFeedProps = {
   modalStatus: boolean | string;
-  setModalStauts: React.Dispatch<SetStateAction<boolean | string>>;
+  setModalStatus: React.Dispatch<SetStateAction<boolean | string>>;
 };
 
-const CommonFeed = ({ modalStatus, setModalStauts }: CommonFeedProps) => {
+const CommonFeed = ({ modalStatus, setModalStatus }: CommonFeedProps) => {
   const [step, setStep] = useState<CommonFeedStep>('이미지추가');
   const {
     images,
@@ -26,34 +26,34 @@ const CommonFeed = ({ modalStatus, setModalStauts }: CommonFeedProps) => {
     setCurrentImage,
     removeImage,
   } = useImageUpload();
-  const [data, setData] = useState<CommonFeedData>({
+  const [commonFeedData, setCommonFeedData] = useState<CommonFeedData>({
     images,
     content: '',
     hashtag: [],
   });
 
   const updateImages = (newImages: FeedImage[]) => {
-    setData((prev) => ({
+    setCommonFeedData((prev) => ({
       ...prev,
       images: newImages,
     }));
   };
 
   const updateContents = (newContents: string) => {
-    setData((prev) => ({
+    setCommonFeedData((prev) => ({
       ...prev,
       content: newContents,
     }));
   };
 
   const updateHashTags = (newHashtags: string[]) => {
-    setData((prev) => ({
+    setCommonFeedData((prev) => ({
       ...prev,
       hashtag: newHashtags,
     }));
   };
 
-  const [popupState, setPopupState] = useState<CommonFeedPopup>(null);
+  const [popupState, setPopupState] = useState<FeedPopup>(null);
 
   const handleCloseModal = () => setPopupState('confirm');
   const handleOpenPublishPopup = () => setPopupState('publish');
@@ -61,13 +61,13 @@ const CommonFeed = ({ modalStatus, setModalStauts }: CommonFeedProps) => {
 
   const createCommonFeed = () => {
     // TODO: 일반피드 작성 서버 API 연동
-    console.log('데이터', data);
+    console.log('데이터', setCommonFeedData);
     handleClosePopup();
-    setModalStauts(false);
+    setModalStatus(false);
   };
 
   const handleDeleteFeed = () => {
-    setModalStauts(false);
+    setModalStatus(false);
     handleClosePopup();
   };
 
@@ -91,10 +91,11 @@ const CommonFeed = ({ modalStatus, setModalStauts }: CommonFeedProps) => {
             )}
             {step === '게시글작성' && (
               <AddContent
+                feedType="common"
                 images={images}
                 currentImage={currentImage}
                 setCurrentImage={setCurrentImage}
-                data={data}
+                commonFeedData={commonFeedData}
                 updateContents={updateContents}
                 updateHashtags={updateHashTags}
                 onPrev={() => {

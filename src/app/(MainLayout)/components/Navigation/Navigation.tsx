@@ -6,12 +6,12 @@ import ProfileIcon from '@/assets/icons/nav-profile.svg';
 import SettingIcon from '@/assets/icons/nav-setting.svg';
 import DiscussionFeedIcon from '@/assets/icons/nav-discussion-feed.svg';
 import CommonFeedIcon from '@/assets/icons/nav-common-feed.svg';
-import Modal from '@/components/common/Modal';
 import styles from './Navigation.module.scss';
 import Menu from '../Menu/Menu';
 import ModalMenu from '../ModalMenu/ModalMenu';
 import { MenuType, ModalMenuType } from '../../@types/main';
 import CommonFeed from '../CommonFeed/CommonFeed';
+import DiscussionFeed from '../DiscussionFeed/DiscussionFeed';
 
 type CombinedMenuType = MenuType | ModalMenuType;
 
@@ -47,10 +47,6 @@ const Navigation = () => {
     setFeedModal(modalName);
   };
 
-  const closeModal = () => {
-    setFeedModal(false);
-  };
-
   const modalMenus: ModalMenuType[] = [
     {
       name: '일반 피드 작성',
@@ -58,7 +54,7 @@ const Navigation = () => {
       url: '/',
       icon: <CommonFeedIcon />,
       component: (
-        <CommonFeed modalStatus={feedModal} setModalStauts={setFeedModal} />
+        <CommonFeed modalStatus={feedModal} setModalStatus={setFeedModal} />
       ),
       modalStatus: feedModal === '일반 피드 작성',
       setComponentStatus: changeFeedModalStatus,
@@ -70,7 +66,7 @@ const Navigation = () => {
       url: '/',
       icon: <DiscussionFeedIcon />,
       component: (
-        <Modal onClose={closeModal}>토론 피드로 대체 예정입니다</Modal>
+        <DiscussionFeed modalStatus={feedModal} setModalStatus={setFeedModal} />
       ),
       modalStatus: feedModal === '토론 피드 작성',
       setComponentStatus: changeFeedModalStatus,
