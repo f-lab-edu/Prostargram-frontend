@@ -1,0 +1,52 @@
+@use '../../../../styles/helpers/index' as *;
+
+.container {
+  padding: 20px;
+  border-bottom: 1px solid $COLOR_GRAY_2;
+
+  .profile_wrapper {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 15px;
+
+    .profile {
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+
+      .profile_image {
+        @include flex-center;
+        border-radius: 9999px;
+        overflow: hidden;
+      }
+
+      .username {
+        font-weight: bold;
+      }
+
+      .feed_time {
+        color: $COLOR_GRAY_4;
+      }
+    }
+
+    .profile_follow_btn {
+      width: 7rem;
+    }
+  }
+
+  .feed_content {
+    padding-bottom: 30px;
+    font-size: $FONT_SIZE_14;
+    color: $COLOR_GRAY_2;
+    line-height: 1.25rem;
+    white-space: pre-line;
+    word-wrap: break-word;
+  }
+
+  .hashtag_wrapper {
+    display: flex;
+    gap: 10px;
+    font-size: $FONT_SIZE_14;
+    color: $COLOR_GRAY_4;
+  }
+}

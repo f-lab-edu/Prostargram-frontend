@@ -12,7 +12,7 @@ interface FeedWrapperProps {
 
 const FeedWrapper = ({ modalWidth = '1070px', children }: FeedWrapperProps) => {
   const router = useRouter();
-  const searchParams = new URLSearchParams(useSearchParams()).get('p');
+  const searchParams = new URLSearchParams(useSearchParams()).get('f');
 
   const closeFeed = (bool: boolean) => {
     console.log(bool);
