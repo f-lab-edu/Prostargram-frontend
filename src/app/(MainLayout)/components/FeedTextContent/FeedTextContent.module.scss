@@ -45,7 +45,9 @@
 
   .hashtag_wrapper {
     display: flex;
-    gap: 10px;
+    flex-wrap: wrap;
+    row-gap: 5px;
+    column-gap: 10px;
     font-size: $FONT_SIZE_14;
     color: $COLOR_GRAY_4;
   }
