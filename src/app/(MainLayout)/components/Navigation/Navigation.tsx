@@ -43,8 +43,12 @@ const Navigation = () => {
 
   const [feedModal, setFeedModal] = useState<boolean | string>(false);
 
-  const changeFeedModalStatus = (modalName: string) => {
+  const changeFeedModalName = (modalName: string) => {
     setFeedModal(modalName);
+  };
+
+  const changeFeedModalStatus = (modalStatus: boolean) => {
+    setFeedModal(modalStatus);
   };
 
   const modalMenus: ModalMenuType[] = [
@@ -54,10 +58,13 @@ const Navigation = () => {
       url: '/',
       icon: <CommonFeedIcon />,
       component: (
-        <CommonFeed modalStatus={feedModal} setModalStatus={setFeedModal} />
+        <CommonFeed
+          modalStatus={feedModal}
+          setModalStatus={changeFeedModalStatus}
+        />
       ),
       modalStatus: feedModal === '일반 피드 작성',
-      setComponentStatus: changeFeedModalStatus,
+      setComponentStatus: changeFeedModalName,
       order: 3,
     },
     {
@@ -66,10 +73,13 @@ const Navigation = () => {
       url: '/',
       icon: <DiscussionFeedIcon />,
       component: (
-        <DiscussionFeed modalStatus={feedModal} setModalStatus={setFeedModal} />
+        <DiscussionFeed
+          modalStatus={feedModal}
+          setModalStatus={changeFeedModalStatus}
+        />
       ),
       modalStatus: feedModal === '토론 피드 작성',
-      setComponentStatus: changeFeedModalStatus,
+      setComponentStatus: changeFeedModalName,
       order: 4,
     },
   ];

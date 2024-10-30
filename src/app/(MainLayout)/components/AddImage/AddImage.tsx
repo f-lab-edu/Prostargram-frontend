@@ -1,33 +1,35 @@
-import { FormEvent, SetStateAction, useEffect } from 'react';
+import { FormEvent, useEffect } from 'react';
 import Image from 'next/image';
 import Plus from '@/assets/icons/plus.svg';
 import Remove from '@/assets/icons/remove.svg';
 import Button from '@/components/common/Button';
+import { FeedImage } from '@/hooks/useImageUpload';
 import styles from './AddImage.module.scss';
 import ImagePreview from '../ImagePreview/ImagePreview';
-import { FeedImage } from '../../types/feed';
+import { CommonFeedData } from '../../types/feed';
 
 type AddImageProps = {
   onNext?: () => void;
   images: FeedImage[];
   currentImage: FeedImage | null;
-  setCurrentImage: React.Dispatch<SetStateAction<FeedImage | null>>;
+  updateCurrentImage: (image: FeedImage) => void;
   selectImageFile: (e: FormEvent<HTMLInputElement>) => void;
   removeImage: (idx: number) => void;
-  updateImages: (images: FeedImage[]) => void;
+  updateImages?: (nextCommonFeedData: Partial<CommonFeedData>) => void;
 };
 
 const AddImage = ({
   onNext,
   images,
   currentImage,
-  setCurrentImage,
+  updateCurrentImage,
   selectImageFile,
   removeImage,
   updateImages,
 }: AddImageProps) => {
   useEffect(() => {
-    updateImages(images);
+    if (updateImages)
+      updateImages({ images: images.map((image) => image.file) });
   }, [images]);
 
   return (
@@ -36,7 +38,7 @@ const AddImage = ({
       <ImagePreview
         images={images}
         currentImage={currentImage!}
-        setCurrentImage={setCurrentImage}
+        updateCurrentImage={updateCurrentImage}
       />
       {/* 우측 영역 */}
       <div className={styles.right_content}>
@@ -50,7 +52,7 @@ const AddImage = ({
                 return (
                   <div className={styles.image_preview_box}>
                     <Image
-                      key={image.name}
+                      key={image.file.name}
                       src={image.src}
                       className={styles.feed_image_preview}
                       width={100}
@@ -58,7 +60,7 @@ const AddImage = ({
                       alt="feed_image_preview"
                     />
                     <Remove
-                      key={`${image.name}_remove`}
+                      key={`${image.file.name}_remove`}
                       className={styles.image_remove}
                       onClick={() => removeImage(idx)}
                     />

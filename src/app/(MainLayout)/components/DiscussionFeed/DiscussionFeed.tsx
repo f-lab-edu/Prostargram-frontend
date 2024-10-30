@@ -1,13 +1,13 @@
 import Modal from '@/components/common/Modal';
 import ConfirmPopup from '@/components/common/Popup/ConfirmPopup/ConfirmPopup';
-import React, { SetStateAction, useState } from 'react';
+import { useState } from 'react';
 import { DiscussionFeedData, FeedPopup } from '../../types/feed';
 import styles from './DiscussionFeed.module.scss';
 import AddContent from '../AddContent/AddContent';
 
 type DiscussionFeedProps = {
   modalStatus: boolean | string;
-  setModalStatus: React.Dispatch<SetStateAction<boolean | string>>;
+  setModalStatus: (modalStatus: boolean) => void;
 };
 
 const DiscussionFeed = ({

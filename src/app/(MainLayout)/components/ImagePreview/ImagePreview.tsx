@@ -1,28 +1,27 @@
-import { SetStateAction } from 'react';
 import Image from 'next/image';
 import EmptyImage from '@/assets/icons/empty-image.svg';
 import LeftArrow from '@/assets/icons/left_arrow.svg';
 import RightArrow from '@/assets/icons/right_arrow.svg';
-import { FeedImage } from '../../types/feed';
+import { FeedImage } from '@/hooks/useImageUpload';
 import styles from './ImagePreview.module.scss';
 
 type ImagePreviewProps = {
   images: FeedImage[];
   currentImage: FeedImage;
-  setCurrentImage: React.Dispatch<SetStateAction<FeedImage | null>>;
+  updateCurrentImage: (image: FeedImage) => void;
 };
 
 const ImagePreview = ({
   images,
   currentImage,
-  setCurrentImage,
+  updateCurrentImage,
 }: ImagePreviewProps) => {
   const onClickPrevImage = () => {
-    if (currentImage) setCurrentImage(images[currentImage.index - 1]);
+    if (currentImage) updateCurrentImage(images[currentImage.index - 1]);
   };
 
   const onClickNextImage = () => {
-    if (currentImage) setCurrentImage(images[currentImage.index + 1]);
+    if (currentImage) updateCurrentImage(images[currentImage.index + 1]);
   };
 
   return (

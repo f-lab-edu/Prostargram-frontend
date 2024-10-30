@@ -1,4 +1,4 @@
-import { ChangeEvent, SetStateAction, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import Image from 'next/image';
 import Button from '@/components/common/Button';
 import Typo from '@/components/common/Typo';
@@ -6,11 +6,8 @@ import CircleCloseIcon from '@/assets/icons/circle-close-gray.svg';
 import MyInterestFieldForMyPage from '@/app/my/components/MyInterest/MyInterestFieldForMyPage';
 import If from '@/components/common/If';
 import Textarea from '@/components/common/Textarea/Textarea';
-import {
-  CommonFeedData,
-  DiscussionFeedData,
-  FeedImage,
-} from '../../types/feed';
+import { FeedImage } from '@/hooks/useImageUpload';
+import { CommonFeedData, DiscussionFeedData } from '../../types/feed';
 import ImagePreview from '../ImagePreview/ImagePreview';
 import styles from './AddContent.module.scss';
 import DiscussionSubject from '../DiscussionSubject/DiscussionSubject';
@@ -21,9 +18,10 @@ type AddContentProps = {
   onNext?: () => void;
   images?: FeedImage[];
   currentImage?: FeedImage | null;
-  setCurrentImage?: React.Dispatch<SetStateAction<FeedImage | null>>;
+  updateCurrentImage?: (image: FeedImage) => void;
   commonFeedData?: CommonFeedData;
   discussionFeedData?: DiscussionFeedData;
+  updateCommonFeedData?: (nextCommonFeedData: Partial<CommonFeedData>) => void;
   updateDiscussionFeedData?: (
     nextDiscussionFeedData: Partial<DiscussionFeedData>,
   ) => void;
@@ -35,9 +33,10 @@ const AddContent = ({
   onNext,
   images,
   currentImage,
-  setCurrentImage,
+  updateCurrentImage,
   discussionFeedData,
   commonFeedData,
+  updateCommonFeedData,
   updateDiscussionFeedData,
 }: AddContentProps) => {
   const [hashtags, setHashtags] = useState<string[]>([]);
@@ -51,21 +50,29 @@ const AddContent = ({
   };
 
   useEffect(() => {
-    updateDiscussionFeedData?.({ hashtag: hashtags });
+    if (feedType === 'common') {
+      updateCommonFeedData?.({ hashtag: hashtags });
+    } else {
+      updateDiscussionFeedData?.({ hashtag: hashtags });
+    }
   }, [hashtags]);
 
   const onChangeTextarea = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    updateDiscussionFeedData?.({ content: e.target.value });
+    if (feedType === 'common') {
+      updateCommonFeedData?.({ content: e.target.value });
+    } else {
+      updateDiscussionFeedData?.({ content: e.target.value });
+    }
   };
 
   return (
     <>
       {/* 좌측 영역 */}
-      {feedType === 'common' && images && setCurrentImage && (
+      {feedType === 'common' && images && updateCurrentImage && (
         <ImagePreview
           images={images}
           currentImage={currentImage!}
-          setCurrentImage={setCurrentImage}
+          updateCurrentImage={updateCurrentImage}
         />
       )}
       {feedType === 'discussion' && (

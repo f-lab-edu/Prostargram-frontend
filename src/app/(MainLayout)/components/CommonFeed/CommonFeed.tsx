@@ -1,20 +1,15 @@
-import React, { SetStateAction, useState } from 'react';
+import { useState } from 'react';
 import Modal from '@/components/common/Modal';
 import useImageUpload from '@/hooks/useImageUpload';
 import ConfirmPopup from '@/components/common/Popup/ConfirmPopup/ConfirmPopup';
 import style from './CommonFeed.module.scss';
 import AddImage from '../AddImage/AddImage';
 import AddContent from '../AddContent/AddContent';
-import {
-  CommonFeedData,
-  FeedPopup,
-  CommonFeedStep,
-  FeedImage,
-} from '../../types/feed';
+import { CommonFeedData, FeedPopup, CommonFeedStep } from '../../types/feed';
 
 type CommonFeedProps = {
   modalStatus: boolean | string;
-  setModalStatus: React.Dispatch<SetStateAction<boolean | string>>;
+  setModalStatus: (modalStatus: boolean) => void;
 };
 
 const CommonFeed = ({ modalStatus, setModalStatus }: CommonFeedProps) => {
@@ -23,35 +18,23 @@ const CommonFeed = ({ modalStatus, setModalStatus }: CommonFeedProps) => {
     images,
     currentImage,
     selectImageFile,
-    setCurrentImage,
+    updateCurrentImage,
     removeImage,
   } = useImageUpload();
   const [commonFeedData, setCommonFeedData] = useState<CommonFeedData>({
-    images,
+    images: images.map((image) => image.file),
     content: '',
     hashtag: [],
   });
 
-  const updateImages = (newImages: FeedImage[]) => {
+  const updateCommonFeedData = (
+    nextCommonFeedData: Partial<CommonFeedData>,
+  ) => {
     setCommonFeedData((prev) => ({
       ...prev,
-      images: newImages,
+      ...nextCommonFeedData,
     }));
   };
-
-  // const updateContents = (newContents: string) => {
-  //   setCommonFeedData((prev) => ({
-  //     ...prev,
-  //     content: newContents,
-  //   }));
-  // };
-
-  // const updateHashTags = (newHashtags: string[]) => {
-  //   setCommonFeedData((prev) => ({
-  //     ...prev,
-  //     hashtag: newHashtags,
-  //   }));
-  // };
 
   const [popupState, setPopupState] = useState<FeedPopup>(null);
 
@@ -61,7 +44,7 @@ const CommonFeed = ({ modalStatus, setModalStatus }: CommonFeedProps) => {
 
   const createCommonFeed = () => {
     // TODO: 일반피드 작성 서버 API 연동
-    console.log('데이터', setCommonFeedData);
+    console.log('데이터', commonFeedData);
     handleClosePopup();
     setModalStatus(false);
   };
@@ -81,9 +64,9 @@ const CommonFeed = ({ modalStatus, setModalStatus }: CommonFeedProps) => {
                 images={images}
                 currentImage={currentImage}
                 selectImageFile={selectImageFile}
-                setCurrentImage={setCurrentImage}
+                updateCurrentImage={updateCurrentImage}
                 removeImage={removeImage}
-                updateImages={updateImages}
+                updateImages={updateCommonFeedData}
                 onNext={() => {
                   setStep('게시글작성');
                 }}
@@ -94,8 +77,9 @@ const CommonFeed = ({ modalStatus, setModalStatus }: CommonFeedProps) => {
                 feedType="common"
                 images={images}
                 currentImage={currentImage}
-                setCurrentImage={setCurrentImage}
+                updateCurrentImage={updateCurrentImage}
                 commonFeedData={commonFeedData}
+                updateCommonFeedData={updateCommonFeedData}
                 onPrev={() => {
                   setStep('이미지추가');
                 }}

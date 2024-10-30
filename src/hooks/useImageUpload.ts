@@ -1,10 +1,14 @@
 import { FormEvent, useState, useEffect } from 'react';
 
-type Image = { name: string; size: number; src: string; index: number };
+export type FeedImage = {
+  file: File;
+  index: number;
+  src: string;
+};
 
 const useImageUpload = () => {
-  const [images, setImages] = useState<Image[]>([]);
-  const [currentImage, setCurrentImage] = useState<Image | null>(null);
+  const [images, setImages] = useState<FeedImage[]>([]);
+  const [currentImage, setCurrentImage] = useState<FeedImage | null>(null);
 
   const selectImageFile = (e: FormEvent<HTMLInputElement>) => {
     const { files } = e.target as HTMLInputElement;
@@ -14,11 +18,11 @@ const useImageUpload = () => {
 
       reader.onloadend = () => {
         const img = {
+          file: files[0],
           index: images.length,
-          name: files[0].name,
-          size: files[0].size,
           src: reader.result as string,
         };
+
         setImages((prev) => [...prev, img]);
       };
       reader.readAsDataURL(files[0]); // 파일을 Data URL 형식으로 읽기
@@ -31,7 +35,7 @@ const useImageUpload = () => {
     }
   };
 
-  const changeCurrentImage = (idx: number, newImages: Image[]) => {
+  const changeCurrentImage = (idx: number, newImages: FeedImage[]) => {
     if (idx === 0 && newImages.length === 0) {
       setCurrentImage(null);
     }
@@ -49,14 +53,17 @@ const useImageUpload = () => {
     let newImages = images.filter((image) => image.index !== idx);
 
     newImages = newImages.map((image, index) => ({
-      name: image.name,
+      file: image.file,
       src: image.src,
-      size: image.size,
       index,
     }));
 
     setImages(newImages);
     changeCurrentImage(idx, newImages);
+  };
+
+  const updateCurrentImage = (image: FeedImage) => {
+    setCurrentImage(image);
   };
 
   useEffect(() => {
@@ -67,7 +74,7 @@ const useImageUpload = () => {
     images,
     currentImage,
     selectImageFile,
-    setCurrentImage,
+    updateCurrentImage,
     removeImage,
   };
 };
