@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { ModalMenuType } from '../../@types/main';
+import { ModalMenuType } from '../../types/main';
 import styles from '../Menu/Menu.module.scss';
 
 type ModalMenuProps = {

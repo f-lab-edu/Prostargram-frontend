@@ -9,7 +9,7 @@ import CommonFeedIcon from '@/assets/icons/nav-common-feed.svg';
 import styles from './Navigation.module.scss';
 import Menu from '../Menu/Menu';
 import ModalMenu from '../ModalMenu/ModalMenu';
-import { MenuType, ModalMenuType } from '../../@types/main';
+import { MenuType, ModalMenuType } from '../../types/main';
 import CommonFeed from '../CommonFeed/CommonFeed';
 import DiscussionFeed from '../DiscussionFeed/DiscussionFeed';
 

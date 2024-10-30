@@ -5,7 +5,7 @@ import Remove from '@/assets/icons/remove.svg';
 import Button from '@/components/common/Button';
 import styles from './AddImage.module.scss';
 import ImagePreview from '../ImagePreview/ImagePreview';
-import { FeedImage } from '../../@types/feed';
+import { FeedImage } from '../../types/feed';
 
 type AddImageProps = {
   onNext?: () => void;

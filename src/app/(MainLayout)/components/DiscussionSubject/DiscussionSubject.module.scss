@@ -6,7 +6,7 @@
   padding: 20px;
 }
 
-@mixin input {
+@mixin textarea {
   padding: 5px 4px;
   border: 0;
   max-width: 100%;
@@ -34,16 +34,16 @@
       @include subject_box;
       background-color: rgba(43, 89, 195, 0.3);
       border-right: 1px solid $COLOR_GRAY_2;
-      .input {
-        @include input;
+      .textarea {
+        @include textarea;
       }
     }
 
     .subject2 {
       @include subject_box;
       background-color: rgba(211, 101, 130, 0.3);
-      .input {
-        @include input;
+      .textarea {
+        @include textarea;
       }
     }
   }

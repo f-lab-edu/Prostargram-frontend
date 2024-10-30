@@ -10,7 +10,7 @@ import {
   FeedPopup,
   CommonFeedStep,
   FeedImage,
-} from '../../@types/feed';
+} from '../../types/feed';
 
 type CommonFeedProps = {
   modalStatus: boolean | string;

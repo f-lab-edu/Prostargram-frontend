@@ -2,6 +2,7 @@ import { ChangeEvent } from 'react';
 import BlueFlag from '@/assets/icons/blue_flag.svg';
 import RedFlag from '@/assets/icons/red_flag.svg';
 import Typo from '@/components/common/Typo';
+import Textarea from '@/components/common/Textarea/Textarea';
 import styles from './DiscussionSubject.module.scss';
 
 type DiscussionSubjectProps = {
@@ -19,8 +20,8 @@ const DiscussionSubject = ({
       <div className={styles.subject_box}>
         <div className={styles.subject1}>
           <BlueFlag />
-          <textarea
-            className={styles.input}
+          <Textarea
+            className={styles.textarea}
             placeholder="토론 주제 입력..."
             onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
               updateSubject1(e.target.value)
@@ -30,8 +31,8 @@ const DiscussionSubject = ({
         </div>
         <div className={styles.subject2}>
           <RedFlag />
-          <textarea
-            className={styles.input}
+          <Textarea
+            className={styles.textarea}
             placeholder="토론 주제 입력..."
             onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
               updateSubject2(e.target.value)

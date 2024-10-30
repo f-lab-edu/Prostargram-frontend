@@ -5,14 +5,15 @@ import Typo from '@/components/common/Typo';
 import CircleCloseIcon from '@/assets/icons/circle-close-gray.svg';
 import MyInterestFieldForMyPage from '@/app/my/components/MyInterest/MyInterestFieldForMyPage';
 import If from '@/components/common/If';
+import Textarea from '@/components/common/Textarea/Textarea';
 import {
   CommonFeedData,
   DiscussionFeedData,
   FeedImage,
-} from '../../@types/feed';
+} from '../../types/feed';
 import ImagePreview from '../ImagePreview/ImagePreview';
 import styles from './AddContent.module.scss';
-import DiscussionSubject from '../\bDiscussionSubject/DiscussionSubject';
+import DiscussionSubject from '../DiscussionSubject/DiscussionSubject';
 
 type AddContentProps = {
   feedType: 'common' | 'discussion';
@@ -95,8 +96,7 @@ const AddContent = ({
           <Typo as="p" color="gray-2" fontSize="body-20">
             게시글 작성
           </Typo>
-          {/* 컴포넌트화 */}
-          <textarea
+          <Textarea
             value={
               feedType === 'common'
                 ? commonFeedData?.content

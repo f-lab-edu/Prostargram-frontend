@@ -3,7 +3,7 @@ import Image from 'next/image';
 import EmptyImage from '@/assets/icons/empty-image.svg';
 import LeftArrow from '@/assets/icons/left_arrow.svg';
 import RightArrow from '@/assets/icons/right_arrow.svg';
-import { FeedImage } from '../../@types/feed';
+import { FeedImage } from '../../types/feed';
 import styles from './ImagePreview.module.scss';
 
 type ImagePreviewProps = {
