@@ -7,6 +7,7 @@ import FeedCommentList from '../FeedCommentList';
 
 import styles from './ReadOnlyCommonFeed.module.scss';
 import FeedLikeBox from '../FeedLikeBox';
+import FeedCommentWriteInput from '../FeedCommentWriteInput';
 
 const MOCK_FEED_DATA = {
   username: 'seongjin',
@@ -39,6 +40,7 @@ const ReadOnlyCommonFeed = () => {
         </div>
         <div>
           <FeedLikeBox postId={1} likeCount={14264} commentCount={30} />
+          <FeedCommentWriteInput postId={1} />
         </div>
       </div>
     </div>
