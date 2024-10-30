@@ -24,10 +24,9 @@ type AddContentProps = {
   setCurrentImage?: React.Dispatch<SetStateAction<FeedImage | null>>;
   commonFeedData?: CommonFeedData;
   discussionFeedData?: DiscussionFeedData;
-  updateContents: (contents: string) => void;
-  updateHashtags: (hashtags: string[]) => void;
-  updateSubject1?: (sub1: string) => void;
-  updateSubject2?: (sub2: string) => void;
+  updateDiscussionFeedData: (
+    nextDiscussionFeedData: Partial<DiscussionFeedData>,
+  ) => void;
 };
 
 const AddContent = ({
@@ -39,10 +38,7 @@ const AddContent = ({
   setCurrentImage,
   discussionFeedData,
   commonFeedData,
-  updateContents,
-  updateHashtags,
-  updateSubject1,
-  updateSubject2,
+  updateDiscussionFeedData,
 }: AddContentProps) => {
   const [hashtags, setHashtags] = useState<string[]>([]);
 
@@ -55,11 +51,11 @@ const AddContent = ({
   };
 
   useEffect(() => {
-    updateHashtags(hashtags);
+    updateDiscussionFeedData({ hashtag: hashtags });
   }, [hashtags]);
 
   const onChangeTextarea = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    updateContents(e.target.value);
+    updateDiscussionFeedData({ content: e.target.value });
   };
 
   return (
@@ -74,8 +70,12 @@ const AddContent = ({
       )}
       {feedType === 'discussion' && (
         <DiscussionSubject
-          updateSubject1={(value: string) => updateSubject1?.(value)}
-          updateSubject2={(value: string) => updateSubject2?.(value)}
+          updateSubject1={(value: string) =>
+            updateDiscussionFeedData?.({ subject1: value })
+          }
+          updateSubject2={(value: string) =>
+            updateDiscussionFeedData?.({ subject2: value })
+          }
         />
       )}
 

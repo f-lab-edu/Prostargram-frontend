@@ -40,30 +40,12 @@ const DiscussionFeed = ({
     handleClosePopup();
   };
 
-  const updateSubject1 = (sub1: string) => {
+  const updateDiscussionFeedData = (
+    nextDiscussionFeedData: Partial<DiscussionFeedData>,
+  ) => {
     setDiscussionFeedData((prev) => ({
       ...prev,
-      subject1: sub1,
-    }));
-  };
-  const updateSubject2 = (sub2: string) => {
-    setDiscussionFeedData((prev) => ({
-      ...prev,
-      subject2: sub2,
-    }));
-  };
-
-  const updateContents = (newContents: string) => {
-    setDiscussionFeedData((prev) => ({
-      ...prev,
-      content: newContents,
-    }));
-  };
-
-  const updateHashTags = (newHashtags: string[]) => {
-    setDiscussionFeedData((prev) => ({
-      ...prev,
-      hashtag: newHashtags,
+      ...nextDiscussionFeedData,
     }));
   };
 
@@ -74,10 +56,7 @@ const DiscussionFeed = ({
           <div className={styles.content_wrapper}>
             <AddContent
               feedType="discussion"
-              updateContents={updateContents}
-              updateHashtags={updateHashTags}
-              updateSubject1={updateSubject1}
-              updateSubject2={updateSubject2}
+              updateDiscussionFeedData={updateDiscussionFeedData}
               discussionFeedData={discussionFeedData}
               onNext={() => handleOpenPublishPopup()}
             />
