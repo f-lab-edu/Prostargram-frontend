@@ -6,6 +6,7 @@ import FeedTextContent from '../FeedTextContent';
 import FeedCommentList from '../FeedCommentList';
 
 import styles from './ReadOnlyCommonFeed.module.scss';
+import FeedLikeBox from '../FeedLikeBox';
 
 const MOCK_FEED_DATA = {
   username: 'seongjin',
@@ -35,6 +36,9 @@ const ReadOnlyCommonFeed = () => {
         </div>
         <div className={styles.right_down}>
           <FeedCommentList feedId="1" feedCommentIds={['1', '2', '3']} />
+        </div>
+        <div>
+          <FeedLikeBox username="진성진" likeCount={14264} commentCount={30} />
         </div>
       </div>
     </div>

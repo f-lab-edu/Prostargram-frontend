@@ -2,6 +2,7 @@ import Image from 'next/image';
 
 import { compactTimeFormatter, digitNumberFormatter } from '@/utils/formatter';
 
+import HeartIcon from '@/assets/icons/heart.svg';
 import styles from './FeedComment.module.scss';
 
 export type FeedCommentType = {
@@ -42,7 +43,9 @@ const FeedComment = ({ commentData }: FeedCommentProps) => {
           </div>
           <p>{nickname}</p>
         </div>
-        <div>하트</div>
+        <div className={styles.heart_icon}>
+          <HeartIcon />
+        </div>
       </div>
       <p className={styles.feed_content}>{feedContent}</p>
 
