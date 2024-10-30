@@ -4,27 +4,30 @@ import styles from './modal.module.scss';
 type ModalProps = {
   children?: ReactNode;
   width?: CSSProperties['width'];
-  onClose: (status: boolean) => void;
+  onClose?: (status: boolean) => void;
 };
 
 const Modal = ({ children, width = '800px', onClose }: ModalProps) => {
   const handleContainerClick = (e: MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
-    e.preventDefault();
+  };
+
+  const handleWrapperClick = () => {
+    if (onClose) onClose(false);
   };
 
   return (
     <div className={styles.wrapper}>
       <div
         className={styles.modal_bg}
-        onClick={() => onClose(false)}
-        aria-hidden="true"
+        onClick={handleWrapperClick}
+        role="presentation"
       />
       <div
         className={styles.container}
         style={{ width }}
         onClick={handleContainerClick}
-        aria-hidden="true"
+        role="presentation"
       >
         {children}
       </div>
