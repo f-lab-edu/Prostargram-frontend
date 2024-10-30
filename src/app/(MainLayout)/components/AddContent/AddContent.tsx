@@ -24,7 +24,7 @@ type AddContentProps = {
   setCurrentImage?: React.Dispatch<SetStateAction<FeedImage | null>>;
   commonFeedData?: CommonFeedData;
   discussionFeedData?: DiscussionFeedData;
-  updateDiscussionFeedData: (
+  updateDiscussionFeedData?: (
     nextDiscussionFeedData: Partial<DiscussionFeedData>,
   ) => void;
 };
@@ -51,11 +51,11 @@ const AddContent = ({
   };
 
   useEffect(() => {
-    updateDiscussionFeedData({ hashtag: hashtags });
+    updateDiscussionFeedData?.({ hashtag: hashtags });
   }, [hashtags]);
 
   const onChangeTextarea = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    updateDiscussionFeedData({ content: e.target.value });
+    updateDiscussionFeedData?.({ content: e.target.value });
   };
 
   return (

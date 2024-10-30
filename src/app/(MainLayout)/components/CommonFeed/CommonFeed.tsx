@@ -39,19 +39,19 @@ const CommonFeed = ({ modalStatus, setModalStatus }: CommonFeedProps) => {
     }));
   };
 
-  const updateContents = (newContents: string) => {
-    setCommonFeedData((prev) => ({
-      ...prev,
-      content: newContents,
-    }));
-  };
+  // const updateContents = (newContents: string) => {
+  //   setCommonFeedData((prev) => ({
+  //     ...prev,
+  //     content: newContents,
+  //   }));
+  // };
 
-  const updateHashTags = (newHashtags: string[]) => {
-    setCommonFeedData((prev) => ({
-      ...prev,
-      hashtag: newHashtags,
-    }));
-  };
+  // const updateHashTags = (newHashtags: string[]) => {
+  //   setCommonFeedData((prev) => ({
+  //     ...prev,
+  //     hashtag: newHashtags,
+  //   }));
+  // };
 
   const [popupState, setPopupState] = useState<FeedPopup>(null);
 
@@ -96,8 +96,6 @@ const CommonFeed = ({ modalStatus, setModalStatus }: CommonFeedProps) => {
                 currentImage={currentImage}
                 setCurrentImage={setCurrentImage}
                 commonFeedData={commonFeedData}
-                updateContents={updateContents}
-                updateHashtags={updateHashTags}
                 onPrev={() => {
                   setStep('이미지추가');
                 }}
