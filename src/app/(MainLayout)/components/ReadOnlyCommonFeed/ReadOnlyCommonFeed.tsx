@@ -38,7 +38,7 @@ const ReadOnlyCommonFeed = () => {
           <FeedCommentList feedId="1" feedCommentIds={['1', '2', '3']} />
         </div>
         <div>
-          <FeedLikeBox username="진성진" likeCount={14264} commentCount={30} />
+          <FeedLikeBox postId={1} likeCount={14264} commentCount={30} />
         </div>
       </div>
     </div>

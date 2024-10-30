@@ -2,8 +2,8 @@ import Image from 'next/image';
 
 import { compactTimeFormatter, digitNumberFormatter } from '@/utils/formatter';
 
-import HeartIcon from '@/assets/icons/heart.svg';
 import styles from './FeedComment.module.scss';
+import LikeButton from '../LikeButton';
 
 export type FeedCommentType = {
   commentId: string;
@@ -43,9 +43,7 @@ const FeedComment = ({ commentData }: FeedCommentProps) => {
           </div>
           <p>{nickname}</p>
         </div>
-        <div className={styles.heart_icon}>
-          <HeartIcon />
-        </div>
+        <LikeButton postId={1} />
       </div>
       <p className={styles.feed_content}>{feedContent}</p>
 

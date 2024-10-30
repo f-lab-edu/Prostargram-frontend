@@ -1,27 +1,22 @@
 import { digitNumberFormatter } from '@/utils/formatter';
 
-import HeartIcon from '@/assets/icons/heart.svg';
 import CommentIcon from '@/assets/icons/comment.svg';
+import LikeButton from '../LikeButton';
+
 import styles from './FeedLikeBox.module.scss';
 
 interface FeedLikeBoxProps {
-  username: string;
+  postId: number;
   likeCount: number;
   commentCount: number;
 }
 
-const FeedLikeBox = ({
-  username,
-  likeCount,
-  commentCount,
-}: FeedLikeBoxProps) => {
-  console.log(username);
-
+const FeedLikeBox = ({ postId, likeCount, commentCount }: FeedLikeBoxProps) => {
   return (
     <div className={styles.container}>
       <div className={styles.item}>
         <span>
-          <HeartIcon className={styles.like} />
+          <LikeButton postId={postId} />
         </span>
         <span>{digitNumberFormatter(likeCount)}</span>
       </div>
