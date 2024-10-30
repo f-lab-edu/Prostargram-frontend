@@ -23,8 +23,9 @@
   .container {
     position: relative;
     height: 80vh;
+    max-height: 800px;
     background-color: $COLOR_WHITE;
-    z-index: 2;
+    z-index: 3;
     border-radius: 10px;
     border: 1px solid $COLOR_GRAY_2;
   }

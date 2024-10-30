@@ -2,8 +2,10 @@
 
 import { useSearchParams } from 'next/navigation';
 
-import styles from './ReadOnlyCommonFeed.module.scss';
 import FeedTextContent from '../FeedTextContent';
+import FeedCommentList from '../FeedCommentList';
+
+import styles from './ReadOnlyCommonFeed.module.scss';
 
 const MOCK_FEED_DATA = {
   username: 'seongjin',
@@ -28,10 +30,12 @@ const ReadOnlyCommonFeed = () => {
     <div className={styles.container}>
       <div className={styles.left}>Left</div>
       <div className={styles.right}>
-        <div>
-          <FeedTextContent {...MOCK_FEED_DATA} />
+        <div className={styles.right_up}>
+          <FeedTextContent feedData={MOCK_FEED_DATA} />
         </div>
-        <div>RightDown</div>
+        <div className={styles.right_down}>
+          <FeedCommentList feedId="1" feedCommentIds={['1', '2', '3']} />
+        </div>
       </div>
     </div>
   );

@@ -6,27 +6,30 @@ import ProfileFollowButton from '@/app/my/components/Profile/ProfileFollowButton
 import styles from './FeedTextContent.module.scss';
 
 interface FeedTextContentProps {
-  username: string;
-  profileUrl?: string;
-  createdAt: string;
-  updatedAt?: string;
-  isFollow: boolean;
-  content: string;
-  hashtags: string[];
+  feedData: {
+    username: string;
+    profileUrl?: string;
+    createdAt: string;
+    updatedAt?: string;
+    isFollow: boolean;
+    content: string;
+    hashtags: string[];
+  };
 }
 
 const DEFAULT_PROFILE =
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4vkwPhD-NHO6sV_3ailgWXjiP_WPM24J3IhkB3xZ-bQ&s';
 
-const FeedTextContent = ({
-  username,
-  profileUrl = DEFAULT_PROFILE,
-  isFollow,
-  createdAt,
-  updatedAt,
-  content,
-  hashtags,
-}: FeedTextContentProps) => {
+const FeedTextContent = ({ feedData }: FeedTextContentProps) => {
+  const {
+    username,
+    profileUrl = DEFAULT_PROFILE,
+    isFollow,
+    createdAt,
+    updatedAt,
+    content,
+    hashtags,
+  } = feedData;
   return (
     <div className={styles.container}>
       <div className={styles.profile_wrapper}>
