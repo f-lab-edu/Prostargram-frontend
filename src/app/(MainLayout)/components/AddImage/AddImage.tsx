@@ -1,0 +1,101 @@
+import { FormEvent, useEffect } from 'react';
+import Image from 'next/image';
+import Plus from '@/assets/icons/plus.svg';
+import Remove from '@/assets/icons/remove.svg';
+import Button from '@/components/common/Button';
+import { FeedImage } from '@/hooks/useImageUpload';
+import styles from './AddImage.module.scss';
+import ImagePreview from '../ImagePreview/ImagePreview';
+import { CommonFeedData } from '../../types/feed';
+
+type AddImageProps = {
+  onNext?: () => void;
+  images: FeedImage[];
+  currentImage: FeedImage | null;
+  updateCurrentImage: (image: FeedImage) => void;
+  selectImageFile: (e: FormEvent<HTMLInputElement>) => void;
+  removeImage: (idx: number) => void;
+  updateImages?: (nextCommonFeedData: Partial<CommonFeedData>) => void;
+};
+
+const AddImage = ({
+  onNext,
+  images,
+  currentImage,
+  updateCurrentImage,
+  selectImageFile,
+  removeImage,
+  updateImages,
+}: AddImageProps) => {
+  useEffect(() => {
+    if (updateImages)
+      updateImages({ images: images.map((image) => image.file) });
+  }, [images]);
+
+  return (
+    <>
+      {/* 좌측 영역 */}
+      <ImagePreview
+        images={images}
+        currentImage={currentImage!}
+        updateCurrentImage={updateCurrentImage}
+      />
+      {/* 우측 영역 */}
+      <div className={styles.right_content}>
+        <div className={styles.add_img_title}>
+          이미지 추가<span>(최대 6개)</span>
+        </div>
+        <div className={styles.image_upload_wrapper}>
+          {images && (
+            <>
+              {images.map((image, idx) => {
+                return (
+                  <div className={styles.image_preview_box}>
+                    <Image
+                      key={image.file.name}
+                      src={image.src}
+                      className={styles.feed_image_preview}
+                      width={100}
+                      height={100}
+                      alt="feed_image_preview"
+                    />
+                    <Remove
+                      key={`${image.file.name}_remove`}
+                      className={styles.image_remove}
+                      onClick={() => removeImage(idx)}
+                    />
+                  </div>
+                );
+              })}
+              {images.length < 6 && (
+                <div className={styles.image_upload}>
+                  <div className={styles.file_label_wrapper}>
+                    <label className={styles.file_label} htmlFor="file-input">
+                      <Plus width="32px" height="32px" />
+                    </label>
+                  </div>
+                  <input
+                    className={styles.file_input}
+                    type="file"
+                    id="file-input"
+                    onInput={selectImageFile}
+                  />
+                </div>
+              )}
+            </>
+          )}
+
+          <Button
+            disabled={images.length === 0}
+            className={styles.next_btn}
+            onClick={onNext}
+          >
+            다음 단계로
+          </Button>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default AddImage;

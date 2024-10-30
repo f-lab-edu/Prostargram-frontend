@@ -1,0 +1,98 @@
+@use '../../../../styles/helpers/index' as *;
+
+.right_content {
+  width: 399px;
+  height: 100%;
+
+  .add_img_title {
+    padding: 26px;
+    border-bottom: 1px solid $COLOR_GRAY_1;
+    font-size: $FONT_SIZE_20;
+    height: 12%;
+
+    span {
+      color: $COLOR_GRAY_2;
+    }
+  }
+
+  .image_upload_wrapper {
+    padding: 20px;
+    gap: 25px;
+    @include flex-row;
+    flex-wrap: wrap;
+
+    .image_preview_box {
+      position: relative;
+
+      .feed_image_preview {
+        border: 1px solid $COLOR_GRAY_1;
+        border-radius: 10px;
+        object-fit: cover;
+      }
+
+      .image_remove {
+        position: absolute;
+        width: 14px;
+        height: 14px;
+        left: 6px;
+        top: 6px;
+        cursor: pointer;
+      }
+    }
+
+    .image_upload {
+      border: 1px solid $COLOR_GRAY_1;
+      border-radius: 10px;
+      width: 100px;
+      height: 100px;
+
+      .file_input {
+        display: none;
+      }
+
+      .file_label_wrapper {
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+
+        .file_label {
+          display: inline-block;
+          width: 100%;
+          height: 100%;
+          @include flex-center;
+          svg {
+            position: absolute;
+          }
+        }
+      }
+    }
+  }
+
+  .add_img {
+    @include flex-column;
+    @include flex-space-between;
+    padding: 25px;
+    height: 88%;
+    .image {
+      border: 1px solid $COLOR_GRAY_1;
+      border-radius: 10px;
+      width: 100px;
+      height: 100px;
+      cursor: pointer;
+
+      svg {
+        position: relative;
+        top: calc(50% - 16px);
+        left: calc(50% - 16px);
+      }
+    }
+  }
+
+  .next_btn {
+    position: absolute;
+    width: 365px;
+    height: 50px;
+    bottom: 17px;
+    right: 17px;
+  }
+}

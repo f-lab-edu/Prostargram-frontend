@@ -6,11 +6,12 @@ import ProfileIcon from '@/assets/icons/nav-profile.svg';
 import SettingIcon from '@/assets/icons/nav-setting.svg';
 import DiscussionFeedIcon from '@/assets/icons/nav-discussion-feed.svg';
 import CommonFeedIcon from '@/assets/icons/nav-common-feed.svg';
-import Modal from '@/components/common/Modal';
 import styles from './Navigation.module.scss';
-import Menu from './Menu';
-import ModalMenu from './ModalMenu';
-import { MenuType, ModalMenuType } from './MenuType';
+import Menu from '../Menu/Menu';
+import ModalMenu from '../ModalMenu/ModalMenu';
+import { MenuType, ModalMenuType } from '../../types/main';
+import CommonFeed from '../CommonFeed/CommonFeed';
+import DiscussionFeed from '../DiscussionFeed/DiscussionFeed';
 
 type CombinedMenuType = MenuType | ModalMenuType;
 
@@ -42,12 +43,12 @@ const Navigation = () => {
 
   const [feedModal, setFeedModal] = useState<boolean | string>(false);
 
-  const changeFeedModalStatus = (modalName: string) => {
+  const changeFeedModalName = (modalName: string) => {
     setFeedModal(modalName);
   };
 
-  const closeModal = () => {
-    setFeedModal(false);
+  const changeFeedModalStatus = (modalStatus: boolean) => {
+    setFeedModal(modalStatus);
   };
 
   const modalMenus: ModalMenuType[] = [
@@ -56,9 +57,14 @@ const Navigation = () => {
       type: 'modal',
       url: '/',
       icon: <CommonFeedIcon />,
-      component: <Modal onClose={closeModal}>일반피드로 대체 예정입니다</Modal>,
+      component: (
+        <CommonFeed
+          modalStatus={feedModal}
+          setModalStatus={changeFeedModalStatus}
+        />
+      ),
       modalStatus: feedModal === '일반 피드 작성',
-      setComponentStatus: changeFeedModalStatus,
+      setComponentStatus: changeFeedModalName,
       order: 3,
     },
     {
@@ -67,10 +73,13 @@ const Navigation = () => {
       url: '/',
       icon: <DiscussionFeedIcon />,
       component: (
-        <Modal onClose={closeModal}>토론 피드로 대체 예정입니다</Modal>
+        <DiscussionFeed
+          modalStatus={feedModal}
+          setModalStatus={changeFeedModalStatus}
+        />
       ),
       modalStatus: feedModal === '토론 피드 작성',
-      setComponentStatus: changeFeedModalStatus,
+      setComponentStatus: changeFeedModalName,
       order: 4,
     },
   ];
