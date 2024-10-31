@@ -1,16 +1,25 @@
 'use client';
 
-import { ReactNode } from 'react';
+import { CSSProperties, ReactNode } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import Modal from '../Modal';
 
 interface FeedWrapperProps {
   children?: ReactNode;
-  modalWidth?: string;
+  modalWidth?: CSSProperties['width'];
+  modalMaxWidth?: CSSProperties['maxWidth'];
+  modalHeight?: CSSProperties['height'];
+  modalMaxHeight?: CSSProperties['maxHeight'];
 }
 
-const FeedWrapper = ({ modalWidth = '1070px', children }: FeedWrapperProps) => {
+const FeedWrapper = ({
+  modalWidth = '90vw',
+  modalMaxWidth = '1070px',
+  modalHeight = '80vw',
+  modalMaxHeight = '800px',
+  children,
+}: FeedWrapperProps) => {
   const router = useRouter();
   const searchParams = new URLSearchParams(useSearchParams()).get('f');
 
@@ -24,7 +33,13 @@ const FeedWrapper = ({ modalWidth = '1070px', children }: FeedWrapperProps) => {
   }
 
   return (
-    <Modal width={modalWidth} onClose={closeFeed}>
+    <Modal
+      width={modalWidth}
+      maxWidth={modalMaxWidth}
+      height={modalHeight}
+      maxHeight={modalMaxHeight}
+      onClose={closeFeed}
+    >
       {children}
     </Modal>
   );

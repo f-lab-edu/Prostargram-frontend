@@ -8,6 +8,7 @@ import FeedCommentList from '../FeedCommentList';
 import styles from './ReadOnlyCommonFeed.module.scss';
 import FeedLikeBox from '../FeedLikeBox';
 import FeedCommentWriteInput from '../FeedCommentWriteInput';
+import Slide from '../Slide';
 
 const MOCK_FEED_DATA = {
   username: 'seongjin',
@@ -30,7 +31,13 @@ const ReadOnlyCommonFeed = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.left}>Left</div>
+      <div className={styles.left}>
+        <Slide>
+          <div>111111111111111111111111111111111111111111111111111111</div>
+          <div>222222222222222222222222222222222222222222222222222222</div>
+          <div>333333333333333333333333333333333333333333333333333333</div>
+        </Slide>
+      </div>
       <div className={styles.right}>
         <div className={styles.right_up}>
           <FeedTextContent feedData={MOCK_FEED_DATA} />
