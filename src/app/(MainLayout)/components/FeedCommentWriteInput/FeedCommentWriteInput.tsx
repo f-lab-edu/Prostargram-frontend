@@ -19,20 +19,20 @@ const FeedCommentWriteInput = ({
   parentId,
   placeholder = '댓글 달기...',
 }: FeedCommentWriteInputProps) => {
-  const { commentContent, setCommentContent, textareaRef } =
+  const { textareaContent, setTextareaContent, textareaRef } =
     useAutoResizeTextArea({ maxLine: 3, lineHeight: 20 });
 
   const changeHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const { value } = e.target;
     if (value.length <= MAX_LENGTH) {
-      setCommentContent(value);
+      setTextareaContent(value);
     }
   };
 
   const submitHandler = () => {
     console.log(postId, parentId);
-    if (commentContent) {
-      console.log('게시');
+    if (textareaContent) {
+      console.log(textareaContent);
     }
   };
 
@@ -42,7 +42,7 @@ const FeedCommentWriteInput = ({
         className={styles.comment_textarea}
         placeholder={placeholder}
         onChange={changeHandler}
-        value={commentContent}
+        value={textareaContent}
         ref={textareaRef}
       />
       <button className={styles.submit_button} onClick={submitHandler}>

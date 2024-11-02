@@ -9,23 +9,22 @@ const useAutoResizeTextArea = ({
   maxLine = 3,
   lineHeight = 20,
 }: useAutoResizeTextAreaParams) => {
-  const [commentContent, setCommentContent] = useState<string>('');
+  const [textareaContent, setTextareaContent] = useState<string>('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     if (textareaRef.current) {
-      const rowCount = textareaRef.current.value.split(/\r\n|\r|\n/).length;
-      const target = textareaRef.current;
+      const element = textareaRef.current;
+      const maxLimitHeight = lineHeight * maxLine;
 
-      if (rowCount < maxLine) {
-        target.style.height = `${(rowCount * lineHeight).toString()}px`;
-      } else {
-        target.style.height = `${maxLine * lineHeight}px`;
-      }
+      element.style.height = `${lineHeight}px`;
+
+      const currentHeight = Math.min(element.scrollHeight, maxLimitHeight);
+      element.style.height = `${currentHeight}px`;
     }
-  }, [maxLine, lineHeight, commentContent]);
+  }, [maxLine, lineHeight, textareaContent]);
 
-  return { commentContent, setCommentContent, textareaRef };
+  return { textareaContent, setTextareaContent, textareaRef };
 };
 
 export default useAutoResizeTextArea;

@@ -47,9 +47,7 @@ const Slide = ({ children, leftIcon, rightIcon }: SlideProps) => {
   useEffect(() => {
     window.addEventListener('resize', () => updateParentWidth);
 
-    return () => {
-      window.removeEventListener('resize', () => updateParentWidth);
-    };
+    return () => window.removeEventListener('resize', () => updateParentWidth);
   }, [updateParentWidth]);
 
   const slideItems =

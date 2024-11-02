@@ -43,7 +43,7 @@ const ReadOnlyCommonFeed = () => {
           <FeedTextContent feedData={MOCK_FEED_DATA} />
         </div>
         <div className={styles.right_down}>
-          <FeedCommentList feedId="1" feedCommentIds={['1', '2', '3']} />
+          <FeedCommentList feedId="1" feedCommentIds={['0', '2', '3']} />
         </div>
         <div>
           <FeedLikeBox postId={1} likeCount={14264} commentCount={30} />
