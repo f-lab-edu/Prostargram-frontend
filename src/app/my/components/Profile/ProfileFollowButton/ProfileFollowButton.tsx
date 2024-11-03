@@ -9,9 +9,13 @@ import { useState } from 'react';
 
 interface ProfileFollowButtonProps {
   isFollow: boolean;
+  size?: 'none' | 'small' | 'medium' | 'large';
 }
 
-const ProfileFollowButton = ({ isFollow }: ProfileFollowButtonProps) => {
+const ProfileFollowButton = ({
+  isFollow,
+  size = 'large',
+}: ProfileFollowButtonProps) => {
   const [followStatus, setFollowStatus] = useState(isFollow);
 
   const followHandler = () => {
@@ -24,7 +28,7 @@ const ProfileFollowButton = ({ isFollow }: ProfileFollowButtonProps) => {
   return (
     <If condition={followStatus}>
       <If.True>
-        <Button size="large" fill="red" onClick={unfollowHandler}>
+        <Button size={size} fill="red" onClick={unfollowHandler}>
           <UnfollowIcon
             width="20"
             height="20"
@@ -34,7 +38,7 @@ const ProfileFollowButton = ({ isFollow }: ProfileFollowButtonProps) => {
         </Button>
       </If.True>
       <If.False>
-        <Button size="large" onClick={followHandler}>
+        <Button size={size} onClick={followHandler}>
           <FollowIcon
             width="20"
             height="20"

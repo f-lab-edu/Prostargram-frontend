@@ -4,10 +4,20 @@ import styles from './modal.module.scss';
 type ModalProps = {
   children?: ReactNode;
   width?: CSSProperties['width'];
+  maxWidth?: CSSProperties['maxWidth'];
+  height?: CSSProperties['height'];
+  maxHeight?: CSSProperties['maxHeight'];
   onClose?: (status: boolean) => void;
 };
 
-const Modal = ({ children, width = '800px', onClose }: ModalProps) => {
+const Modal = ({
+  children,
+  width = '800px',
+  maxWidth,
+  height,
+  maxHeight,
+  onClose,
+}: ModalProps) => {
   const handleContainerClick = (e: MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
   };
@@ -25,7 +35,7 @@ const Modal = ({ children, width = '800px', onClose }: ModalProps) => {
       />
       <div
         className={styles.container}
-        style={{ width }}
+        style={{ width, maxWidth, height, maxHeight }}
         onClick={handleContainerClick}
         role="presentation"
       >
