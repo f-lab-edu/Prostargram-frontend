@@ -3,13 +3,10 @@
 import { useSearchParams } from 'next/navigation';
 
 import FeedWrapper from '@/components/common/FeedWrapper';
-import Slide from '../Slide';
 import FeedLikeBox from '../FeedLikeBox';
 import FeedTextContent from '../FeedTextContent';
-import FeedCommentList from '../FeedCommentList';
-import FeedCommentWriteInput from '../FeedCommentWriteInput';
 
-import styles from './ReadOnlyCommonFeed.module.scss';
+import styles from './ReadOnlyDebateFeed.module.scss';
 
 const MOCK_FEED_DATA = {
   username: 'seongjin',
@@ -23,33 +20,60 @@ const MOCK_FEED_DATA = {
   hashtags: ['javascript', 'typescript', 'react'],
 };
 
-const ReadOnlyCommonFeed = () => {
-  const feedId = new URLSearchParams(useSearchParams()).get('cf');
+interface UserType {
+  userId: number;
+  userName: string;
+  profileImgUrl: string;
+}
+
+interface DebateFeedType {
+  post: {
+    postType: 'DEBATE';
+    postId: number;
+    userId: number;
+    content: string;
+    hashTagNames: string[];
+    likeCount: number;
+    commentCount: number;
+    createdAt: string;
+    options: {
+      optionId: number;
+      optionContent: string;
+      voteCount: number;
+    }[];
+    selectedOptionId: number;
+    isLike: boolean;
+    isFollow: boolean;
+  };
+  basicUser: UserType;
+}
+
+interface ReadOnlyDebateFeedProps {
+  debateFeedData?: DebateFeedType;
+}
+
+const ReadOnlyDebateFeed = ({ debateFeedData }: ReadOnlyDebateFeedProps) => {
+  console.log(debateFeedData);
+
+  const feedId = new URLSearchParams(useSearchParams()).get('df');
 
   if (!feedId) {
     return null;
   }
 
   return (
-    <FeedWrapper feedIdQuery="cf">
+    <FeedWrapper modalMaxWidth={1_300} feedIdQuery="df">
       <div className={styles.container}>
         <div className={styles.left}>
-          <Slide>
-            <div>111111111111111111111111111111111111111111111111111111</div>
-            <div>222222222222222222222222222222222222222222222222222222</div>
-            <div>333333333333333333333333333333333333333333333333333333</div>
-          </Slide>
+          <div>토론 영역</div>
         </div>
         <div className={styles.right}>
           <div className={styles.right_up}>
             <FeedTextContent feedData={MOCK_FEED_DATA} />
           </div>
-          <div className={styles.right_down}>
-            <FeedCommentList feedId="1" feedCommentIds={['1', '2', '3']} />
-          </div>
+          <div className={styles.right_down} />
           <div>
             <FeedLikeBox postId={1} likeCount={14264} commentCount={30} />
-            <FeedCommentWriteInput postId={1} />
           </div>
         </div>
       </div>
@@ -57,4 +81,4 @@ const ReadOnlyCommonFeed = () => {
   );
 };
 
-export default ReadOnlyCommonFeed;
+export default ReadOnlyDebateFeed;

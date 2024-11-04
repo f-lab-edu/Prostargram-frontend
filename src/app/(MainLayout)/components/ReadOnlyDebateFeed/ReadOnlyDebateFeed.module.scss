@@ -1,4 +1,4 @@
-@use '../../../styles/helpers/index' as *;
+@use '../../../../styles/helpers/index' as *;
 
 .container {
   display: flex;
@@ -8,20 +8,21 @@
   overflow: hidden;
 
   .left {
-    flex: 1;
-    max-width: 670px;
+    width: 100%;
+    max-width: 900px;
     height: 100%;
     border-right: 1px solid $COLOR_GRAY_2;
   }
 
   .right {
-    width: 40%;
+    width: 100%;
+    max-width: 400px;
     display: flex;
     flex-direction: column;
   }
 
   .right_up {
-    max-height: 230px;
+    flex: 1;
   }
 
   .right_down {

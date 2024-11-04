@@ -1,15 +1,14 @@
-import FeedWrapper from '@/components/common/FeedWrapper';
+import ReadOnlyCommonFeed from './components/ReadOnlyCommonFeed';
+import ReadOnlyDebateFeed from './components/ReadOnlyDebateFeed';
 
 import styles from './page.module.scss';
-import ReadOnlyCommonFeed from './components/ReadOnlyCommonFeed';
 
 const MainPage = () => {
   return (
     <div className={styles.container}>
       메인
-      <FeedWrapper>
-        <ReadOnlyCommonFeed />
-      </FeedWrapper>
+      <ReadOnlyCommonFeed />
+      <ReadOnlyDebateFeed />
     </div>
   );
 };
