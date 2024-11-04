@@ -19,7 +19,7 @@ const MOCK_FEED_DATA = {
   createdAt: '2024-10-25 20:08:22',
   updatedAt: '2024-10-28 21:29:22',
   content:
-    '테스트 입니다. 테스트 입니다. 테스트 입니다. 테스트 입니다. 테스트 입니다. \n테스트 입니다. ',
+    '테스트 입니다. 테스트 입니다. 테스트 입니다. 테스트 입니다. 테스트 입니다. \n테스트 입니다. 테스트 입니다. 테스트 입니다. 테스트 입니다. 테스트 입니다. 테스트 입니다. \n테스트 입니다. 테스트 입니다. 테스트 입니다. 테스트 입니다. 테스트 입니다. 테스트 입니다. \n테스트 입니다. ',
   hashtags: ['javascript', 'typescript', 'react'],
 };
 
@@ -44,6 +44,7 @@ const ReadOnlyCommonFeed = () => {
           <div className={styles.right_up}>
             <FeedTextContent feedData={MOCK_FEED_DATA} />
           </div>
+          <div className={styles.divider} />
           <div className={styles.right_down}>
             <FeedCommentList feedId="1" feedCommentIds={['1', '2', '3']} />
           </div>

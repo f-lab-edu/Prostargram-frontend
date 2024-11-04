@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import FeedWrapper from '@/components/common/FeedWrapper';
 import FeedLikeBox from '../FeedLikeBox';
 import FeedTextContent from '../FeedTextContent';
+import DebateContent, { DebateOptionType } from '../DebateContent';
 
 import styles from './ReadOnlyDebateFeed.module.scss';
 
@@ -16,7 +17,7 @@ const MOCK_FEED_DATA = {
   createdAt: '2024-10-25 20:08:22',
   updatedAt: '2024-10-28 21:29:22',
   content:
-    '테스트 입니다. 테스트 입니다. 테스트 입니다. 테스트 입니다. 테스트 입니다. \n테스트 입니다. ',
+    '테스트 입니다. 테스트 입니다. 테스트 입니다. 테스트 입니다. 테스트 입니다. \n테스트 입니다. 테스트 입니다. 테스트 입니다. 테스트 입니다. 테스트 입니다. 테스트 입니다. \n테스트 입니다. 테스트 입니다. 테스트 입니다. 테스트 입니다. 테스트 입니다. 테스트 입니다. \n테스트 입니다. 테스트 입니다. 테스트 입니다. 테스트 입니다. 테스트 입니다. 테스트 입니다. \n테스트 입니다. 테스트 입니다. 테스트 입니다. 테스트 입니다. 테스트 입니다. 테스트 입니다. \n테스트 입니다. 테스트 입니다. 테스트 입니다. 테스트 입니다. 테스트 입니다. 테스트 입니다. \n테스트 입니다. 테스트 입니다. 테스트 입니다. 테스트 입니다. 테스트 입니다. 테스트 입니다. \n테스트 입니다. ',
   hashtags: ['javascript', 'typescript', 'react'],
 };
 
@@ -36,11 +37,7 @@ interface DebateFeedType {
     likeCount: number;
     commentCount: number;
     createdAt: string;
-    options: {
-      optionId: number;
-      optionContent: string;
-      voteCount: number;
-    }[];
+    options: DebateOptionType[];
     selectedOptionId: number;
     isLike: boolean;
     isFollow: boolean;
@@ -49,7 +46,7 @@ interface DebateFeedType {
 }
 
 interface ReadOnlyDebateFeedProps {
-  debateFeedData?: DebateFeedType;
+  debateFeedData: DebateFeedType;
 }
 
 const ReadOnlyDebateFeed = ({ debateFeedData }: ReadOnlyDebateFeedProps) => {
@@ -61,11 +58,35 @@ const ReadOnlyDebateFeed = ({ debateFeedData }: ReadOnlyDebateFeedProps) => {
     return null;
   }
 
+  const [{ voteCount: firstVoteCount }, { voteCount: secondVoteCount }] =
+    debateFeedData.post.options;
+
+  const totalCount = firstVoteCount + secondVoteCount;
+  const firstRatio = Math.floor((firstVoteCount / totalCount) * 100);
+  const secondRatio = Math.floor((secondVoteCount / totalCount) * 100);
+
   return (
     <FeedWrapper modalMaxWidth={1_300} feedIdQuery="df">
       <div className={styles.container}>
         <div className={styles.left}>
-          <div>토론 영역</div>
+          <DebateContent
+            index={1}
+            option={debateFeedData.post.options[0]}
+            isSelected={
+              debateFeedData.post.selectedOptionId ===
+              debateFeedData.post.options[0].optionId
+            }
+            ratio={firstRatio}
+          />
+          <DebateContent
+            index={2}
+            option={debateFeedData.post.options[1]}
+            isSelected={
+              debateFeedData.post.selectedOptionId ===
+              debateFeedData.post.options[1].optionId
+            }
+            ratio={secondRatio}
+          />
         </div>
         <div className={styles.right}>
           <div className={styles.right_up}>
