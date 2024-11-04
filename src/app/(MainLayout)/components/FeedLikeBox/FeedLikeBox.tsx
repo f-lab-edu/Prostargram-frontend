@@ -9,14 +9,20 @@ interface FeedLikeBoxProps {
   postId: number;
   likeCount: number;
   commentCount: number;
+  isLike: boolean;
 }
 
-const FeedLikeBox = ({ postId, likeCount, commentCount }: FeedLikeBoxProps) => {
+const FeedLikeBox = ({
+  postId,
+  likeCount,
+  commentCount,
+  isLike,
+}: FeedLikeBoxProps) => {
   return (
     <div className={styles.container}>
       <div className={styles.item}>
         <span>
-          <LikeButton postId={postId} />
+          <LikeButton postId={postId} isLike={isLike} />
         </span>
         <span>{digitNumberFormatter(likeCount)}</span>
       </div>

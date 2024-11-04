@@ -10,18 +10,15 @@ import FeedCommentList from '../FeedCommentList';
 
 import styles from './DebateContent.module.scss';
 import FeedCommentWriteInput from '../FeedCommentWriteInput';
-
-export interface DebateOptionType {
-  optionId: number;
-  optionContent: string;
-  voteCount: number;
-}
+import { DebateOptionType } from '../../types/feed';
 
 interface DebateContentProps {
+  postId: number;
   index: number;
   option: DebateOptionType;
   isSelected?: boolean;
   ratio: number;
+  disabled?: boolean;
 }
 
 const FLAG_SET = {
@@ -36,10 +33,12 @@ const FLAG_SET = {
 };
 
 const DebateContent = ({
+  postId,
   index,
   option,
-  isSelected,
   ratio,
+  isSelected,
+  disabled,
 }: DebateContentProps) => {
   const { optionContent, voteCount } = option;
 
@@ -62,10 +61,21 @@ const DebateContent = ({
         />
       </div>
       <div className={styles.comment_container}>
-        <FeedCommentList feedId="1" feedCommentIds={['1', '2', '3']} />
+        <FeedCommentList
+          feedId={postId.toString()}
+          feedCommentIds={['1', '2', '3']}
+        />
       </div>
       <div>
-        <FeedCommentWriteInput postId={1} placeholder="댓글 달기..." />
+        <FeedCommentWriteInput
+          postId={1}
+          placeholder={
+            disabled
+              ? '댓글 달기...'
+              : '다른 의견에 동의하셔서 입력하실 수 없습니다.'
+          }
+          disabled={!disabled}
+        />
       </div>
     </div>
   );
