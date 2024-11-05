@@ -15,6 +15,7 @@ export type FeedCommentType = {
   createdAt: string;
   updatedAt: string;
   likeCount: number;
+  isLike: boolean;
   childFeedComments: string[];
 };
 
@@ -31,6 +32,7 @@ const FeedComment = ({ commentData }: FeedCommentProps) => {
     createdAt,
     updatedAt,
     likeCount,
+    isLike,
     childFeedComments,
   } = commentData;
 
@@ -45,7 +47,7 @@ const FeedComment = ({ commentData }: FeedCommentProps) => {
           </div>
           <p>{nickname}</p>
         </div>
-        <LikeButton postId={1} />
+        <LikeButton commentId={+commentId} isLike={isLike} />
       </div>
       <p className={styles.feed_content}>{feedContent}</p>
 

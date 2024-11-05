@@ -11,17 +11,19 @@ interface FeedWrapperProps {
   modalMaxWidth?: CSSProperties['maxWidth'];
   modalHeight?: CSSProperties['height'];
   modalMaxHeight?: CSSProperties['maxHeight'];
+  feedIdQuery: 'cf' | 'df' | 'sf';
 }
 
 const FeedWrapper = ({
+  children,
   modalWidth = '90vw',
   modalMaxWidth = '1070px',
   modalHeight = '80vw',
   modalMaxHeight = '800px',
-  children,
+  feedIdQuery,
 }: FeedWrapperProps) => {
   const router = useRouter();
-  const searchParams = new URLSearchParams(useSearchParams()).get('f');
+  const searchParams = new URLSearchParams(useSearchParams()).get(feedIdQuery);
 
   const closeFeed = (bool: boolean) => {
     console.log(bool);
@@ -29,6 +31,7 @@ const FeedWrapper = ({
   };
 
   if (!searchParams) {
+    router.push('/');
     return null;
   }
 

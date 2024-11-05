@@ -3,8 +3,7 @@
 .container {
   max-height: 300px;
   padding: 20px;
-  border-bottom: 1px solid $COLOR_GRAY_2;
-
+  
   .profile_wrapper {
     display: flex;
     justify-content: space-between;
@@ -36,12 +35,24 @@
   }
 
   .feed_content {
-    padding-bottom: 30px;
+    max-height: 140px;
+    margin-bottom: 20px;
     font-size: $FONT_SIZE_14;
     color: $COLOR_GRAY_2;
     line-height: 1.25rem;
     white-space: pre-line;
     word-wrap: break-word;
+    overflow: auto;
+
+    &::-webkit-scrollbar {
+      scrollbar-width: thin;
+      background: $COLOR_WHITE;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: $COLOR_PRIMARY_5;
+      border-radius: 5px;
+    }
   }
 
   .hashtag_wrapper {

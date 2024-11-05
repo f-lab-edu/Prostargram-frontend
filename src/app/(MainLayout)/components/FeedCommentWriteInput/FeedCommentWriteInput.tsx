@@ -12,12 +12,14 @@ interface FeedCommentWriteInputProps {
   postId: number;
   parentId?: number;
   placeholder?: string;
+  disabled?: boolean;
 }
 
 const FeedCommentWriteInput = ({
   postId,
   parentId,
   placeholder = '댓글 달기...',
+  disabled,
 }: FeedCommentWriteInputProps) => {
   const { textareaContent, setTextareaContent, textareaRef } =
     useAutoResizeTextArea({ maxLine: 3, lineHeight: 20 });
@@ -44,8 +46,13 @@ const FeedCommentWriteInput = ({
         onChange={changeHandler}
         value={textareaContent}
         ref={textareaRef}
+        disabled={disabled}
       />
-      <button className={styles.submit_button} onClick={submitHandler}>
+      <button
+        className={styles.submit_button}
+        onClick={submitHandler}
+        disabled={disabled}
+      />
         게시
       </button>
     </div>
