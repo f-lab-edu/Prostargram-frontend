@@ -1,0 +1,29 @@
+@use '../../../../styles/helpers/index' as *;
+
+.container {
+  display: flex;
+  align-items: center;
+  height: auto;
+  margin: 10px 0;
+  border: 1px solid $COLOR_GRAY_2;
+  border-radius: 5px;
+
+  textarea {
+    flex: 1;
+    height: 20px;
+    margin: 10px;
+    margin-right: 0;
+    white-space: pre-wrap;
+    word-break: break-all;
+    line-height: 20px;
+  }
+
+  button {
+    height: 100%;
+    padding: 0.5rem 1rem;
+    border-radius: 2px;
+    text-align: center;
+    color: $COLOR_PRIMARY_1;
+    cursor: pointer;
+  }
+}

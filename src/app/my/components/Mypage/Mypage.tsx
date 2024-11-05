@@ -5,7 +5,7 @@ import {
   digitNumberFormatter,
 } from '@/utils/formatter';
 
-import { UserType } from '../../@types/my';
+import { UserType } from '../../types/my';
 import Follow from '../Follow';
 import MyLink from '../MyLink';
 import Profile from '../Profile';

@@ -1,0 +1,51 @@
+@use '../../../../styles/helpers/index' as *;
+
+.container {
+  margin-bottom: 1rem;
+}
+
+.reply_container {
+  margin-bottom: 1.75rem;
+}
+
+.profile_wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 5px;
+
+  .profile_nickname {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: bold;
+    color: $COLOR_GRAY_2;
+  }
+
+  .profile {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+}
+
+.feed_content {
+  margin-bottom: 10px;
+  font-size: $FONT_SIZE_14;
+  color: $COLOR_GRAY_2;
+  line-height: 1.25rem;
+  white-space: pre-line;
+  word-wrap: break-word;
+}
+
+.feed_coment_info {
+  display: flex;
+  gap: 20px;
+  font-size: $FONT_SIZE_14;
+  color: $COLOR_GRAY_4;
+
+  .replay_write_button {
+    cursor: pointer;
+  }
+}
