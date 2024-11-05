@@ -2,6 +2,7 @@ import ReadOnlyCommonFeed from './components/ReadOnlyCommonFeed';
 import ReadOnlyDebateFeed from './components/ReadOnlyDebateFeed';
 
 import styles from './page.module.scss';
+import ReadOnlyCommonFeed from './components/ReadOnlyCommonFeed';
 
 const MOCK_DATA_OF_COMMON_FEED = {
   post: {

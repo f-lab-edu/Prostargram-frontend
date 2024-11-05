@@ -52,7 +52,7 @@ const FeedCommentWriteInput = ({
         className={styles.submit_button}
         onClick={submitHandler}
         disabled={disabled}
-      >
+      />
         게시
       </button>
     </div>
