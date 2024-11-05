@@ -1,0 +1,7 @@
+@use '../../../../styles/helpers/index' as *;
+
+.content_wrapper {
+  display: flex;
+  height: 100%;
+  cursor: default;
+}
