@@ -10,6 +10,7 @@
   justify-content: center;
   position: relative;
   background-color: $COLOR_WHITE;
+  z-index: 1;
 
   .follow_button {
     width: 120px;

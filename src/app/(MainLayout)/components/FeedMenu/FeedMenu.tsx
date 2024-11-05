@@ -11,7 +11,7 @@ type FeedMenuProps = {
 };
 
 const FeedMenu = ({ post }: FeedMenuProps) => {
-  const isMine = false;
+  const isMine = true;
   const isFollow = false;
   const [isToggleMenuOn, setIsToggleMenuOn] = useState(false);
 

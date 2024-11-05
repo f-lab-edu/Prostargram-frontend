@@ -5,6 +5,10 @@
   font-size: 20px;
   color: $COLOR_GRAY_2;
 
+  svg {
+    cursor: pointer;
+  }
+
   .like_count {
     margin: 0 15px 0 5px;
   }
