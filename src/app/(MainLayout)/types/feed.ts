@@ -13,6 +13,40 @@ type DiscussionFeedData = {
   hashtag: string[];
 };
 
+type DebateOption = {
+  optionId: number;
+  optionContent: string;
+  voteCount: number;
+};
+
+type Post = {
+  postId: number;
+  userId: number;
+  content: string;
+  hashTagNames: string[];
+  postType: string;
+  likeCount: number;
+  commentCount: number;
+  createdAt: string;
+  isLike: boolean;
+  isFollow: boolean;
+  contentImageUrls?: string;
+  preSignedImageUrls?: string;
+  options?: DebateOption[];
+  selectedOptionId?: number;
+};
+
+type BasicUser = {
+  userId: number;
+  userName: string;
+  profileImgUrl: string;
+};
+
+type MainFeed = {
+  post: Post;
+  basicUser: BasicUser;
+};
+
 type FeedPopup = 'confirm' | 'publish' | null;
 
 interface BasicUserType {
@@ -60,6 +94,9 @@ export type {
   CommonFeedData,
   DiscussionFeedData,
   FeedPopup,
+  Post,
+  BasicUser,
+  MainFeed,
   BasicUserType,
   DebateOptionType,
   ReadOnlyCommonFeedType,

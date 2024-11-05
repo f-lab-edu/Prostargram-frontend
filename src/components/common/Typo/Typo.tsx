@@ -48,6 +48,7 @@ interface TypoProps {
   marginLeft?: CSSProperties['marginLeft'];
   marginRight?: CSSProperties['marginRight'];
   cursor?: CSSProperties['cursor'];
+  className?: string;
 }
 
 const Typo = ({
@@ -63,6 +64,7 @@ const Typo = ({
   marginLeft,
   marginRight,
   cursor,
+  className,
 }: TypoProps) => {
   return (
     <Component
@@ -76,9 +78,15 @@ const Typo = ({
         cursor,
         wordBreak: 'keep-all',
       }}
-      className={clsx(styles.typography, styles[color], styles[fontSize], {
-        [styles.underline]: underline,
-      })}
+      className={clsx(
+        className,
+        styles.typography,
+        styles[color],
+        styles[fontSize],
+        {
+          [styles.underline]: underline,
+        },
+      )}
     >
       {children}
     </Component>
