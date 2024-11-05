@@ -13,6 +13,40 @@ type DiscussionFeedData = {
   hashtag: string[];
 };
 
+type Post = {
+  postId: number;
+  userId: number;
+  content: string;
+  hashTagNames: string[];
+  postType: string;
+  likeCount: number;
+  commentCount: number;
+  createdAt: string;
+  isLike: boolean;
+  isFollow: boolean;
+  contentImageUrls: string;
+  preSignedImageUrls: string;
+};
+
+type BasicUser = {
+  userId: number;
+  userName: string;
+  profileImgUrl: string;
+};
+
+type MainFeed = {
+  post: Post;
+  basicUser: BasicUser;
+};
+
 type FeedPopup = 'confirm' | 'publish' | null;
 
-export type { CommonFeedStep, CommonFeedData, DiscussionFeedData, FeedPopup };
+export type {
+  CommonFeedStep,
+  CommonFeedData,
+  DiscussionFeedData,
+  FeedPopup,
+  Post,
+  BasicUser,
+  MainFeed,
+};

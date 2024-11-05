@@ -1,0 +1,56 @@
+@use '../../../../styles/helpers/index' as *;
+
+.username_box {
+  margin-top: 16px;
+  margin-bottom: 12px;
+  @include flex-start-center;
+
+  .username {
+    font-size: 16px;
+    font-weight: bold;
+    margin-right: 10px;
+    white-space: nowrap;
+  }
+}
+
+.content_wrapper {
+  display: flex;
+
+  .content_box {
+    position: relative;
+    font-size: 16px;
+    color: $COLOR_GRAY_2;
+    //   max-height: 50px;
+    line-height: 24px;
+
+    .more {
+      cursor: pointer;
+      background-color: $COLOR_WHITE;
+      font-weight: bold;
+      float: right;
+      display: flex;
+      align-items: flex-end;
+      height: 100%;
+      shape-outside: inset(calc(100% - 24px) 0 0 0);
+    }
+  }
+}
+
+.hashtag_box {
+  margin-top: 30px;
+  display: flex;
+  gap: 10px;
+
+  .hashtag {
+    font-size: 14px;
+    color: $COLOR_GRAY_4;
+  }
+}
+
+.two_ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}

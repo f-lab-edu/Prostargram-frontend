@@ -1,0 +1,42 @@
+@use '../../../../styles/helpers/index' as *;
+
+.follow_box {
+  width: 150px;
+}
+
+.menu_box {
+  position: relative;
+
+  .feed_top_menu {
+    cursor: pointer;
+  }
+
+  .toggle_menu {
+    position: absolute;
+    right: 20px;
+    border: 1px solid $COLOR_GRAY_2;
+    width: 80px;
+    font-size: 14px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+
+    li {
+      padding: 10px;
+      text-align: center;
+      background-color: $COLOR_WHITE;
+      cursor: pointer;
+    }
+
+    .update {
+      border-bottom: 1px solid $COLOR_GRAY_2;
+      border-top-left-radius: 10px;
+    }
+
+    .delete {
+      color: $COLOR_RED;
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+    }
+  }
+}

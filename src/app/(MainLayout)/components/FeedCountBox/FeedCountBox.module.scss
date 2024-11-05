@@ -1,0 +1,15 @@
+@use '../../../../styles/helpers/index' as *;
+
+.count_box {
+  @include flex-start-center;
+  font-size: 20px;
+  color: $COLOR_GRAY_2;
+
+  .like_count {
+    margin: 0 15px 0 5px;
+  }
+
+  .comment_count {
+    margin-left: 5px;
+  }
+}
