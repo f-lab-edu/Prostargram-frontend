@@ -13,6 +13,12 @@ type DiscussionFeedData = {
   hashtag: string[];
 };
 
+type DebateOption = {
+  optionId: number;
+  optionContent: string;
+  voteCount: number;
+};
+
 type Post = {
   postId: number;
   userId: number;
@@ -24,8 +30,10 @@ type Post = {
   createdAt: string;
   isLike: boolean;
   isFollow: boolean;
-  contentImageUrls: string;
-  preSignedImageUrls: string;
+  contentImageUrls?: string;
+  preSignedImageUrls?: string;
+  options?: DebateOption[];
+  selectedOptionId?: number;
 };
 
 type BasicUser = {
