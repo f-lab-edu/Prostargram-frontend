@@ -8,10 +8,21 @@
   padding: 18px 0 18px 18px;
   border-top: 1px solid $COLOR_GRAY_2;
 
+  &:has(.comment_textarea:disabled) {
+    & * {
+      color: $COLOR_GRAY_2;
+    }
+
+    .submit_button {
+      cursor: default;
+    }
+  }
+
   .comment_textarea {
     flex: 1;
-    color: $COLOR_GRAY_2;
+    height: 20px;
     line-height: 1.25rem;
+    color: $COLOR_GRAY_2;
     white-space: pre-wrap;
     word-wrap: break-word;
   }

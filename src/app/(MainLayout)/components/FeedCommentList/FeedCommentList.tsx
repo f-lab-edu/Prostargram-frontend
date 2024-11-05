@@ -20,6 +20,7 @@ const makeMockData = (id: number) => ({
   createdAt: '2024-10-25 20:08:22',
   updatedAt: '2024-10-28 21:29:22',
   likeCount: 1357345 + id,
+  isLike: false,
   childFeedComments: +id < 4 ? [4, 5, 6] : [],
 });
 

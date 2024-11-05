@@ -7,13 +7,12 @@ import styles from './FeedTextContent.module.scss';
 
 interface FeedTextContentProps {
   feedData: {
-    username: string;
+    userName: string;
     profileUrl?: string;
     createdAt: string;
-    updatedAt?: string;
     isFollow: boolean;
     content: string;
-    hashtags: string[];
+    hashTagNames: string[];
   };
 }
 
@@ -22,13 +21,12 @@ const DEFAULT_PROFILE =
 
 const FeedTextContent = ({ feedData }: FeedTextContentProps) => {
   const {
-    username,
+    userName,
     profileUrl = DEFAULT_PROFILE,
     isFollow,
     createdAt,
-    updatedAt,
     content,
-    hashtags,
+    hashTagNames,
   } = feedData;
   return (
     <div className={styles.container}>
@@ -37,10 +35,8 @@ const FeedTextContent = ({ feedData }: FeedTextContentProps) => {
           <div className={styles.profile_image}>
             <Image width="32" height="32" src={profileUrl} alt="user_profile" />
           </div>
-          <p className={styles.username}>{username}</p>
-          <p className={styles.feed_time}>
-            {compactTimeFormatter(updatedAt ?? createdAt)}
-          </p>
+          <p className={styles.username}>{userName}</p>
+          <p className={styles.feed_time}>{compactTimeFormatter(createdAt)}</p>
         </div>
         <div className={styles.profile_follow_btn}>
           <ProfileFollowButton size="small" isFollow={isFollow} />
@@ -48,7 +44,7 @@ const FeedTextContent = ({ feedData }: FeedTextContentProps) => {
       </div>
       <p className={styles.feed_content}>{content}</p>
       <div className={styles.hashtag_wrapper}>
-        {hashtags.map((hashtag) => (
+        {hashTagNames.map((hashtag) => (
           <p key={hashtag}>#{hashtag}</p>
         ))}
       </div>
