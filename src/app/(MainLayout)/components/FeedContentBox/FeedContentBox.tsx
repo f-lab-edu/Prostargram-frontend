@@ -39,7 +39,9 @@ const FeedContentBox = ({ feed }: FeedContentBoxProps) => {
       </div>
       <div className={styles.hashtag_box}>
         {feed.post.hashTagNames.map((hashtag) => (
-          <span className={styles.hashtag}>{hashtag}</span>
+          <span key={hashtag} className={styles.hashtag}>
+            {hashtag}
+          </span>
         ))}
       </div>
     </>

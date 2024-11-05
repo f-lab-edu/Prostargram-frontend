@@ -1,4 +1,5 @@
 import { CSSProperties, MouseEvent, ReactNode } from 'react';
+import Portal from '../Portal/Portal';
 import styles from './modal.module.scss';
 
 type ModalProps = {
@@ -27,21 +28,23 @@ const Modal = ({
   };
 
   return (
-    <div className={styles.wrapper}>
-      <div
-        className={styles.modal_bg}
-        onClick={handleWrapperClick}
-        role="presentation"
-      />
-      <div
-        className={styles.container}
-        style={{ width, maxWidth, height, maxHeight }}
-        onClick={handleContainerClick}
-        role="presentation"
-      >
-        {children}
+    <Portal>
+      <div className={styles.wrapper}>
+        <div
+          className={styles.modal_bg}
+          onClick={handleWrapperClick}
+          role="presentation"
+        />
+        <div
+          className={styles.container}
+          style={{ width, maxWidth, height, maxHeight }}
+          onClick={handleContainerClick}
+          role="presentation"
+        >
+          {children}
+        </div>
       </div>
-    </div>
+    </Portal>
   );
 };
 
