@@ -15,12 +15,17 @@ const FeedCountBox = ({ post }: FeedCountBoxProps) => {
   const router = useRouter();
 
   const onClickMessageIcon = () => {
-    router.push('?f=1');
+    if (post.postType === 'BASIC') {
+      router.push('?cf=1');
+    }
+    if (post.postType === 'DEBATE') {
+      router.push('?df=1');
+    }
   };
 
   return (
     <div className={styles.count_box}>
-      <LikeButton size="medium" postId={post.postId} />
+      <LikeButton isLike={false} size="medium" postId={post.postId} />
       <div className={styles.like_count}>
         {digitNumberFormatter(post.likeCount)}
       </div>

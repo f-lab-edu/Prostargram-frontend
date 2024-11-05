@@ -14,7 +14,12 @@ const FeedContentBox = ({ feed }: FeedContentBoxProps) => {
   const router = useRouter();
 
   const onClickMoreButton = () => {
-    router.push('?f=1');
+    if (feed.post.postType === 'BASIC') {
+      router.push('?cf=1');
+    }
+    if (feed.post.postType === 'DEBATE') {
+      router.push('?df=1');
+    }
   };
 
   return (
