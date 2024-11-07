@@ -1,0 +1,10 @@
+@use '../../../../styles/helpers/index' as *;
+
+.feed_top_profile {
+  border-radius: 50%;
+}
+
+.username {
+  font-weight: bold;
+  margin-left: 15px;
+}

@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import styles from './ConfirmPopup.module.scss';
 import Typo from '../../Typo';
 import Button from '../../Button';
+import Portal from '../../Portal/Portal';
 
 type ConfirmPopupProps = {
   leftBtnColor: 'blue' | 'red' | 'white' | 'gray';
@@ -27,26 +28,28 @@ const ConfirmPopup = ({
   className,
 }: ConfirmPopupProps) => {
   return (
-    <div className={styles.popup_bg}>
-      <div className={clsx([styles.popup_box, className])}>
-        <Typo as="h1" fontSize="body-20" color="gray-2">
-          {mainText}
-        </Typo>
-        {subText && (
-          <Typo as="h2" fontSize="body-14" color="gray-4">
-            {subText}
+    <Portal>
+      <div className={styles.popup_bg}>
+        <div className={clsx([styles.popup_box, className])}>
+          <Typo as="h1" fontSize="body-20" color="gray-2">
+            {mainText}
           </Typo>
-        )}
-        <div className={styles.button_box}>
-          <Button fill={leftBtnColor} size="medium" onClick={onAction}>
-            {leftBtnText}
-          </Button>
-          <Button fill={rightBtnColor} size="medium" onClick={onCancel}>
-            {rightBtnText}
-          </Button>
+          {subText && (
+            <Typo as="h2" fontSize="body-14" color="gray-4">
+              {subText}
+            </Typo>
+          )}
+          <div className={styles.button_box}>
+            <Button fill={leftBtnColor} size="medium" onClick={onAction}>
+              {leftBtnText}
+            </Button>
+            <Button fill={rightBtnColor} size="medium" onClick={onCancel}>
+              {rightBtnText}
+            </Button>
+          </div>
         </div>
       </div>
-    </div>
+    </Portal>
   );
 };
 

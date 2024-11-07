@@ -1,9 +1,10 @@
 @use '../../../../styles/helpers/index' as *;
 
 .nav {
+  position: fixed;
   background-color: $COLOR_WHITE;
   width: 300px;
-  height: 100vh;
+  height: 100%;
   border-right: 1px solid $COLOR_GRAY_3;
 
   .logo {

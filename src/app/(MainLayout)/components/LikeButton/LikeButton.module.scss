@@ -1,0 +1,15 @@
+@use '../../../../styles/helpers/index' as *;
+
+.heart_icon {
+  cursor: pointer;
+
+  &.small {
+    width: 20px;
+    height: 20px;
+  }
+
+  &.medium {
+    width: 30px;
+    height: 30px;
+  }
+}

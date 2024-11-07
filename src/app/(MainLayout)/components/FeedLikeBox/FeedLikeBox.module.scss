@@ -1,0 +1,29 @@
+@use '../../../../styles/helpers/index' as *;
+
+.container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 18px;
+  border-top: 1px solid $COLOR_GRAY_2;
+  color: $COLOR_GRAY_2;
+
+  .item {
+    display: flex;
+    gap: 5px;
+
+    span {
+      display: inline-flex;
+      align-items: center;
+
+      .like {
+        cursor: pointer;
+      }
+
+      svg {
+        width: 22px;
+        height: 22px;
+      }
+    }
+  }
+}
