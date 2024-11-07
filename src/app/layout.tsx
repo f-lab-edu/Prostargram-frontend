@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 
+import QueryClientProvider from '@/provider/QueryClientProvider';
 import '@/styles/global.scss';
 
 const pretendard = localFont({
@@ -24,8 +25,8 @@ const RootLayout = ({
   return (
     <html lang="ko">
       <body className={pretendard.className}>
+        <QueryClientProvider>{children}</QueryClientProvider>
         <div id="portal" />
-        {children}
       </body>
     </html>
   );
