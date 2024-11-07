@@ -23,8 +23,9 @@ const SignupPage = () => {
     register,
     watch,
     formState: { errors },
-    isEmailConfirmed,
     isEmailPending,
+    isEmailRetry,
+    isEmailConfirmed,
     isNicknameConfirmed,
   } = useSignUpState();
 
@@ -67,10 +68,12 @@ const SignupPage = () => {
               className={styles.button}
               onClick={requestConfirmNumber}
               changeConfirmState={changeConfirmState}
-              disabled={!isEmailPending}
-              startTimeForMilliseconds={3_000}
+              disabled={!isEmailPending && !isEmailRetry}
+              startTimeForMilliseconds={900_000} // 15분
             >
-              {isEmailPending ? '인증 요청' : '요청 완료'}
+              {!isEmailRetry && isEmailPending && '인증 요청'}
+              {isEmailRetry && !isEmailPending && '재요청'}
+              {!isEmailRetry && !isEmailPending && '요청 완료'}
             </Field.FieldTimerButton>
           </Field.FieldBox>
 
@@ -79,7 +82,7 @@ const SignupPage = () => {
           </Field.FieldErrorMessage>
         </Field>
 
-        {!isEmailPending && (
+        {(!isEmailPending || isEmailRetry) && (
           <Field>
             <Field.FieldLabel htmlFor="confirm">
               <Field.FieldEmphasize>*</Field.FieldEmphasize>

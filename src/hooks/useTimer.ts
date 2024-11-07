@@ -5,8 +5,10 @@ interface UseTimerParams {
 }
 
 const useTimer = ({ waitTime }: UseTimerParams) => {
-  const [time, setTime] = useState(waitTime);
+  const [time, setTime] = useState<number>(waitTime);
   const timerId = useRef<NodeJS.Timeout | null>(null);
+
+  const changeTime = (nextTime: number) => setTime(nextTime);
 
   const clearTimer = () => {
     if (timerId.current) {
@@ -35,7 +37,7 @@ const useTimer = ({ waitTime }: UseTimerParams) => {
     return () => clearTimer();
   }, []);
 
-  return { time, startTimer, clearTimer };
+  return { time, startTimer, changeTime, clearTimer };
 };
 
 export default useTimer;

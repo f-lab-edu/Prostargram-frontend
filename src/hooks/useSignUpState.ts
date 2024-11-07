@@ -7,9 +7,11 @@ const CONFIRM_STATES = {
   PENDING: 'pending',
   REQUEST: 'request',
   CONFIRM: 'confirm',
-};
+  RETRY: 'retry',
+} as const;
 
-export type ConfirmStateType = keyof typeof CONFIRM_STATES;
+export type ConfirmStateType =
+  (typeof CONFIRM_STATES)[keyof typeof CONFIRM_STATES];
 
 export interface ISignUpFormValueType {
   email: string;
@@ -20,19 +22,23 @@ export interface ISignUpFormValueType {
 }
 
 const useSignUpState = <T extends ISignUpFormValueType>() => {
-  const [confirmState, setConfirmState] = useState(CONFIRM_STATES.PENDING);
-  const [nicknameState, setNicknameState] = useState(CONFIRM_STATES.PENDING);
+  const [confirmState, setConfirmState] = useState<ConfirmStateType>(
+    CONFIRM_STATES.PENDING,
+  );
+  const [nicknameState, setNicknameState] = useState<ConfirmStateType>(
+    CONFIRM_STATES.PENDING,
+  );
 
   const formMethods = useForm<T | ISignUpFormValueType>();
   const { watch, setError, clearErrors } = formMethods;
 
   const isEmailConfirmed = confirmState === CONFIRM_STATES.CONFIRM;
   const isEmailPending = confirmState === CONFIRM_STATES.PENDING;
+  const isEmailRetry = confirmState === CONFIRM_STATES.RETRY;
   const isNicknameConfirmed = nicknameState === CONFIRM_STATES.CONFIRM;
 
-  const changeConfirmState = (state: ConfirmStateType) => {
+  const changeConfirmState = (state: ConfirmStateType) =>
     setConfirmState(state);
-  };
 
   const requestConfirmNumber = async (callback?: () => void) => {
     const email = watch('email');
@@ -130,6 +136,7 @@ const useSignUpState = <T extends ISignUpFormValueType>() => {
     nicknameState,
     isEmailConfirmed,
     isEmailPending,
+    isEmailRetry,
     isNicknameConfirmed,
     changeConfirmState,
     requestConfirmNumber,

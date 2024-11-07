@@ -76,7 +76,7 @@ const FieldTimerButton = ({
   changeConfirmState,
   ...props
 }: FieldTimerButtonProps) => {
-  const { time, startTimer } = useTimer({
+  const { time, startTimer, changeTime } = useTimer({
     waitTime: startTimeForMilliseconds,
   });
 
@@ -89,9 +89,9 @@ const FieldTimerButton = ({
   useEffect(() => {
     if (time > 0) return;
 
-    console.log(time);
-    changeConfirmState('PENDING');
-  }, [time, changeConfirmState]);
+    changeConfirmState('retry');
+    changeTime(startTimeForMilliseconds);
+  }, [time, startTimeForMilliseconds, changeConfirmState, changeTime]);
 
   return (
     <Button onClick={clickHandler} {...props}>
