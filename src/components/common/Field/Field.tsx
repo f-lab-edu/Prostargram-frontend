@@ -1,8 +1,14 @@
-import clsx from 'clsx';
-import { PropsWithChildren } from 'react';
+'use client';
 
+import clsx from 'clsx';
+import { ButtonHTMLAttributes, PropsWithChildren, useEffect } from 'react';
+
+import useTimer from '@/hooks/useTimer';
+import { ConfirmStateType } from '@/hooks/useSignUpState';
+import { timeFormatter } from '@/utils/formatter';
 import CautionIcon from '@/assets/icons/caution.svg';
 import Typo from '../Typo';
+import Button from '../Button';
 
 import styles from './Field.module.scss';
 
@@ -56,9 +62,48 @@ const FieldErrorMessage = ({ children }: FieldErrorMessageProps) => {
   );
 };
 
+interface FieldTimerButtonProps
+  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onClick'> {
+  onClick: (callback?: () => void) => void;
+  startTimeForMilliseconds: number;
+  changeConfirmState: (state: ConfirmStateType) => void;
+}
+
+const FieldTimerButton = ({
+  children,
+  onClick,
+  startTimeForMilliseconds,
+  changeConfirmState,
+  ...props
+}: FieldTimerButtonProps) => {
+  const { time, startTimer } = useTimer({
+    waitTime: startTimeForMilliseconds,
+  });
+
+  const clickHandler = () => {
+    if (onClick) {
+      onClick(startTimer);
+    }
+  };
+
+  useEffect(() => {
+    if (time > 0) return;
+
+    console.log(time);
+    changeConfirmState('PENDING');
+  }, [time, changeConfirmState]);
+
+  return (
+    <Button onClick={clickHandler} {...props}>
+      {startTimeForMilliseconds !== time ? timeFormatter(time) : children}
+    </Button>
+  );
+};
+
 Field.FieldLabel = FieldLabel;
 Field.FieldEmphasize = FieldEmphasize;
 Field.FieldBox = FieldBox;
 Field.FieldErrorMessage = FieldErrorMessage;
+Field.FieldTimerButton = FieldTimerButton;
 
 export default Field;

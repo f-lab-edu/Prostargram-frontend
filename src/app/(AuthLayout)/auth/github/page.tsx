@@ -15,6 +15,7 @@ import styles from './page.module.scss';
 const GithubSignupPage = () => {
   const router = useRouter();
   const {
+    changeConfirmState,
     checkConfirmNumber,
     checkNickname,
     requestConfirmNumber,
@@ -58,14 +59,16 @@ const GithubSignupPage = () => {
                 onKeyDown={preventEnter}
                 {...register('email', validators.email(isEmailConfirmed))}
               />
-              <Button
+              <Field.FieldTimerButton
                 type="button"
                 className={styles.button}
                 onClick={requestConfirmNumber}
+                changeConfirmState={changeConfirmState}
                 disabled={!isEmailPending}
+                startTimeForMilliseconds={3_000}
               >
                 {isEmailPending ? '인증 요청' : '요청 완료'}
-              </Button>
+              </Field.FieldTimerButton>
             </Field.FieldBox>
             <Field.FieldErrorMessage>
               {errors.email?.message}

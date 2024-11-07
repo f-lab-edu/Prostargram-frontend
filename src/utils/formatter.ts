@@ -43,4 +43,23 @@ const compactTimeFormatter = (targetDate: string) => {
   return '방금 전';
 };
 
-export { compactNumberFormatter, digitNumberFormatter, compactTimeFormatter };
+const timeFormatter = (time: number) => {
+  const totalSeconds = time / 1_000; // 초로 변경
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = Math.floor(totalSeconds - minutes * 60);
+
+  if (minutes <= 0) {
+    const returnString = `0:${seconds.toString().padStart(2, '0')}`;
+    return returnString;
+  }
+
+  const returnString = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  return returnString;
+};
+
+export {
+  compactNumberFormatter,
+  digitNumberFormatter,
+  compactTimeFormatter,
+  timeFormatter,
+};

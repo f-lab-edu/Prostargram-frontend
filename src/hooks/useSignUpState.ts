@@ -9,6 +9,8 @@ const CONFIRM_STATES = {
   CONFIRM: 'confirm',
 };
 
+export type ConfirmStateType = keyof typeof CONFIRM_STATES;
+
 export interface ISignUpFormValueType {
   email: string;
   password: string;
@@ -26,10 +28,13 @@ const useSignUpState = <T extends ISignUpFormValueType>() => {
 
   const isEmailConfirmed = confirmState === CONFIRM_STATES.CONFIRM;
   const isEmailPending = confirmState === CONFIRM_STATES.PENDING;
-
   const isNicknameConfirmed = nicknameState === CONFIRM_STATES.CONFIRM;
 
-  const requestConfirmNumber = async () => {
+  const changeConfirmState = (state: ConfirmStateType) => {
+    setConfirmState(state);
+  };
+
+  const requestConfirmNumber = async (callback?: () => void) => {
     const email = watch('email');
     if (!email) {
       setError('email', {
@@ -44,6 +49,9 @@ const useSignUpState = <T extends ISignUpFormValueType>() => {
         message: '이메일 형식이 알맞지 않습니다.',
       });
       return;
+    }
+    if (callback) {
+      callback();
     }
     clearErrors('email');
     setConfirmState(CONFIRM_STATES.REQUEST);
@@ -123,6 +131,7 @@ const useSignUpState = <T extends ISignUpFormValueType>() => {
     isEmailConfirmed,
     isEmailPending,
     isNicknameConfirmed,
+    changeConfirmState,
     requestConfirmNumber,
     checkConfirmNumber,
     checkNickname,
