@@ -1,10 +1,9 @@
-import { MainFeed } from '../../types/feed';
 import FeedContentBox from '../FeedContentBox/FeedContentBox';
 import FeedCountBox from '../FeedCountBox/FeedCountBox';
 import styles from './FeedBottom.module.scss';
 
 type FeedBottomProps = {
-  feed: MainFeed;
+  feed: Feed.FeedsResponse;
 };
 
 const FeedBottom = ({ feed }: FeedBottomProps) => {

@@ -1,4 +1,3 @@
-import { Post } from '../../types/feed';
 import BasicFeedContent from '../BasicFeedContent/BasicFeedContent';
 import DebateFeedContent from '../DebateFeedContent/DebateFeedContent';
 import styles from './FeedCenter.module.scss';
@@ -10,7 +9,7 @@ const MOCK_IMAGE_URL = [
 ];
 
 type FeedCenterProps = {
-  post: Post;
+  post: Feed.BasicPost | Feed.DebatePost | Feed.PollPost;
 };
 
 const FeedCenter = ({ post }: FeedCenterProps) => {

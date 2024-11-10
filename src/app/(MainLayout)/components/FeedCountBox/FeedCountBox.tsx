@@ -3,12 +3,11 @@
 import { useRouter } from 'next/navigation';
 import MessageIcon from '@/assets/icons/message.svg';
 import { digitNumberFormatter } from '@/utils/formatter';
-import { Post } from '../../types/feed';
 import LikeButton from '../LikeButton';
 import styles from './FeedCountBox.module.scss';
 
 type FeedCountBoxProps = {
-  post: Post;
+  post: Feed.BasicPost | Feed.DebatePost | Feed.PollPost;
 };
 
 const FeedCountBox = ({ post }: FeedCountBoxProps) => {

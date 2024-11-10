@@ -3,7 +3,7 @@ declare module Feed {
     postId: number;
     userId: number;
     content: string;
-    hashTagNames: string;
+    hashTagNames: string[];
     postType: 'BASIC' | 'DEBATE' | 'POLL';
     likeCount: number;
     commentCount: number;

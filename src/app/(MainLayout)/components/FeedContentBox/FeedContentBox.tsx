@@ -4,11 +4,10 @@ import { useRouter } from 'next/navigation';
 import Typo from '@/components/common/Typo';
 import { compactTimeFormatter } from '@/utils/formatter';
 import clsx from 'clsx';
-import { MainFeed } from '../../types/feed';
 import styles from './FeedContentBox.module.scss';
 
 type FeedContentBoxProps = {
-  feed: MainFeed;
+  feed: Feed.FeedsResponse;
 };
 const FeedContentBox = ({ feed }: FeedContentBoxProps) => {
   const router = useRouter();

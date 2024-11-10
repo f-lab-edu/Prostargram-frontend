@@ -1,11 +1,10 @@
 import styles from './Feed.module.scss';
 import FeedTop from '../FeedTop/FeedTop';
-import { MainFeed } from '../../types/feed';
 import FeedBottom from '../FeedBottom/FeedBottom';
 import FeedCenter from '../FeedCenter/FeedCenter';
 
 type FeedProps = {
-  feed: MainFeed;
+  feed: Feed.FeedsResponse;
 };
 
 const Feed = ({ feed }: FeedProps) => {

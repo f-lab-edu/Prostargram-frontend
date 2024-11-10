@@ -4,10 +4,9 @@ import { useState } from 'react';
 import ProfileFollowButton from '@/app/my/components/Profile/ProfileFollowButton';
 import MeatBallMenu from '@/assets/icons/meatball_menu.svg';
 import styles from './FeedMenu.module.scss';
-import { Post } from '../../types/feed';
 
 type FeedMenuProps = {
-  post: Post;
+  post: Feed.BasicPost | Feed.DebatePost | Feed.PollPost;
 };
 
 const FeedMenu = ({ post }: FeedMenuProps) => {
