@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import styles from './Feed.module.scss';
 import FeedTop from '../FeedTop/FeedTop';
 import FeedBottom from '../FeedBottom/FeedBottom';
@@ -7,14 +8,14 @@ type FeedProps = {
   feed: Feed.FeedsResponse;
 };
 
-const Feed = ({ feed }: FeedProps) => {
+const Feed = forwardRef<HTMLDivElement, FeedProps>(({ feed }, ref) => {
   return (
-    <div className={styles.feed_container}>
+    <div ref={ref} className={styles.feed_container}>
       <FeedTop feed={feed} />
       <FeedCenter post={feed.post} />
       <FeedBottom feed={feed} />
     </div>
   );
-};
+});
 
 export default Feed;

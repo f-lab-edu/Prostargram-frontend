@@ -19,7 +19,7 @@ declare module Feed {
   };
 
   interface BasicPost extends Feed.Common {
-    contentImageUrls?: string;
+    contentImageUrls: string[];
     preSignedImageUrls?: string;
   }
 

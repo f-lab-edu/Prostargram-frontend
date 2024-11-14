@@ -1,6 +1,7 @@
 'use client';
 
-import { useFeeds } from '@/api/feed/queries';
+import { useCallback, useRef } from 'react';
+import { useInfiniteFeeds } from '@/api/feed/feedQueries';
 import ReadOnlyCommonFeed from './components/ReadOnlyCommonFeed';
 import ReadOnlyDebateFeed from './components/ReadOnlyDebateFeed';
 import styles from './page.module.scss';
@@ -65,15 +66,46 @@ const MOCK_DATA_OF_DEBATE_FEED = {
 };
 
 const MainPage = () => {
-  const { data } = useFeeds({ page: 0 });
+  const observer = useRef<IntersectionObserver | null>(null);
 
-  console.log(data);
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteFeeds(0);
+
+  const lastPostRef = useCallback(
+    (node: HTMLDivElement) => {
+      console.log('node', node);
+      console.log(observer.current);
+
+      if (isFetchingNextPage) return;
+
+      if (observer.current) observer.current.disconnect();
+
+      observer.current = new IntersectionObserver((entries) => {
+        console.log('entries::', entries);
+        if (entries[0].isIntersecting && hasNextPage) {
+          fetchNextPage();
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [isFetchingNextPage, fetchNextPage, hasNextPage],
+  );
 
   return (
     <div className={styles.container}>
-      {data?.result?.map((result) => {
-        return <Feed feed={result} />;
-      })}
+      {data?.pages?.map((page) => (
+        <>
+          {page.result?.map((result, idx) => {
+            return (
+              <Feed
+                ref={page.result?.length === idx + 1 ? lastPostRef : null}
+                key={result.post.postId}
+                feed={result}
+              />
+            );
+          })}
+        </>
+      ))}
       <ReadOnlyCommonFeed commonFeedData={MOCK_DATA_OF_COMMON_FEED} />
       <ReadOnlyDebateFeed debateFeedData={MOCK_DATA_OF_DEBATE_FEED} />
     </div>
