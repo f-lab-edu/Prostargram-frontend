@@ -127,19 +127,15 @@ const MainPage = () => {
   const observer = useRef<IntersectionObserver | null>(null);
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfiniteFeeds(0);
+    useInfiniteFeeds();
 
   const lastPostRef = useCallback(
     (node: HTMLDivElement) => {
-      console.log('node', node);
-      console.log(observer.current);
-
       if (isFetchingNextPage) return;
 
       if (observer.current) observer.current.disconnect();
 
       observer.current = new IntersectionObserver((entries) => {
-        console.log('entries::', entries);
         if (entries[0].isIntersecting && hasNextPage) {
           fetchNextPage();
         }
