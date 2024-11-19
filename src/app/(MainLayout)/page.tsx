@@ -3,6 +3,7 @@ import ReadOnlyDebateFeed from './components/ReadOnlyDebateFeed';
 
 import styles from './page.module.scss';
 import Feed from './components/Feed/Feed';
+import FollowingList from './components/FollowingList/FollowingList';
 
 const MOCK_BASIC_FEED_DATA = {
   post: {
@@ -118,9 +119,67 @@ const MOCK_DATA_OF_DEBATE_FEED = {
   },
 };
 
+const MOCK_DATA_OF_FOLLOWING_DATA = [
+  {
+    userId: 1,
+    userName: '정민욱',
+    profileImgUrl: 'https://profileImg1.url',
+    departmentName: '네이버',
+  },
+  {
+    userId: 2,
+    userName: '제이슨',
+    profileImgUrl: 'https://profileImg2.url',
+    departmentName: '카카오',
+  },
+  {
+    userId: 3,
+    userName: '진성진',
+    profileImgUrl: 'https://profileImg3.url',
+    departmentName: '우아한형제들',
+  },
+  {
+    userId: 1,
+    userName: '정민욱',
+    profileImgUrl: 'https://profileImg1.url',
+    departmentName: '네이버',
+  },
+  {
+    userId: 2,
+    userName: '제이슨',
+    profileImgUrl: 'https://profileImg2.url',
+    departmentName: '카카오',
+  },
+  {
+    userId: 3,
+    userName: '진성진',
+    profileImgUrl: 'https://profileImg3.url',
+    departmentName: '우아한형제들',
+  },
+  {
+    userId: 1,
+    userName: '정민욱',
+    profileImgUrl: 'https://profileImg1.url',
+    departmentName: '네이버',
+  },
+  {
+    userId: 2,
+    userName: '제이슨',
+    profileImgUrl: 'https://profileImg2.url',
+    departmentName: '카카오',
+  },
+  {
+    userId: 3,
+    userName: '진성진',
+    profileImgUrl: 'https://profileImg3.url',
+    departmentName: '우아한형제들',
+  },
+];
+
 const MainPage = () => {
   return (
     <div className={styles.container}>
+      <FollowingList followingUsers={MOCK_DATA_OF_FOLLOWING_DATA} />
       <Feed feed={MOCK_BASIC_FEED_DATA} />
       <Feed feed={MOCK_DEBATE_FEED_DATA} />
       <ReadOnlyCommonFeed commonFeedData={MOCK_DATA_OF_COMMON_FEED} />
