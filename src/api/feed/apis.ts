@@ -14,7 +14,7 @@ import { authInstance } from '../httpRequest';
 // };
 
 const getFeeds = (page: number) => {
-  const res = authInstance<Feed.FeedsResponse[]>({
+  const res = authInstance<Feed.FeedsResponse>({
     method: 'get',
     url: `/feeds?page=${page}`,
     headers: {

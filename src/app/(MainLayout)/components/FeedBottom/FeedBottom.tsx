@@ -3,7 +3,7 @@ import FeedCountBox from '../FeedCountBox/FeedCountBox';
 import styles from './FeedBottom.module.scss';
 
 type FeedBottomProps = {
-  feed: Feed.FeedsResponse;
+  feed: Feed.FeedData;
 };
 
 const FeedBottom = ({ feed }: FeedBottomProps) => {

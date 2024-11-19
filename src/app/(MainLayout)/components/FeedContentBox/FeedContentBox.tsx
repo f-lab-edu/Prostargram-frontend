@@ -7,7 +7,7 @@ import clsx from 'clsx';
 import styles from './FeedContentBox.module.scss';
 
 type FeedContentBoxProps = {
-  feed: Feed.FeedsResponse;
+  feed: Feed.FeedData;
 };
 const FeedContentBox = ({ feed }: FeedContentBoxProps) => {
   const router = useRouter();

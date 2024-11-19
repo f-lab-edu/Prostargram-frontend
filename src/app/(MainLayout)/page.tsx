@@ -154,10 +154,10 @@ const MainPage = () => {
       <FollowingList followingUsers={MOCK_DATA_OF_FOLLOWING_DATA} />
       {data?.pages?.map((page) => (
         <>
-          {page.result?.map((result, idx) => {
+          {page.result?.data?.map((result, idx) => {
             return (
               <Feed
-                ref={page.result?.length === idx + 1 ? lastPostRef : null}
+                ref={page.result?.data?.length === idx + 1 ? lastPostRef : null}
                 key={result.post.postId}
                 feed={result}
               />

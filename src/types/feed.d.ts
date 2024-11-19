@@ -41,8 +41,13 @@ declare module Feed {
     profileImgUrl: string;
   }
 
-  interface FeedsResponse {
+  interface FeedData {
     post: BasicPost | DebatePost | PollPost;
     basicUser: BasicUser;
+  }
+
+  interface FeedsResponse {
+    data: FeedData[];
+    hasNext: boolean;
   }
 }

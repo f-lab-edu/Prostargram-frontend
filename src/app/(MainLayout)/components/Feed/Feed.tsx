@@ -5,7 +5,7 @@ import FeedBottom from '../FeedBottom/FeedBottom';
 import FeedCenter from '../FeedCenter/FeedCenter';
 
 type FeedProps = {
-  feed: Feed.FeedsResponse;
+  feed: Feed.FeedData;
 };
 
 const Feed = forwardRef<HTMLDivElement, FeedProps>(({ feed }, ref) => {
