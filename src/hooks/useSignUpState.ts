@@ -2,6 +2,8 @@ import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 
 import { REG_EXP } from '@/constants/regExp';
+import { postEmailConfirm } from '@/api/sign-up';
+import { useMutation } from '@tanstack/react-query';
 
 const CONFIRM_STATES = {
   PENDING: 'pending',
@@ -29,12 +31,29 @@ const useSignUpState = <T extends ISignUpFormValueType>() => {
     CONFIRM_STATES.PENDING,
   );
 
-  const formMethods = useForm<T | ISignUpFormValueType>();
+  const formMethods = useForm<T | ISignUpFormValueType>({
+    mode: 'onChange',
+  });
   const { watch, setError, clearErrors } = formMethods;
 
-  const isEmailConfirmed = confirmState === CONFIRM_STATES.CONFIRM;
+  const { isPending: isRequestPending, mutate } = useMutation({
+    mutationFn: (email: string) => postEmailConfirm(email),
+    onSuccess: () => {
+      clearErrors('email');
+      setConfirmState(CONFIRM_STATES.REQUEST);
+    },
+    onError: (data) => {
+      setError('email', {
+        type: 'validate',
+        message: data.message,
+      });
+    },
+  });
+
   const isEmailPending = confirmState === CONFIRM_STATES.PENDING;
+  const isEmailConfirmed = confirmState === CONFIRM_STATES.CONFIRM;
   const isEmailRetry = confirmState === CONFIRM_STATES.RETRY;
+
   const isNicknameConfirmed = nicknameState === CONFIRM_STATES.CONFIRM;
 
   const changeConfirmState = (state: ConfirmStateType) =>
@@ -42,47 +61,15 @@ const useSignUpState = <T extends ISignUpFormValueType>() => {
 
   const requestConfirmNumber = async (callback?: () => void) => {
     const email = watch('email');
-    if (!email) {
-      setError('email', {
-        type: 'required',
-        message: '이메일을 입력해주세요.',
-      });
-      return;
-    }
-    if (!REG_EXP.EMAIL.test(email)) {
-      setError('email', {
-        type: 'validate',
-        message: '이메일 형식이 알맞지 않습니다.',
-      });
-      return;
-    }
+
+    await mutate(email);
+
     if (callback) {
       callback();
     }
-    clearErrors('email');
-    setConfirmState(CONFIRM_STATES.REQUEST);
   };
 
   const checkConfirmNumber = async () => {
-    const confirm = watch('confirm');
-    if (!confirm) {
-      setError('confirm', {
-        type: 'required',
-        message: '인증번호를 입력해주세요.',
-      });
-      return;
-    }
-    if (confirm.length < 6) {
-      setError('confirm', { type: 'min', message: '인증번호는 6자리 입니다.' });
-      return;
-    }
-    if (!REG_EXP.CONFIRM.test(confirm)) {
-      setError('confirm', {
-        type: 'validate',
-        message: '인증번호는 숫자로만 입력해야 합니다.',
-      });
-      return;
-    }
     clearErrors('confirm');
     setConfirmState(CONFIRM_STATES.CONFIRM);
   };
@@ -131,6 +118,7 @@ const useSignUpState = <T extends ISignUpFormValueType>() => {
   };
 
   return {
+    isRequestPending,
     ...formMethods,
     confirmState,
     nicknameState,

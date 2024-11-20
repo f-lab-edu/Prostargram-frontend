@@ -84,14 +84,12 @@ const nickname: (isConfirmed: boolean) => RegisterOptions<FieldValues> = (
 const confirm: (isConfirmed: boolean) => RegisterOptions<FieldValues> = (
   isConfirmed,
 ) => ({
-  required: '인증을 완료해 주세요.',
+  required: '인증번호를 입력해 주세요.',
   minLength: {
     value: 6,
     message: '인증번호는 6자리입니다.',
   },
   validate: {
-    confirmValidate: (v) =>
-      REG_EXP.CONFIRM.test(v) || '인증번호는 숫자만 입력해야 합니다.',
     isConfirmedValidate: () => isConfirmed || '인증을 완료해 주세요.',
   },
 });

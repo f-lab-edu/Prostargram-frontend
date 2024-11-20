@@ -12,20 +12,20 @@ import Button from '../Button';
 
 import styles from './Field.module.scss';
 
-interface FieldProps extends PropsWithChildren {
+interface ContainerProps extends PropsWithChildren {
   className?: string;
 }
 
-const Field = ({ className, children }: FieldProps) => {
+const Container = ({ className, children }: ContainerProps) => {
   return <div className={clsx(styles.container, className)}>{children}</div>;
 };
 
-interface FieldLabelProps extends PropsWithChildren {
+interface LabelProps extends PropsWithChildren {
   htmlFor?: string;
   className?: string;
 }
 
-const FieldLabel = ({ htmlFor, className, children }: FieldLabelProps) => {
+const Label = ({ htmlFor, className, children }: LabelProps) => {
   return (
     <label htmlFor={htmlFor} className={clsx(styles.label, className)}>
       {children}
@@ -33,23 +33,23 @@ const FieldLabel = ({ htmlFor, className, children }: FieldLabelProps) => {
   );
 };
 
-interface FieldEmphasizeProps extends PropsWithChildren {}
+interface EmphasizeProps extends PropsWithChildren {}
 
-const FieldEmphasize = ({ children }: FieldEmphasizeProps) => {
+const Emphasize = ({ children }: EmphasizeProps) => {
   return <em className={styles.emphasize}>{children}</em>;
 };
 
-interface FieldBoxProps extends PropsWithChildren {
+interface BoxProps extends PropsWithChildren {
   className?: string;
 }
 
-const FieldBox = ({ className, children }: FieldBoxProps) => {
+const Box = ({ className, children }: BoxProps) => {
   return <div className={clsx(styles.field_box, className)}>{children}</div>;
 };
 
-interface FieldErrorMessageProps extends PropsWithChildren {}
+interface ErrorMessageProps extends PropsWithChildren {}
 
-const FieldErrorMessage = ({ children }: FieldErrorMessageProps) => {
+const ErrorMessage = ({ children }: ErrorMessageProps) => {
   if (!children) return null;
 
   return (
@@ -62,20 +62,20 @@ const FieldErrorMessage = ({ children }: FieldErrorMessageProps) => {
   );
 };
 
-interface FieldTimerButtonProps
+interface TimerButtonProps
   extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onClick'> {
   onClick: (callback?: () => void) => void;
   startTimeForMilliseconds: number;
   changeConfirmState: (state: ConfirmStateType) => void;
 }
 
-const FieldTimerButton = ({
+const TimerButton = ({
   children,
-  onClick,
   startTimeForMilliseconds,
+  onClick,
   changeConfirmState,
   ...props
-}: FieldTimerButtonProps) => {
+}: TimerButtonProps) => {
   const { time, startTimer, changeTime } = useTimer({
     waitTime: startTimeForMilliseconds,
   });
@@ -95,15 +95,19 @@ const FieldTimerButton = ({
 
   return (
     <Button onClick={clickHandler} {...props}>
-      {startTimeForMilliseconds !== time ? timeFormatter(time) : children}
+      {startTimeForMilliseconds >= 0 && startTimeForMilliseconds <= time
+        ? children
+        : timeFormatter(time)}
     </Button>
   );
 };
 
-Field.FieldLabel = FieldLabel;
-Field.FieldEmphasize = FieldEmphasize;
-Field.FieldBox = FieldBox;
-Field.FieldErrorMessage = FieldErrorMessage;
-Field.FieldTimerButton = FieldTimerButton;
+const Field = Object.assign(Container, {
+  Label,
+  Emphasize,
+  Box,
+  ErrorMessage,
+  TimerButton,
+});
 
 export default Field;

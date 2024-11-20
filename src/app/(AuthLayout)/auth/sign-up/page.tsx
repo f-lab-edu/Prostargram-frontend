@@ -23,6 +23,7 @@ const SignupPage = () => {
     register,
     watch,
     formState: { errors },
+    isRequestPending,
     isEmailPending,
     isEmailRetry,
     isEmailConfirmed,
@@ -48,11 +49,11 @@ const SignupPage = () => {
 
       <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
         <Field>
-          <Field.FieldLabel htmlFor="email">
-            <Field.FieldEmphasize>*</Field.FieldEmphasize>
+          <Field.Label htmlFor="email">
+            <Field.Emphasize>*</Field.Emphasize>
             이메일
-          </Field.FieldLabel>
-          <Field.FieldBox>
+          </Field.Label>
+          <Field.Box>
             <Input
               id="email"
               type="text"
@@ -63,32 +64,34 @@ const SignupPage = () => {
               onKeyDown={preventEnter}
               {...register('email', validators.email(isEmailConfirmed))}
             />
-            <Field.FieldTimerButton
+            <Field.TimerButton
               type="button"
               className={styles.button}
               onClick={requestConfirmNumber}
               changeConfirmState={changeConfirmState}
-              disabled={!isEmailPending && !isEmailRetry}
-              startTimeForMilliseconds={900_000} // 15분
+              disabled={
+                !isEmailRetry &&
+                errors.email?.type !== 'isRequestConfirmedValidate'
+              }
+              startTimeForMilliseconds={300_000} // 5분
             >
-              {!isEmailRetry && isEmailPending && '인증 요청'}
-              {isEmailRetry && !isEmailPending && '재요청'}
-              {!isEmailRetry && !isEmailPending && '요청 완료'}
-            </Field.FieldTimerButton>
-          </Field.FieldBox>
+              {isEmailPending && !isEmailRetry && '인증 요청'}
+              {(isRequestPending || (!isEmailPending && !isEmailRetry)) &&
+                '요청 중...'}
+              {isEmailRetry && '재요청'}
+            </Field.TimerButton>
+          </Field.Box>
 
-          <Field.FieldErrorMessage>
-            {errors.email?.message}
-          </Field.FieldErrorMessage>
+          <Field.ErrorMessage>{errors.email?.message}</Field.ErrorMessage>
         </Field>
 
-        {(!isEmailPending || isEmailRetry) && (
+        {!isEmailPending && (
           <Field>
-            <Field.FieldLabel htmlFor="confirm">
-              <Field.FieldEmphasize>*</Field.FieldEmphasize>
+            <Field.Label htmlFor="confirm">
+              <Field.Emphasize>*</Field.Emphasize>
               인증번호
-            </Field.FieldLabel>
-            <Field.FieldBox>
+            </Field.Label>
+            <Field.Box>
               <Input
                 id="confirm"
                 type="text"
@@ -107,19 +110,17 @@ const SignupPage = () => {
               >
                 {isEmailConfirmed ? '인증 완료' : '인증 확인'}
               </Button>
-            </Field.FieldBox>
-            <Field.FieldErrorMessage>
-              {errors.confirm?.message}
-            </Field.FieldErrorMessage>
+            </Field.Box>
+            <Field.ErrorMessage>{errors.confirm?.message}</Field.ErrorMessage>
           </Field>
         )}
 
         <Field>
-          <Field.FieldLabel htmlFor="password">
-            <Field.FieldEmphasize>*</Field.FieldEmphasize>
+          <Field.Label htmlFor="password">
+            <Field.Emphasize>*</Field.Emphasize>
             비밀번호
-          </Field.FieldLabel>
-          <Field.FieldBox>
+          </Field.Label>
+          <Field.Box>
             <Input
               id="password"
               type="password"
@@ -130,18 +131,16 @@ const SignupPage = () => {
               onKeyDown={preventEnter}
               {...register('password', validators.password())}
             />
-          </Field.FieldBox>
-          <Field.FieldErrorMessage>
-            {errors.password?.message}
-          </Field.FieldErrorMessage>
+          </Field.Box>
+          <Field.ErrorMessage>{errors.password?.message}</Field.ErrorMessage>
         </Field>
 
         <Field>
-          <Field.FieldLabel htmlFor="repassword">
-            <Field.FieldEmphasize>*</Field.FieldEmphasize>
+          <Field.Label htmlFor="repassword">
+            <Field.Emphasize>*</Field.Emphasize>
             비밀번호 확인
-          </Field.FieldLabel>
-          <Field.FieldBox>
+          </Field.Label>
+          <Field.Box>
             <Input
               id="repassword"
               type="password"
@@ -155,18 +154,16 @@ const SignupPage = () => {
                 validators.repassword(watch('password')),
               )}
             />
-          </Field.FieldBox>
-          <Field.FieldErrorMessage>
-            {errors.repassword?.message}
-          </Field.FieldErrorMessage>
+          </Field.Box>
+          <Field.ErrorMessage>{errors.repassword?.message}</Field.ErrorMessage>
         </Field>
 
         <Field>
-          <Field.FieldLabel htmlFor="nickname">
-            <Field.FieldEmphasize>*</Field.FieldEmphasize>
+          <Field.Label htmlFor="nickname">
+            <Field.Emphasize>*</Field.Emphasize>
             닉네임
-          </Field.FieldLabel>
-          <Field.FieldBox>
+          </Field.Label>
+          <Field.Box>
             <Input
               id="nickname"
               type="text"
@@ -189,10 +186,8 @@ const SignupPage = () => {
             >
               중복 확인
             </Button>
-          </Field.FieldBox>
-          <Field.FieldErrorMessage>
-            {errors.nickname?.message}
-          </Field.FieldErrorMessage>
+          </Field.Box>
+          <Field.ErrorMessage>{errors.nickname?.message}</Field.ErrorMessage>
         </Field>
         <Button className={styles.next_button}>다음 단계로</Button>
       </form>

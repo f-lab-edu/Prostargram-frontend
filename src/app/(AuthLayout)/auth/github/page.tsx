@@ -45,11 +45,11 @@ const GithubSignupPage = () => {
         <div>
           <p className={styles.sub_title}>회원가입</p>
           <Field>
-            <Field.FieldLabel htmlFor="email">
-              <Field.FieldEmphasize>*</Field.FieldEmphasize>
+            <Field.Label htmlFor="email">
+              <Field.Emphasize>*</Field.Emphasize>
               이메일
-            </Field.FieldLabel>
-            <Field.FieldBox>
+            </Field.Label>
+            <Field.Box>
               <Input
                 id="email"
                 type="text"
@@ -60,7 +60,7 @@ const GithubSignupPage = () => {
                 onKeyDown={preventEnter}
                 {...register('email', validators.email(isEmailConfirmed))}
               />
-              <Field.FieldTimerButton
+              <Field.TimerButton
                 type="button"
                 className={styles.button}
                 onClick={requestConfirmNumber}
@@ -71,20 +71,18 @@ const GithubSignupPage = () => {
                 {!isEmailRetry && isEmailPending && '인증 요청'}
                 {isEmailRetry && !isEmailPending && '재요청'}
                 {!isEmailRetry && !isEmailPending && '요청 완료'}
-              </Field.FieldTimerButton>
-            </Field.FieldBox>
-            <Field.FieldErrorMessage>
-              {errors.email?.message}
-            </Field.FieldErrorMessage>
+              </Field.TimerButton>
+            </Field.Box>
+            <Field.ErrorMessage>{errors.email?.message}</Field.ErrorMessage>
           </Field>
 
           {!isEmailPending && (
             <Field>
-              <Field.FieldLabel htmlFor="confirm">
-                <Field.FieldEmphasize>*</Field.FieldEmphasize>
+              <Field.Label htmlFor="confirm">
+                <Field.Emphasize>*</Field.Emphasize>
                 인증번호
-              </Field.FieldLabel>
-              <Field.FieldBox>
+              </Field.Label>
+              <Field.Box>
                 <Input
                   id="confirm"
                   type="text"
@@ -103,19 +101,17 @@ const GithubSignupPage = () => {
                 >
                   {isEmailConfirmed ? '인증 완료' : '인증 확인'}
                 </Button>
-              </Field.FieldBox>
-              <Field.FieldErrorMessage>
-                {errors.confirm?.message}
-              </Field.FieldErrorMessage>
+              </Field.Box>
+              <Field.ErrorMessage>{errors.confirm?.message}</Field.ErrorMessage>
             </Field>
           )}
 
           <Field className={styles.last_field}>
-            <Field.FieldLabel htmlFor="nickname">
-              <Field.FieldEmphasize>*</Field.FieldEmphasize>
+            <Field.Label htmlFor="nickname">
+              <Field.Emphasize>*</Field.Emphasize>
               닉네임
-            </Field.FieldLabel>
-            <Field.FieldBox>
+            </Field.Label>
+            <Field.Box>
               <Input
                 id="nickname"
                 type="text"
@@ -135,10 +131,8 @@ const GithubSignupPage = () => {
               >
                 중복 확인
               </Button>
-            </Field.FieldBox>
-            <Field.FieldErrorMessage>
-              {errors.nickname?.message}
-            </Field.FieldErrorMessage>
+            </Field.Box>
+            <Field.ErrorMessage>{errors.nickname?.message}</Field.ErrorMessage>
           </Field>
         </div>
 
