@@ -1,9 +1,11 @@
 import { useForm } from 'react-hook-form';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { REG_EXP } from '@/constants/regExp';
-import { postEmailConfirm } from '@/api/sign-up';
-import { useMutation } from '@tanstack/react-query';
+import {
+  useConfirmUsernameDuplicate,
+  useEamilConfirmMutation,
+  useSelfSignUpMutation,
+} from '@/api/mutations/sign-up';
 
 const CONFIRM_STATES = {
   PENDING: 'pending',
@@ -19,31 +21,80 @@ export interface ISignUpFormValueType {
   email: string;
   password: string;
   repassword: string;
-  nickname: string;
+  username: string;
   confirm: string;
 }
 
 const useSignUpState = <T extends ISignUpFormValueType>() => {
+  const [signupToken, setSignupToken] = useState({
+    emailToken: '',
+    usernameToken: '',
+  });
   const [confirmState, setConfirmState] = useState<ConfirmStateType>(
     CONFIRM_STATES.PENDING,
   );
-  const [nicknameState, setNicknameState] = useState<ConfirmStateType>(
+  const [usernameState, setUsernameState] = useState<ConfirmStateType>(
     CONFIRM_STATES.PENDING,
   );
 
   const formMethods = useForm<T | ISignUpFormValueType>({
     mode: 'onChange',
+    defaultValues: {
+      email: '',
+      confirm: '',
+      password: '',
+      repassword: '',
+      username: '',
+    },
   });
-  const { watch, setError, clearErrors } = formMethods;
+  const { watch, setError, clearErrors, resetField } = formMethods;
 
-  const { isPending: isRequestPending, mutate } = useMutation({
-    mutationFn: (email: string) => postEmailConfirm(email),
-    onSuccess: () => {
-      clearErrors('email');
-      setConfirmState(CONFIRM_STATES.REQUEST);
+  const { isPending: isRequestEmailPending, mutate: requestCodeByEmail } =
+    useSelfSignUpMutation({
+      onSuccess: () => {
+        setConfirmState(CONFIRM_STATES.REQUEST);
+        clearErrors('email');
+      },
+      onError: (data) => {
+        setError('email', {
+          type: 'validate',
+          message: data.message,
+        });
+      },
+    });
+
+  const { isPending: isRequestConfirmPending, mutate: requestConfirmCode } =
+    useEamilConfirmMutation({
+      onSuccess: (res) => {
+        setSignupToken((prev) => ({
+          ...prev,
+          emailToken: res.result!.emailToken,
+        }));
+        setConfirmState(CONFIRM_STATES.CONFIRM);
+        clearErrors(['email', 'confirm']);
+      },
+      onError: (data) => {
+        setError('confirm', {
+          type: 'validate',
+          message: data.message,
+        });
+      },
+    });
+
+  const {
+    isPending: isDuplicateUsernamePending,
+    mutate: requestCheckDuplicateUsername,
+  } = useConfirmUsernameDuplicate({
+    onSuccess: (res) => {
+      setSignupToken((prev) => ({
+        ...prev,
+        usernameToken: res.result!.usernameToken,
+      }));
+      setUsernameState(CONFIRM_STATES.CONFIRM);
+      clearErrors('username');
     },
     onError: (data) => {
-      setError('email', {
+      setError('confirm', {
         type: 'validate',
         message: data.message,
       });
@@ -51,85 +102,69 @@ const useSignUpState = <T extends ISignUpFormValueType>() => {
   });
 
   const isEmailPending = confirmState === CONFIRM_STATES.PENDING;
+  const isEmailRequest = confirmState === CONFIRM_STATES.REQUEST;
   const isEmailConfirmed = confirmState === CONFIRM_STATES.CONFIRM;
   const isEmailRetry = confirmState === CONFIRM_STATES.RETRY;
 
-  const isNicknameConfirmed = nicknameState === CONFIRM_STATES.CONFIRM;
+  const isUsernameConfirmed = usernameState === CONFIRM_STATES.CONFIRM;
+
+  const [email, code, password, repassword, username] = watch([
+    'email',
+    'confirm',
+    'password',
+    'repassword',
+    'username',
+  ]);
 
   const changeConfirmState = (state: ConfirmStateType) =>
     setConfirmState(state);
 
-  const requestConfirmNumber = async (callback?: () => void) => {
-    const email = watch('email');
+  const changeUsernameState = (state: ConfirmStateType) =>
+    setUsernameState(state);
 
-    await mutate(email);
-
-    if (callback) {
-      callback();
-    }
+  const requestConfirmNumber = async () => {
+    await requestCodeByEmail(email);
   };
 
   const checkConfirmNumber = async () => {
-    clearErrors('confirm');
-    setConfirmState(CONFIRM_STATES.CONFIRM);
+    await requestConfirmCode({ email, code });
   };
 
-  const checkNickname = async () => {
-    const nickname = watch('nickname');
-    if (!nickname) {
-      setError('nickname', {
-        type: 'required',
-        message: '닉네임을 입력해주세요.',
-      });
-      return;
-    }
-    if (nickname.length < 2) {
-      setError('nickname', {
-        type: 'minLength',
-        message: '닉네임은 최소 2자 이상 작성해야 합니다.',
-      });
-      return;
-    }
-    if (nickname.length > 16) {
-      setError('nickname', {
-        type: 'maxLength',
-        message: '닉네임은 최대 길이 16자 이하로 작성해야 합니다.',
-      });
-      return;
-    }
-    if (!REG_EXP.NICKNAME.test(nickname)) {
-      setError('nickname', {
-        type: 'validate',
-        message: '닉네임은 영어(소문자),한글,숫자, _, .만 사용 가능합니다.',
-      });
-      return;
-    }
-
-    if (nickname === 'nickname') {
-      setError('nickname', {
-        type: 'validate',
-        message: '중복된 닉네임입니다.',
-      });
-      return;
-    }
-
-    clearErrors('nickname');
-    setNicknameState(CONFIRM_STATES.CONFIRM);
+  const checkUsername = async () => {
+    await requestCheckDuplicateUsername(username);
   };
+
+  const resetEmail = () => {
+    resetField('email');
+    resetField('confirm');
+    setConfirmState('pending');
+  };
+
+  useEffect(() => {
+    if (password !== '' && password === repassword) {
+      clearErrors(['password', 'repassword']);
+    }
+  }, [password, repassword, clearErrors]);
 
   return {
-    isRequestPending,
     ...formMethods,
+    signupToken,
+    isRequestEmailPending,
+    isRequestConfirmPending,
+    isDuplicateUsernamePending,
     confirmState,
-    nicknameState,
+    usernameState,
     isEmailConfirmed,
     isEmailPending,
+    isEmailRequest,
     isEmailRetry,
-    isNicknameConfirmed,
+    isUsernameConfirmed,
     changeConfirmState,
+    changeUsernameState,
     requestConfirmNumber,
     checkConfirmNumber,
-    checkNickname,
+    checkUsername,
+    resetEmail,
   };
 };
 

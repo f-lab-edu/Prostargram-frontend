@@ -1,41 +1,69 @@
-import { useMutation } from '@tanstack/react-query';
 import { defaultInstance } from './httpRequest';
 
-const postEmailConfirm = async (email: string) => {
-  // const result = defaultInstance({
-  //   method: 'post',
-  //   url: `/verification/email?email=${email}`,
-  // });
+type UserSignUpType = {
+  email: string;
+  password: string;
+  username: string;
+  emailToken: string;
+  usernameToken: string;
+};
 
-  console.log(email);
-  const result = {
-    isSuccess: true,
-    code: 200,
-    message: '성공적으로 요청하였습니다.',
-  };
-  // const result = await new Promise((res) => {
-  //   const data = {
-  //     isSuccess: true,
-  //     code: 200,
-  //     message: '성공적으로 요청하였습니다.',
-  //   };
+const postConfirmCodeByEamil = async (email: string) => {
+  const url = `/verification/email?email=${email}`;
 
-  //   setTimeout(() => res(data), 3000);
-  // });
-
-  console.log(result);
+  const result = await defaultInstance({
+    method: 'POST',
+    url,
+  });
 
   return result;
 };
 
-const useEamilConfirm = () => {
-  return useMutation({
-    mutationFn: (email: string) =>
-      defaultInstance({
-        method: 'post',
-        url: `/verification/email?email=${email}`,
-      }),
+const postConfirmCode = async ({
+  email,
+  code,
+}: {
+  email: string;
+  code: string;
+}) => {
+  const url = `/verification/email/${email}?code=${code}`;
+
+  const result = await defaultInstance<{ emailToken: string }>({
+    method: 'POST',
+    url,
   });
+
+  return result;
 };
 
-export { postEmailConfirm, useEamilConfirm };
+const postConfirmUsernameDuplicate = async (username: string) => {
+  const url = `/verification/username?username=${username}`;
+
+  const result = await defaultInstance<{ usernameToken: string }>({
+    method: 'POST',
+    url,
+  });
+
+  return result;
+};
+
+const postSignupUser = async (userInfo: UserSignUpType) => {
+  const url = `/users`;
+
+  const result = await defaultInstance({
+    method: 'POST',
+    url,
+    data: userInfo,
+  });
+
+  return result;
+};
+
+export {
+  postConfirmCodeByEamil,
+  postConfirmCode,
+  postConfirmUsernameDuplicate,
+  postSignupUser,
+};
+
+export type { UserSignUpType };

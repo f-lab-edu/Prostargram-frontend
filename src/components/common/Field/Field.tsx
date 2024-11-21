@@ -64,40 +64,52 @@ const ErrorMessage = ({ children }: ErrorMessageProps) => {
 
 interface TimerButtonProps
   extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onClick'> {
-  onClick: (callback?: () => void) => void;
-  startTimeForMilliseconds: number;
+  isConfirm?: boolean;
+  timerDuration: number;
+  onClick?: () => void;
   changeConfirmState: (state: ConfirmStateType) => void;
 }
 
 const TimerButton = ({
-  children,
-  startTimeForMilliseconds,
+  isConfirm,
+  timerDuration,
   onClick,
   changeConfirmState,
   ...props
 }: TimerButtonProps) => {
-  const { time, startTimer, changeTime } = useTimer({
-    waitTime: startTimeForMilliseconds,
+  const { time, startTimer, changeTime, clearTimer } = useTimer({
+    waitTime: timerDuration,
   });
 
   const clickHandler = () => {
     if (onClick) {
-      onClick(startTimer);
+      onClick();
     }
+    changeTime(timerDuration);
+    startTimer();
   };
+
+  useEffect(() => {
+    if (time <= 0) return;
+    startTimer();
+  }, [time, startTimer]);
 
   useEffect(() => {
     if (time > 0) return;
 
     changeConfirmState('retry');
-    changeTime(startTimeForMilliseconds);
-  }, [time, startTimeForMilliseconds, changeConfirmState, changeTime]);
+    clearTimer();
+  }, [time, changeConfirmState, clearTimer]);
+
+  useEffect(() => {
+    if (isConfirm) {
+      clearTimer();
+    }
+  }, [isConfirm, clearTimer]);
 
   return (
     <Button onClick={clickHandler} {...props}>
-      {startTimeForMilliseconds >= 0 && startTimeForMilliseconds <= time
-        ? children
-        : timeFormatter(time)}
+      {time <= 0 ? '재요청' : timeFormatter(time)}
     </Button>
   );
 };
