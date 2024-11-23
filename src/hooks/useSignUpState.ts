@@ -94,7 +94,7 @@ const useSignUpState = <T extends ISignUpFormValueType>() => {
       clearErrors('username');
     },
     onError: (data) => {
-      setError('confirm', {
+      setError('username', {
         type: 'validate',
         message: data.message,
       });
@@ -131,6 +131,7 @@ const useSignUpState = <T extends ISignUpFormValueType>() => {
   };
 
   const checkUsername = async () => {
+    clearErrors('username');
     await requestCheckDuplicateUsername(username);
   };
 
