@@ -49,10 +49,22 @@ const AdditionalInfoPage = () => {
 
   const submitHandler: SubmitHandler<IAddionalInfoType> = (values) => {
     const { links, interests, myInterests } = values;
+
+    const myInterestsName = myInterests.map(({ myInterest }) => ({
+      userId: 1,
+      interestName: myInterest,
+    }));
+    const interestName = interests.map((interest) => ({
+      userId: 1,
+      interestName: interest,
+    }));
+
+    const interestNames = [...interestName, ...myInterestsName];
+    const socialAccounts = links.map(({ link }) => link).filter((v) => !!v);
+
     const additionalInfo = {
-      interests,
-      links: links.map(({ link }) => link).filter((v) => !!v),
-      myInterests: myInterests.map(({ myInterest }) => myInterest),
+      links: socialAccounts,
+      interestNames,
     };
 
     console.log(additionalInfo);
@@ -92,7 +104,6 @@ const AdditionalInfoPage = () => {
               )}
             </Field.Box>
           </Field>
-
           <Field>
             <Field.Label>추천 관심사</Field.Label>
             <Field.Box
@@ -122,6 +133,7 @@ const AdditionalInfoPage = () => {
                   onRemove={removeMyInterest}
                 />
               ))}
+
               {myInterestsFields.length !== MY_INTERESTS_FIELDS_LIMIT && (
                 <Button
                   type="button"

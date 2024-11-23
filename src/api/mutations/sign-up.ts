@@ -12,7 +12,7 @@ export const useSelfSignUpMutation = (
   options: UseMutationOptions<HttpSuccessType<unknown>, ResponseError, string>,
 ) =>
   useMutation({
-    mutationFn: (email: string) => postConfirmCodeByEamil(email),
+    mutationFn: postConfirmCodeByEamil,
     ...options,
   });
 
@@ -24,7 +24,7 @@ export const useEamilConfirmMutation = (
   > = {},
 ) => {
   return useMutation({
-    mutationFn: (params) => postConfirmCode(params),
+    mutationFn: postConfirmCode,
     ...options,
   });
 };
@@ -37,7 +37,7 @@ export const useConfirmUsernameDuplicate = (
   > = {},
 ) => {
   return useMutation({
-    mutationFn: (username) => postConfirmUsernameDuplicate(username),
+    mutationFn: postConfirmUsernameDuplicate,
     ...options,
   });
 };
@@ -50,7 +50,7 @@ export const useSignupUser = (
   > = {},
 ) => {
   return useMutation({
-    mutationFn: (username) => postSignupUser(username),
+    mutationFn: postSignupUser,
     ...options,
   });
 };
