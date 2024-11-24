@@ -1,6 +1,6 @@
 'use client';
 
-// import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
 import { KeyboardEvent } from 'react';
 
 import Logo from '@/components/common/Logo';
@@ -8,28 +8,36 @@ import Field from '@/components/common/Field';
 import Input from '@/components/common/Input';
 import Button from '@/components/common/Button';
 import validators from '@/utils/validate';
-import useSignUpState, { ISignUpFormValueType } from '@/hooks/useSignUpState';
-
-import { ERROR_MESSAGE } from '@/constants/errorMessage';
-import { useSignupUser } from '@/api/mutations/sign-up';
-import { postLogin } from '@/api/auth';
+import useSignUpState, {
+  CONFIRM_STATES,
+  ISignUpFormValueType,
+} from '@/hooks/useSignUpState';
+import useSignupMutation from '@/hooks/useSignUpMutation';
 
 import styles from './page.module.scss';
 
 const GithubSignupPage = () => {
-  // const router = useRouter();
+  const formMethods = useForm<ISignUpFormValueType>({
+    mode: 'onChange',
+    defaultValues: {
+      email: '',
+      confirm: '',
+      password: '',
+      repassword: '',
+      username: '',
+    },
+  });
+
+  const {
+    watch,
+    register,
+    resetField,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = formMethods;
 
   const {
     signupToken,
-    register,
-    watch,
-    setError,
-    resetField,
-    formState: { errors, isValid },
-    handleSubmit,
-    isRequestEmailPending,
-    isRequestConfirmPending,
-    isDuplicateUsernamePending,
     isEmailConfirmed,
     isEmailPending,
     isEmailRequest,
@@ -37,11 +45,24 @@ const GithubSignupPage = () => {
     isUsernameConfirmed,
     changeConfirmState,
     changeUsernameState,
-    requestConfirmNumber,
-    checkConfirmNumber,
-    checkUsername,
-    resetEmail,
+    changeSignupToken,
   } = useSignUpState();
+
+  const {
+    isRequestEmailPending,
+    isRequestConfirmPending,
+    isDuplicateUsernamePending,
+    isRequestSignupPending,
+    requestCodeByEmail,
+    requestConfirmCode,
+    requestCheckDuplicateUsername,
+    requestSignupUser,
+  } = useSignupMutation({
+    formMethods,
+    changeSignupToken,
+    changeConfirmState,
+    changeUsernameState,
+  });
 
   const preventEnter = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -49,61 +70,11 @@ const GithubSignupPage = () => {
     }
   };
 
-  const { isPending: isRequestSignupPending, mutate: requestSignupUser } =
-    useSignupUser({
-      onSuccess: async (res) => {
-        const [email, password] = watch(['email', 'password']);
-
-        if (res.isSuccess) {
-          const result = await postLogin({ email, password });
-          console.log(result);
-        }
-      },
-      onError: (err) => {
-        const [password] = watch('password');
-        if (
-          err.message.includes('이메일 형식') ||
-          err.message.includes('이메일 인증')
-        ) {
-          setError('email', { type: 'validate', message: err.message });
-          changeConfirmState('pending');
-          resetField('confirm');
-        }
-        if (err.message.includes('크기가 8에서')) {
-          setError('password', {
-            type: 'validate',
-            message:
-              password.length < 8
-                ? ERROR_MESSAGE.PASSWORD.MIN_LENGTH
-                : ERROR_MESSAGE.PASSWORD.MAX_LENGTH,
-          });
-        }
-        if (err.message.includes('비밀번호 형식')) {
-          setError('password', {
-            type: 'validate',
-            message: ERROR_MESSAGE.PASSWORD.FORMAT_IS_NOT_CORRECT,
-          });
-        }
-        if (err.message.includes('닉네임을 입력')) {
-          setError('username', {
-            type: 'required',
-            message: ERROR_MESSAGE.USERNAME.REQUIRED,
-          });
-          changeUsernameState('pending');
-        }
-        if (err.message.includes('닉네임의 최대 길이')) {
-          setError('username', {
-            type: 'maxLength',
-            message: ERROR_MESSAGE.USERNAME.MAX_LENGTH,
-          });
-          changeUsernameState('pending');
-        }
-        if (err.message.includes('닉네임 중복')) {
-          setError('username', { type: 'validate', message: err.message });
-          changeUsernameState('pending');
-        }
-      },
-    });
+  const resetEmail = () => {
+    resetField('email');
+    resetField('confirm');
+    changeConfirmState(CONFIRM_STATES.PENDING);
+  };
 
   const onSubmit = async (values: ISignUpFormValueType) => {
     const { email, password, username } = values;
@@ -117,7 +88,6 @@ const GithubSignupPage = () => {
 
     console.log('payload', payload);
     await requestSignupUser(payload);
-    // router.push('/auth/info');
   };
 
   return (
@@ -147,7 +117,7 @@ const GithubSignupPage = () => {
                 <Button
                   type="button"
                   className={styles.button}
-                  onClick={requestConfirmNumber}
+                  onClick={() => requestCodeByEmail(watch('email'))}
                   disabled={
                     !watch('email').length ||
                     !!errors.email?.message ||
@@ -163,7 +133,7 @@ const GithubSignupPage = () => {
                 <Field.TimerButton
                   type="button"
                   className={styles.button}
-                  changeConfirmState={changeConfirmState}
+                  changeState={() => changeConfirmState('retry')}
                   isConfirm={isEmailConfirmed}
                   timerDuration={300_000} // 5분
                   disabled={isRequestEmailPending || !isEmailRetry}
@@ -202,7 +172,12 @@ const GithubSignupPage = () => {
                 <Button
                   type="button"
                   className={styles.button}
-                  onClick={checkConfirmNumber}
+                  onClick={() =>
+                    requestConfirmCode({
+                      email: watch('email'),
+                      code: watch('confirm'),
+                    })
+                  }
                   disabled={
                     isRequestConfirmPending || isEmailRetry || isEmailConfirmed
                   }
@@ -236,7 +211,7 @@ const GithubSignupPage = () => {
               <Button
                 type="button"
                 className={styles.button}
-                onClick={checkUsername}
+                onClick={() => requestCheckDuplicateUsername(watch('username'))}
                 disabled={
                   !watch('username')?.length ||
                   isDuplicateUsernamePending ||

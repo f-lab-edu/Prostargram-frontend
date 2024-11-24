@@ -4,7 +4,6 @@ import clsx from 'clsx';
 import { ButtonHTMLAttributes, PropsWithChildren, useEffect } from 'react';
 
 import useTimer from '@/hooks/useTimer';
-import { ConfirmStateType } from '@/hooks/useSignUpState';
 import { timeFormatter } from '@/utils/formatter';
 import CautionIcon from '@/assets/icons/caution.svg';
 import Typo from '../Typo';
@@ -67,14 +66,14 @@ interface TimerButtonProps
   isConfirm?: boolean;
   timerDuration: number;
   onClick?: () => void;
-  changeConfirmState: (state: ConfirmStateType) => void;
+  changeState: () => void;
 }
 
 const TimerButton = ({
   isConfirm,
   timerDuration,
   onClick,
-  changeConfirmState,
+  changeState,
   ...props
 }: TimerButtonProps) => {
   const { time, startTimer, changeTime, clearTimer } = useTimer({
@@ -97,9 +96,9 @@ const TimerButton = ({
   useEffect(() => {
     if (time > 0) return;
 
-    changeConfirmState('retry');
+    changeState();
     clearTimer();
-  }, [time, changeConfirmState, clearTimer]);
+  }, [time, changeState, clearTimer]);
 
   useEffect(() => {
     if (isConfirm) {
