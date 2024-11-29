@@ -1,3 +1,4 @@
+import { getAccessToken } from '@/utils/manageToken';
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
 
 export type HttpResponseType = {
@@ -13,6 +14,11 @@ const defaultAxios = axios.create({ baseURL: BASE_URL });
 const authAxios = axios.create({ baseURL: BASE_URL });
 
 authAxios.interceptors.request.use((config) => {
+  const accessToken = getAccessToken();
+  if (accessToken) {
+    config.headers.set('Authorization', `Bearer ${accessToken}`);
+  }
+
   return config;
 });
 

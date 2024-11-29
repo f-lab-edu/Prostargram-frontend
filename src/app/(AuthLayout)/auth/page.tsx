@@ -9,7 +9,9 @@ import Typo from '@/components/common/Typo';
 import Button from '@/components/common/Button';
 import InputField from '@/components/common/InputField';
 import ToggleWrapper from '@/components/common/ToggleWrapper';
+import { useLogin } from '@/api/mutations/auth';
 import validator from '@/utils/validate';
+import { saveAccessToken, saveRefreshToken } from '@/utils/manageToken';
 
 import OpenEyeIcon from '@/assets/icons/open-eye.svg';
 import CloseEyeIcon from '@/assets/icons/close-eye.svg';
@@ -26,6 +28,7 @@ const LoginPage = () => {
 
   const {
     register,
+    setError,
     handleSubmit,
     formState: { errors, isDirty },
   } = useForm<IFormInput>({
@@ -33,8 +36,32 @@ const LoginPage = () => {
     mode: 'onSubmit',
   });
 
+  const { mutate: requestLogin, isPending } = useLogin({
+    onSuccess: (res) => {
+      const { isSuccess, code, message, result } = res;
+
+      console.log(code, result, isSuccess);
+      if (code === 1000 && result) {
+        saveAccessToken(result.accessToken);
+        saveRefreshToken(result.refreshToken);
+        router.push('/');
+      } else {
+        setError('email', {
+          type: 'validate',
+          message,
+        });
+      }
+    },
+    onError: () => {
+      setError('email', {
+        type: 'deps',
+        message: '알 수 없는 에러가 발생했습니다. 다시 로그인 해 주세요.',
+      });
+    },
+  });
+
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
-    console.log(data);
+    requestLogin(data);
   };
 
   return (
@@ -93,7 +120,9 @@ const LoginPage = () => {
         >
           비밀번호를 잊으셨나요?
         </Typo>
-        <Button>로그인</Button>
+        <Button disabled={isPending}>
+          {isPending ? '요청 중...' : '로그인'}
+        </Button>
       </form>
 
       <div className={styles.or_line}>
