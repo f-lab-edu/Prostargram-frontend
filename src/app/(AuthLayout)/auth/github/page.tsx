@@ -1,7 +1,8 @@
 'use client';
 
 import { useForm } from 'react-hook-form';
-import { KeyboardEvent } from 'react';
+import { useRouter } from 'next/navigation';
+import { KeyboardEvent, useEffect } from 'react';
 
 import Logo from '@/components/common/Logo';
 import Field from '@/components/common/Field';
@@ -13,10 +14,13 @@ import useSignUpState, {
   ISignUpFormValueType,
 } from '@/hooks/useSignUpState';
 import useSignupMutation from '@/hooks/useSignUpMutation';
+import { postLogin } from '@/api/auth';
+import { saveAccessToken, saveRefreshToken } from '@/utils/manageToken';
 
 import styles from './page.module.scss';
 
 const GithubSignupPage = () => {
+  const router = useRouter();
   const formMethods = useForm<ISignUpFormValueType>({
     mode: 'onChange',
     defaultValues: {
@@ -32,6 +36,7 @@ const GithubSignupPage = () => {
     watch,
     register,
     resetField,
+    clearErrors,
     handleSubmit,
     formState: { errors, isValid },
   } = formMethods;
@@ -76,7 +81,7 @@ const GithubSignupPage = () => {
     changeConfirmState(CONFIRM_STATES.PENDING);
   };
 
-  const onSubmit = async (values: ISignUpFormValueType) => {
+  const onSubmit = (values: ISignUpFormValueType) => {
     const { email, password, username } = values;
 
     const payload = {
@@ -86,9 +91,30 @@ const GithubSignupPage = () => {
       ...signupToken,
     };
 
-    console.log('payload', payload);
-    await requestSignupUser(payload);
+    requestSignupUser(payload, {
+      onSuccess: async (res) => {
+        if (res.isSuccess) {
+          const authResults = await postLogin({ email, password });
+          const { result, isSuccess } = authResults;
+
+          if (isSuccess && result) {
+            const { accessToken, refreshToken } = result;
+            saveAccessToken(accessToken);
+            saveRefreshToken(refreshToken);
+            router.push('/auth/info');
+          }
+        }
+      },
+    });
   };
+
+  const [password, repassword] = watch(['password', 'repassword']);
+
+  useEffect(() => {
+    if (password !== '' && password === repassword) {
+      clearErrors(['password', 'repassword']);
+    }
+  }, [password, repassword, clearErrors]);
 
   return (
     <div className={styles.container}>
