@@ -1,6 +1,7 @@
 'use client';
 
 import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
 import { KeyboardEvent, useEffect } from 'react';
 
 import Logo from '@/components/common/Logo';
@@ -13,10 +14,13 @@ import useSignUpState, {
   ISignUpFormValueType,
 } from '@/hooks/useSignUpState';
 import useSignupMutation from '@/hooks/useSignUpMutation';
+import { postLogin } from '@/api/auth';
+import { saveAccessToken, saveRefreshToken } from '@/utils/manageToken';
 
 import styles from './page.module.scss';
 
 const SignupPage = () => {
+  const router = useRouter();
   const formMethods = useForm<ISignUpFormValueType>({
     mode: 'onChange',
     defaultValues: {
@@ -77,7 +81,7 @@ const SignupPage = () => {
     changeConfirmState(CONFIRM_STATES.PENDING);
   };
 
-  const onSubmit = async (values: ISignUpFormValueType) => {
+  const onSubmit = (values: ISignUpFormValueType) => {
     const { email, password, username } = values;
 
     const payload = {
@@ -87,16 +91,30 @@ const SignupPage = () => {
       ...signupToken,
     };
 
-    console.log('payload', payload);
-    await requestSignupUser(payload);
+    requestSignupUser(payload, {
+      onSuccess: async (res) => {
+        if (res.isSuccess) {
+          const authResults = await postLogin({ email, password });
+          const { result, isSuccess } = authResults;
+
+          if (isSuccess && result) {
+            const { accessToken, refreshToken } = result;
+            saveAccessToken(accessToken);
+            saveRefreshToken(refreshToken);
+            router.push('/auth/info');
+          }
+        }
+      },
+    });
   };
 
+  const [password, repassword] = watch(['password', 'repassword']);
+
   useEffect(() => {
-    const [password, repassword] = watch(['password', 'repassword']);
     if (password !== '' && password === repassword) {
       clearErrors(['password', 'repassword']);
     }
-  }, [watch, clearErrors]);
+  }, [password, repassword, clearErrors]);
 
   return (
     <div className={styles.container}>

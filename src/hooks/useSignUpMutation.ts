@@ -1,4 +1,3 @@
-// import { useRouter } from 'next/router';
 import { UseFormReturn } from 'react-hook-form';
 
 import {
@@ -7,7 +6,6 @@ import {
   useConfirmUsernameDuplicate,
   useSignupUser,
 } from '@/api/mutations/sign-up';
-import { postLogin } from '@/api/auth';
 import { ERROR_MESSAGE } from '@/constants/errorMessage';
 import {
   CONFIRM_STATES,
@@ -32,7 +30,6 @@ const useSignupMutation = ({
   changeUsernameState,
   changeSignupToken,
 }: UseSignupMutationParamType) => {
-  // const router = useRouter();
   const { clearErrors, setError, watch, resetField } = formMethods;
 
   const { isPending: isRequestEmailPending, mutate: requestCodeByEmail } =
@@ -89,15 +86,7 @@ const useSignupMutation = ({
 
   const { isPending: isRequestSignupPending, mutate: requestSignupUser } =
     useSignupUser({
-      onSuccess: async (res) => {
-        const [email, password] = watch(['email', 'password']);
-
-        if (res.isSuccess) {
-          const result = await postLogin({ email, password });
-          console.log(result);
-          // router.push('/auth/info');
-        }
-      },
+      onSuccess: async () => {},
       onError: (err) => {
         const [password] = watch('password');
         if (

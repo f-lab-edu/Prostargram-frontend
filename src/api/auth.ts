@@ -1,17 +1,27 @@
 import { defaultInstance } from './httpRequest';
 
-const postLogin = async (loginInfo: { email: string; password: string }) => {
-  console.log('In postLogin', loginInfo);
+interface AuthTokenType {
+  accessToken: string;
+  refreshToken: string;
+}
 
-  const result = await defaultInstance<{
-    accessToken: string;
-    refreshToken: string;
-  }>({
+const postLogin = async (loginInfo: { email: string; password: string }) => {
+  const result = await defaultInstance<AuthTokenType>({
     method: 'POST',
+    url: '/login',
     data: loginInfo,
   });
 
   return result;
 };
 
-export { postLogin };
+const requestLogout = async () => {
+  const result = await defaultInstance<AuthTokenType>({
+    method: 'GET',
+    url: '/logout/success',
+  });
+
+  return result;
+};
+
+export { postLogin, requestLogout };
