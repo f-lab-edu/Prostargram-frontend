@@ -1,131 +1,73 @@
-import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 
-import { REG_EXP } from '@/constants/regExp';
-
-const CONFIRM_STATES = {
+export const CONFIRM_STATES = {
   PENDING: 'pending',
   REQUEST: 'request',
   CONFIRM: 'confirm',
+  RETRY: 'retry',
+} as const;
+
+export type ConfirmStateType =
+  (typeof CONFIRM_STATES)[keyof typeof CONFIRM_STATES];
+
+export type SignUpTokenType = {
+  emailToken: string;
+  usernameToken: string;
 };
 
 export interface ISignUpFormValueType {
   email: string;
   password: string;
   repassword: string;
-  nickname: string;
+  username: string;
   confirm: string;
 }
 
-const useSignUpState = <T extends ISignUpFormValueType>() => {
-  const [confirmState, setConfirmState] = useState(CONFIRM_STATES.PENDING);
-  const [nicknameState, setNicknameState] = useState(CONFIRM_STATES.PENDING);
+const useSignUpState = () => {
+  const [signupToken, setSignupToken] = useState<SignUpTokenType>({
+    emailToken: '',
+    usernameToken: '',
+  });
+  const [confirmState, setConfirmState] = useState<ConfirmStateType>(
+    CONFIRM_STATES.PENDING,
+  );
+  const [usernameState, setUsernameState] = useState<ConfirmStateType>(
+    CONFIRM_STATES.PENDING,
+  );
 
-  const formMethods = useForm<T | ISignUpFormValueType>();
-  const { watch, setError, clearErrors } = formMethods;
+  const changeConfirmState = (state: ConfirmStateType) =>
+    setConfirmState(state);
 
-  const isEmailConfirmed = confirmState === CONFIRM_STATES.CONFIRM;
+  const changeUsernameState = (state: ConfirmStateType) =>
+    setUsernameState(state);
+
+  const changeSignupToken = ({
+    tokenName,
+    token,
+  }: {
+    tokenName: keyof SignUpTokenType;
+    token: string;
+  }) => setSignupToken((prev) => ({ ...prev, [tokenName]: token }));
+
   const isEmailPending = confirmState === CONFIRM_STATES.PENDING;
+  const isEmailRequest = confirmState === CONFIRM_STATES.REQUEST;
+  const isEmailConfirmed = confirmState === CONFIRM_STATES.CONFIRM;
+  const isEmailRetry = confirmState === CONFIRM_STATES.RETRY;
 
-  const isNicknameConfirmed = nicknameState === CONFIRM_STATES.CONFIRM;
-
-  const requestConfirmNumber = async () => {
-    const email = watch('email');
-    if (!email) {
-      setError('email', {
-        type: 'required',
-        message: '이메일을 입력해주세요.',
-      });
-      return;
-    }
-    if (!REG_EXP.EMAIL.test(email)) {
-      setError('email', {
-        type: 'validate',
-        message: '이메일 형식이 알맞지 않습니다.',
-      });
-      return;
-    }
-    clearErrors('email');
-    setConfirmState(CONFIRM_STATES.REQUEST);
-  };
-
-  const checkConfirmNumber = async () => {
-    const confirm = watch('confirm');
-    if (!confirm) {
-      setError('confirm', {
-        type: 'required',
-        message: '인증번호를 입력해주세요.',
-      });
-      return;
-    }
-    if (confirm.length < 6) {
-      setError('confirm', { type: 'min', message: '인증번호는 6자리 입니다.' });
-      return;
-    }
-    if (!REG_EXP.CONFIRM.test(confirm)) {
-      setError('confirm', {
-        type: 'validate',
-        message: '인증번호는 숫자로만 입력해야 합니다.',
-      });
-      return;
-    }
-    clearErrors('confirm');
-    setConfirmState(CONFIRM_STATES.CONFIRM);
-  };
-
-  const checkNickname = async () => {
-    const nickname = watch('nickname');
-    if (!nickname) {
-      setError('nickname', {
-        type: 'required',
-        message: '닉네임을 입력해주세요.',
-      });
-      return;
-    }
-    if (nickname.length < 2) {
-      setError('nickname', {
-        type: 'minLength',
-        message: '닉네임은 최소 2자 이상 작성해야 합니다.',
-      });
-      return;
-    }
-    if (nickname.length > 16) {
-      setError('nickname', {
-        type: 'maxLength',
-        message: '닉네임은 최대 길이 16자 이하로 작성해야 합니다.',
-      });
-      return;
-    }
-    if (!REG_EXP.NICKNAME.test(nickname)) {
-      setError('nickname', {
-        type: 'validate',
-        message: '닉네임은 영어(소문자),한글,숫자, _, .만 사용 가능합니다.',
-      });
-      return;
-    }
-
-    if (nickname === 'nickname') {
-      setError('nickname', {
-        type: 'validate',
-        message: '중복된 닉네임입니다.',
-      });
-      return;
-    }
-
-    clearErrors('nickname');
-    setNicknameState(CONFIRM_STATES.CONFIRM);
-  };
+  const isUsernameConfirmed = usernameState === CONFIRM_STATES.CONFIRM;
 
   return {
-    ...formMethods,
+    signupToken,
     confirmState,
-    nicknameState,
+    usernameState,
     isEmailConfirmed,
     isEmailPending,
-    isNicknameConfirmed,
-    requestConfirmNumber,
-    checkConfirmNumber,
-    checkNickname,
+    isEmailRequest,
+    isEmailRetry,
+    isUsernameConfirmed,
+    changeConfirmState,
+    changeUsernameState,
+    changeSignupToken,
   };
 };
 

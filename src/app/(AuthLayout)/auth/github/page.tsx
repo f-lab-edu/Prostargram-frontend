@@ -1,39 +1,120 @@
 'use client';
 
+import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
-import { KeyboardEvent } from 'react';
+import { KeyboardEvent, useEffect } from 'react';
 
 import Logo from '@/components/common/Logo';
 import Field from '@/components/common/Field';
 import Input from '@/components/common/Input';
 import Button from '@/components/common/Button';
 import validators from '@/utils/validate';
-import useSignUpState, { ISignUpFormValueType } from '@/hooks/useSignUpState';
+import useSignUpState, {
+  CONFIRM_STATES,
+  ISignUpFormValueType,
+} from '@/hooks/useSignUpState';
+import useSignupMutation from '@/hooks/useSignUpMutation';
+import { postLogin } from '@/api/auth';
+import { saveAccessToken, saveRefreshToken } from '@/utils/manageToken';
 
 import styles from './page.module.scss';
 
 const GithubSignupPage = () => {
   const router = useRouter();
+  const formMethods = useForm<ISignUpFormValueType>({
+    mode: 'onChange',
+    defaultValues: {
+      email: '',
+      confirm: '',
+      password: '',
+      repassword: '',
+      username: '',
+    },
+  });
+
   const {
-    checkConfirmNumber,
-    checkNickname,
-    requestConfirmNumber,
-    handleSubmit,
+    watch,
     register,
-    formState: { errors },
+    resetField,
+    clearErrors,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = formMethods;
+
+  const {
+    signupToken,
     isEmailConfirmed,
     isEmailPending,
-    isNicknameConfirmed,
+    isEmailRequest,
+    isEmailRetry,
+    isUsernameConfirmed,
+    changeConfirmState,
+    changeUsernameState,
+    changeSignupToken,
   } = useSignUpState();
 
-  const onSubmit = (data: ISignUpFormValueType) => {
-    console.log(data);
-    router.push('/auth/info');
-  };
+  const {
+    isRequestEmailPending,
+    isRequestConfirmPending,
+    isDuplicateUsernamePending,
+    isRequestSignupPending,
+    requestCodeByEmail,
+    requestConfirmCode,
+    requestCheckDuplicateUsername,
+    requestSignupUser,
+  } = useSignupMutation({
+    formMethods,
+    changeSignupToken,
+    changeConfirmState,
+    changeUsernameState,
+  });
 
   const preventEnter = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') e.preventDefault();
+    if (e.key === 'Enter') {
+      e.preventDefault();
+    }
   };
+
+  const resetEmail = () => {
+    resetField('email');
+    resetField('confirm');
+    changeConfirmState(CONFIRM_STATES.PENDING);
+  };
+
+  const onSubmit = (values: ISignUpFormValueType) => {
+    const { email, password, username } = values;
+
+    const payload = {
+      email,
+      password,
+      username,
+      ...signupToken,
+    };
+
+    requestSignupUser(payload, {
+      onSuccess: async (res) => {
+        if (res.isSuccess) {
+          const authResults = await postLogin({ email, password });
+          const { result, isSuccess } = authResults;
+
+          if (isSuccess && result) {
+            const { accessToken, refreshToken } = result;
+            saveAccessToken(accessToken);
+            saveRefreshToken(refreshToken);
+            router.push('/auth/info');
+          }
+        }
+      },
+    });
+  };
+
+  const [password, repassword] = watch(['password', 'repassword']);
+
+  useEffect(() => {
+    if (password !== '' && password === repassword) {
+      clearErrors(['password', 'repassword']);
+    }
+  }, [password, repassword, clearErrors]);
 
   return (
     <div className={styles.container}>
@@ -43,100 +124,137 @@ const GithubSignupPage = () => {
         <div>
           <p className={styles.sub_title}>회원가입</p>
           <Field>
-            <Field.FieldLabel htmlFor="email">
-              <Field.FieldEmphasize>*</Field.FieldEmphasize>
+            <Field.Label htmlFor="email">
+              <Field.Emphasize>*</Field.Emphasize>
               이메일
-            </Field.FieldLabel>
-            <Field.FieldBox>
+            </Field.Label>
+            <Field.Box>
               <Input
                 id="email"
                 type="text"
                 placeholder="이메일을 입력해주세요."
                 maxLength={30}
                 disabled={!isEmailPending}
-                state={(errors.email?.message && 'fail') || 'normal'}
                 onKeyDown={preventEnter}
-                {...register('email', validators.email(isEmailConfirmed))}
+                state={(errors.email?.message && 'fail') || 'normal'}
+                {...register('email', validators.email)}
               />
-              <Button
-                type="button"
-                className={styles.button}
-                onClick={requestConfirmNumber}
-                disabled={!isEmailPending}
-              >
-                {isEmailPending ? '인증 요청' : '요청 완료'}
-              </Button>
-            </Field.FieldBox>
-            <Field.FieldErrorMessage>
-              {errors.email?.message}
-            </Field.FieldErrorMessage>
+              {(isEmailPending || isEmailRetry) && (
+                <Button
+                  type="button"
+                  className={styles.button}
+                  onClick={() => requestCodeByEmail(watch('email'))}
+                  disabled={
+                    !watch('email').length ||
+                    !!errors.email?.message ||
+                    isRequestEmailPending
+                  }
+                >
+                  {isEmailPending && !isRequestEmailPending && '인증 요청'}
+                  {isEmailRetry && !isRequestEmailPending && '재요청'}
+                  {isRequestEmailPending && '요청 중...'}
+                </Button>
+              )}
+              {isEmailRequest && (
+                <Field.TimerButton
+                  type="button"
+                  className={styles.button}
+                  changeState={() => changeConfirmState('retry')}
+                  isConfirm={isEmailConfirmed}
+                  timerDuration={300_000} // 5분
+                  disabled={isRequestEmailPending || !isEmailRetry}
+                />
+              )}
+              {isEmailConfirmed && (
+                <Button
+                  type="button"
+                  className={styles.button}
+                  onClick={resetEmail}
+                >
+                  재설정
+                </Button>
+              )}
+            </Field.Box>
+            <Field.ErrorMessage>{errors.email?.message}</Field.ErrorMessage>
           </Field>
 
           {!isEmailPending && (
             <Field>
-              <Field.FieldLabel htmlFor="confirm">
-                <Field.FieldEmphasize>*</Field.FieldEmphasize>
+              <Field.Label htmlFor="confirm">
+                <Field.Emphasize>*</Field.Emphasize>
                 인증번호
-              </Field.FieldLabel>
-              <Field.FieldBox>
+              </Field.Label>
+              <Field.Box>
                 <Input
                   id="confirm"
                   type="text"
                   placeholder="인증번호를 입력해주세요."
-                  maxLength={6}
+                  maxLength={7}
                   disabled={isEmailConfirmed}
-                  state={errors.confirm?.message ? 'fail' : 'normal'}
+                  state={(errors.confirm?.message && 'fail') || 'normal'}
                   onKeyDown={preventEnter}
-                  {...register('confirm', validators.confirm(isEmailConfirmed))}
+                  {...register('confirm', validators.confirm)}
                 />
                 <Button
                   type="button"
                   className={styles.button}
-                  onClick={checkConfirmNumber}
-                  disabled={isEmailConfirmed}
+                  onClick={() =>
+                    requestConfirmCode({
+                      email: watch('email'),
+                      code: watch('confirm'),
+                    })
+                  }
+                  disabled={
+                    isRequestConfirmPending || isEmailRetry || isEmailConfirmed
+                  }
                 >
-                  {isEmailConfirmed ? '인증 완료' : '인증 확인'}
+                  {!isRequestConfirmPending && !isEmailConfirmed && '인증 확인'}
+                  {isEmailConfirmed && '인증 완료'}
+                  {isRequestConfirmPending && '인증 중...'}
                 </Button>
-              </Field.FieldBox>
-              <Field.FieldErrorMessage>
-                {errors.confirm?.message}
-              </Field.FieldErrorMessage>
+              </Field.Box>
+              <Field.ErrorMessage>{errors.confirm?.message}</Field.ErrorMessage>
             </Field>
           )}
 
-          <Field className={styles.last_field}>
-            <Field.FieldLabel htmlFor="nickname">
-              <Field.FieldEmphasize>*</Field.FieldEmphasize>
+          <Field>
+            <Field.Label htmlFor="username">
+              <Field.Emphasize>*</Field.Emphasize>
               닉네임
-            </Field.FieldLabel>
-            <Field.FieldBox>
+            </Field.Label>
+            <Field.Box>
               <Input
-                id="nickname"
+                id="username"
                 type="text"
                 placeholder="닉네임을 입력해주세요."
-                state={errors.nickname?.message ? 'fail' : 'normal'}
-                disabled={isNicknameConfirmed}
-                {...register(
-                  'nickname',
-                  validators.nickname(isNicknameConfirmed),
-                )}
+                minLength={2}
+                maxLength={16}
+                state={errors.username?.message ? 'fail' : 'normal'}
+                disabled={isUsernameConfirmed}
+                onKeyDown={preventEnter}
+                {...register('username', validators.username)}
               />
               <Button
                 type="button"
                 className={styles.button}
-                onClick={checkNickname}
-                disabled={isNicknameConfirmed}
+                onClick={() => requestCheckDuplicateUsername(watch('username'))}
+                disabled={
+                  !watch('username')?.length ||
+                  isDuplicateUsernamePending ||
+                  !!errors.username?.message ||
+                  isUsernameConfirmed
+                }
               >
-                중복 확인
+                {isDuplicateUsernamePending ? '확인 중...' : '중복 확인'}
               </Button>
-            </Field.FieldBox>
-            <Field.FieldErrorMessage>
-              {errors.nickname?.message}
-            </Field.FieldErrorMessage>
+            </Field.Box>
+            <Field.ErrorMessage>{errors.username?.message}</Field.ErrorMessage>
           </Field>
         </div>
 
-        <Button>다음 단계로</Button>
+        <Button disabled={!isValid || isRequestSignupPending}>
+          {isRequestSignupPending ? '...' : '다음 단계로'}
+        </Button>
       </form>
     </div>
   );

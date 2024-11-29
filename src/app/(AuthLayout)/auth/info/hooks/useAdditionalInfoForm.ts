@@ -10,17 +10,8 @@ const useAdditionalInfoForm = <T extends FieldValues>({
   const methods = useForm<T>({
     defaultValues,
   });
-  const {
-    handleSubmit,
-    formState: { errors },
-  } = methods;
 
-  return {
-    methods,
-    ...methods,
-    handleSubmit,
-    errors,
-  };
+  return methods;
 };
 
 export default useAdditionalInfoForm;

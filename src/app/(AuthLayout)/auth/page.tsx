@@ -52,7 +52,7 @@ const LoginPage = () => {
             maxLength={30}
             placeholder="이메일을 입력해주세요."
             errorMessage={isDirty ? errors.email?.message : undefined}
-            {...register('email', validator.email(true))}
+            {...register('email', validator.email)}
           />
           <ToggleWrapper>
             {({ isToggle, toggleHandler }) => (
@@ -63,7 +63,7 @@ const LoginPage = () => {
                 maxLength={20}
                 placeholder="비밀번호를 입력해주세요."
                 errorMessage={isDirty ? errors.password?.message : undefined}
-                {...register('password', validator.password())}
+                {...register('password', validator.password)}
                 inputPostFix={
                   <button
                     type="button"
