@@ -6,6 +6,10 @@ const nextConfig = {
         source: '/api/:path*',
         destination: `${process.env.NEXT_PUBLIC_BASE_URL}/:path*`,
       },
+      {
+        source: '/ncloud/:path*',
+        destination: `${process.env.NEXT_NCLOUD_BASE_URL}/:path*`,
+      },
     ];
   },
   images: {

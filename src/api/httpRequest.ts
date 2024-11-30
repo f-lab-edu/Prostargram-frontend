@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
 
 type HttpResponseType = { isSuccess: boolean; code: number; message: string };
-type HttpSuccessType<T> = HttpResponseType & { result?: T };
+export type HttpSuccessType<T> = HttpResponseType & { result?: T };
 
 const BASE_URL = '/api';
 
