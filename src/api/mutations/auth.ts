@@ -1,10 +1,10 @@
 import { UseMutationOptions, useMutation } from '@tanstack/react-query';
-import { postLogin } from '../auth';
+import { AuthInfoType, postLogin } from '../auth';
 import { HttpSuccessType, ResponseError } from '../httpRequest';
 
 const useLogin = (
   options: UseMutationOptions<
-    HttpSuccessType<{ accessToken: string; refreshToken: string }>,
+    HttpSuccessType<AuthInfoType>,
     ResponseError,
     { email: string; password: string }
   >,

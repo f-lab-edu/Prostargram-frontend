@@ -11,7 +11,11 @@ import InputField from '@/components/common/InputField';
 import ToggleWrapper from '@/components/common/ToggleWrapper';
 import { useLogin } from '@/api/mutations/auth';
 import validator from '@/utils/validate';
-import { saveAccessToken, saveRefreshToken } from '@/utils/manageToken';
+import {
+  saveAccessToken,
+  saveRefreshToken,
+  saveUserId,
+} from '@/utils/manageToken';
 
 import OpenEyeIcon from '@/assets/icons/open-eye.svg';
 import CloseEyeIcon from '@/assets/icons/close-eye.svg';
@@ -40,10 +44,10 @@ const LoginPage = () => {
     onSuccess: (res) => {
       const { isSuccess, code, message, result } = res;
 
-      console.log(code, result, isSuccess);
-      if (code === 1000 && result) {
+      if (code === 1000 && isSuccess && result) {
         saveAccessToken(result.accessToken);
         saveRefreshToken(result.refreshToken);
+        saveUserId(result.userId);
         router.push('/');
       } else {
         setError('email', {

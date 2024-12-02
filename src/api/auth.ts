@@ -1,12 +1,13 @@
 import { defaultInstance } from './httpRequest';
 
-interface AuthTokenType {
+export interface AuthInfoType {
   accessToken: string;
   refreshToken: string;
+  userId: number;
 }
 
 const postLogin = async (loginInfo: { email: string; password: string }) => {
-  const result = await defaultInstance<AuthTokenType>({
+  const result = await defaultInstance<AuthInfoType>({
     method: 'POST',
     url: '/login',
     data: loginInfo,
@@ -16,7 +17,7 @@ const postLogin = async (loginInfo: { email: string; password: string }) => {
 };
 
 const requestLogout = async () => {
-  const result = await defaultInstance<AuthTokenType>({
+  const result = await defaultInstance<AuthInfoType>({
     method: 'GET',
     url: '/logout/success',
   });
