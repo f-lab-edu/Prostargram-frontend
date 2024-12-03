@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { dislikeComment, likeComment } from './apis';
+import { dislikeComment, likeComment, writeComment } from './apis';
 
 export const useLikeComment = (commentId: number, options = {}) => {
   return useMutation({
@@ -11,6 +11,13 @@ export const useLikeComment = (commentId: number, options = {}) => {
 export const useDislikeComment = (commentId: number, options = {}) => {
   return useMutation({
     mutationFn: () => dislikeComment(commentId),
+    ...options,
+  });
+};
+
+export const useWriteComment = (postId: number, data: string, options = {}) => {
+  return useMutation({
+    mutationFn: () => writeComment(postId, data),
     ...options,
   });
 };
