@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect } from 'react';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 
@@ -22,11 +21,9 @@ interface ReadOnlyCommonFeedProps {
 const ReadOnlyCommonFeed = ({ commonFeedData }: ReadOnlyCommonFeedProps) => {
   const feedId = new URLSearchParams(useSearchParams()).get('cf');
 
-  const { data } = useGetDetailCommonFeed(feedId!, {});
+  console.log(commonFeedData);
 
-  useEffect(() => {
-    console.log(commonFeedData);
-  }, [commonFeedData]);
+  const { data } = useGetDetailCommonFeed(feedId!, {});
 
   if (!feedId) {
     return null;
@@ -66,10 +63,7 @@ const ReadOnlyCommonFeed = ({ commonFeedData }: ReadOnlyCommonFeedProps) => {
           </div>
           <div className={styles.divider} />
           <div className={styles.right_down}>
-            <FeedCommentList
-              feedId={String(data?.result?.post?.postId)}
-              feedCommentIds={['1', '2', '3']}
-            />
+            <FeedCommentList feedId={feedId} feedCommentIds={['1', '2', '3']} />
           </div>
           {data?.result?.post && (
             <div>
