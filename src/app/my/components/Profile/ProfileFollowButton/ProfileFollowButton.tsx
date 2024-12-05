@@ -21,8 +21,16 @@ const ProfileFollowButton = ({
   size = 'large',
 }: ProfileFollowButtonProps) => {
   const [followStatus, setFollowStatus] = useState(isFollow);
-  const { mutate: followUserMutation } = useFollowUser(userId!);
-  const { mutate: unfollowUserMutation } = useUnfollowUser(userId!);
+
+  // TODO: fromUserId 변경
+  const { mutate: followUserMutation } = useFollowUser({
+    fromUserId: 1,
+    toUserId: userId!,
+  });
+  const { mutate: unfollowUserMutation } = useUnfollowUser({
+    fromUserId: 1,
+    toUserId: userId!,
+  });
 
   const followHandler = () => {
     setFollowStatus(() => {

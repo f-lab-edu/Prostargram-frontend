@@ -1,16 +1,28 @@
 import { useMutation } from '@tanstack/react-query';
 import { followUser, unfollowUser } from './apis';
 
-export const useFollowUser = (userId: number, options = {}) => {
+export const useFollowUser = (
+  data: {
+    fromUserId: number;
+    toUserId: number;
+  },
+  options = {},
+) => {
   return useMutation({
-    mutationFn: () => followUser(userId),
+    mutationFn: () => followUser(data),
     ...options,
   });
 };
 
-export const useUnfollowUser = (userId: number, options = {}) => {
+export const useUnfollowUser = (
+  data: {
+    fromUserId: number;
+    toUserId: number;
+  },
+  options = {},
+) => {
   return useMutation({
-    mutationFn: () => unfollowUser(userId),
+    mutationFn: () => unfollowUser(data),
     ...options,
   });
 };
