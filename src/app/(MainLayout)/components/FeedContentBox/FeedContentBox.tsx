@@ -8,11 +8,13 @@ import styles from './FeedContentBox.module.scss';
 
 type FeedContentBoxProps = {
   feed: Feed.FeedData;
+  setDetailFeedId: (feedId: number) => void;
 };
-const FeedContentBox = ({ feed }: FeedContentBoxProps) => {
+const FeedContentBox = ({ feed, setDetailFeedId }: FeedContentBoxProps) => {
   const router = useRouter();
 
   const onClickMoreButton = () => {
+    setDetailFeedId(feed.post.postId);
     if (feed.post.postType === 'BASIC') {
       router.push('?cf=1');
     }
