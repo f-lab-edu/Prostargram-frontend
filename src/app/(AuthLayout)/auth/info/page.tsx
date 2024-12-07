@@ -49,10 +49,22 @@ const AdditionalInfoPage = () => {
 
   const submitHandler: SubmitHandler<IAddionalInfoType> = (values) => {
     const { links, interests, myInterests } = values;
+
+    const myInterestsName = myInterests.map(({ myInterest }) => ({
+      userId: 1,
+      interestName: myInterest,
+    }));
+    const interestName = interests.map((interest) => ({
+      userId: 1,
+      interestName: interest,
+    }));
+
+    const interestNames = [...interestName, ...myInterestsName];
+    const socialAccounts = links.map(({ link }) => link).filter((v) => !!v);
+
     const additionalInfo = {
-      interests,
-      links: links.map(({ link }) => link).filter((v) => !!v),
-      myInterests: myInterests.map(({ myInterest }) => myInterest),
+      links: socialAccounts,
+      interestNames,
     };
 
     console.log(additionalInfo);
@@ -71,8 +83,8 @@ const AdditionalInfoPage = () => {
         <FormProvider {...methods}>
           <h1 className={styles.sub_title}>추가 정보</h1>
           <Field>
-            <Field.FieldLabel htmlFor="links">링크 (최대 3개)</Field.FieldLabel>
-            <Field.FieldBox className={styles.link_field}>
+            <Field.Label htmlFor="links">링크 (최대 3개)</Field.Label>
+            <Field.Box className={styles.link_field}>
               {linkFields.map((field, index) => (
                 <AdditionalLink
                   key={field.id}
@@ -90,30 +102,27 @@ const AdditionalInfoPage = () => {
                   <PlusIcon width="20" />
                 </Button>
               )}
-            </Field.FieldBox>
+            </Field.Box>
           </Field>
-
           <Field>
-            <Field.FieldLabel>추천 관심사</Field.FieldLabel>
-            <Field.FieldBox
+            <Field.Label>추천 관심사</Field.Label>
+            <Field.Box
               className={clsx(styles.field_box, styles.interest_field_box)}
             >
               {RECOMMANED_INTERESTS.map((interest) => (
                 <InterestCheckbox key={interest} value={interest} />
               ))}
-            </Field.FieldBox>
+            </Field.Box>
           </Field>
 
           <Field>
-            <Field.FieldLabel>
-              나만의 관심사를 추가해보세요! (최대 10개)
-            </Field.FieldLabel>
+            <Field.Label>나만의 관심사를 추가해보세요! (최대 10개)</Field.Label>
             {errors.myInterests && (
               <p className={styles.interest_error}>
                 {errors.myInterests.message}
               </p>
             )}
-            <Field.FieldBox
+            <Field.Box
               className={clsx(styles.field_box, styles.my_interest_field_box)}
             >
               {myInterestsFields.map((field, index) => (
@@ -124,6 +133,7 @@ const AdditionalInfoPage = () => {
                   onRemove={removeMyInterest}
                 />
               ))}
+
               {myInterestsFields.length !== MY_INTERESTS_FIELDS_LIMIT && (
                 <Button
                   type="button"
@@ -134,7 +144,7 @@ const AdditionalInfoPage = () => {
                   <PlusIcon width="20" />
                 </Button>
               )}
-            </Field.FieldBox>
+            </Field.Box>
           </Field>
           <Button>회원가입 완료</Button>
         </FormProvider>

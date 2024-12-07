@@ -1,7 +1,11 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
 
-type HttpResponseType = { isSuccess: boolean; code: number; message: string };
-type HttpSuccessType<T> = HttpResponseType & { result?: T };
+export type HttpResponseType = {
+  isSuccess: boolean;
+  code: number;
+  message: string;
+};
+export type HttpSuccessType<T> = HttpResponseType & { result?: T };
 
 const BASE_URL = '/api';
 
@@ -16,7 +20,7 @@ authAxios.interceptors.response.use((config) => {
   return config;
 });
 
-class ResponseError extends Error {
+export class ResponseError extends Error {
   isSuccess: boolean;
 
   code: number;

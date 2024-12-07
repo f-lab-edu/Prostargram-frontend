@@ -4,7 +4,6 @@ const REG_EXP = {
   PASSWORD:
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@$!%*?&.,])[A-Za-z\d$@$!%*?&.,]/,
   NICKNAME: /^[a-z0-9가-힣_.]{2,16}$/,
-  CONFIRM: /^\d+$/,
   ONLY_ENG_NUM: /^[a-zA-Z0-9]*$/,
 };
 
