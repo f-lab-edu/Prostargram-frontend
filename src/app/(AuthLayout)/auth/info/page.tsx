@@ -1,6 +1,7 @@
 'use client';
 
 import clsx from 'clsx';
+// import { useRouter } from 'next/navigation';
 import { FormProvider, SubmitHandler } from 'react-hook-form';
 
 import { RECOMMANED_INTERESTS } from '@/data/mock';
@@ -22,10 +23,17 @@ const LINK_FIELDS_LIMIT = 3;
 const MY_INTERESTS_FIELDS_LIMIT = 10;
 
 const AdditionalInfoPage = () => {
-  const { methods, getValues, handleSubmit, errors } =
-    useAdditionalInfoForm<IAddionalInfoType>({
-      defaultValues: { links: [{ link: '' }], interests: [], myInterests: [] },
-    });
+  // const router = useRouter();
+  const methods = useAdditionalInfoForm<IAddionalInfoType>({
+    defaultValues: { links: [{ link: '' }], interests: [], myInterests: [] },
+  });
+
+  const {
+    control,
+    getValues,
+    handleSubmit,
+    formState: { errors },
+  } = methods;
 
   const {
     fields: linkFields,
@@ -33,7 +41,7 @@ const AdditionalInfoPage = () => {
     removeField: removeLink,
   } = useAdditionalInfoFieldArray<IAddionalInfoType>({
     name: 'links',
-    control: methods.control,
+    control,
     fieldLimit: LINK_FIELDS_LIMIT,
   });
 
@@ -43,7 +51,7 @@ const AdditionalInfoPage = () => {
     removeField: removeMyInterest,
   } = useAdditionalInfoFieldArray<IAddionalInfoType>({
     name: 'myInterests',
-    control: methods.control,
+    control,
     fieldLimit: MY_INTERESTS_FIELDS_LIMIT,
   });
 
