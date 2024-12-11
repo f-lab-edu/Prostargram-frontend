@@ -5,6 +5,9 @@ import { ChangeEvent } from 'react';
 import useAutoResizeTextArea from '@/hooks/useAutoResizeTextArea';
 import { useWriteComment } from '@/api/comment/commentMutations';
 
+import { useQueryClient } from '@tanstack/react-query';
+import { COMMENT_QUERY_KEYS } from '@/api/comment/commentQueries';
+
 import styles from './FeedCommentWriteInput.module.scss';
 
 const MAX_LENGTH = 1_000;
@@ -32,9 +35,18 @@ const FeedCommentWriteInput = ({
     }
   };
 
+  const queryClient = useQueryClient();
+
   const { mutate: writeCommentMutation } = useWriteComment(
     postId,
     textareaContent,
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: COMMENT_QUERY_KEYS.id(postId),
+        });
+      },
+    },
   );
   const submitHandler = () => {
     console.log(postId, parentId);
