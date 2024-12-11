@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import ProfileFollowButton from '@/app/my/components/Profile/ProfileFollowButton';
 import MeatBallMenu from '@/assets/icons/meatball_menu.svg';
+import { useDeleteFeed } from '@/api/feed/feedMutations';
+
 import styles from './FeedMenu.module.scss';
 
 type FeedMenuProps = {
@@ -19,9 +21,9 @@ const FeedMenu = ({ post }: FeedMenuProps) => {
     console.log('post', post);
   };
 
+  const { mutate: deleteFeedMutation } = useDeleteFeed(post.postId);
   const deleteFeed = () => {
-    //   TODO: 피드 삭제 API 연동 (postType에 따른 분기 처리)
-    console.log('post', post);
+    deleteFeedMutation();
   };
 
   return (
