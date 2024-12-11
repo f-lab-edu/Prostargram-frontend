@@ -8,7 +8,15 @@ import { RECOMMANED_INTERESTS } from '@/data/mock';
 import Logo from '@/components/common/Logo';
 import Field from '@/components/common/Field';
 import Button from '@/components/common/Button';
+import {
+  useAddInterest,
+  useAddSocialAccountMutation,
+  useRemoveInterest,
+  useRemoveSocialAccountMutation,
+} from '@/api/mutations/info';
+import { getUserId } from '@/utils/manageToken';
 
+import { authInstance } from '@/api/httpRequest';
 import PlusIcon from '@/assets/icons/plus.svg';
 import AdditionalLink from './components/AdditionalLink';
 import MyInterestField from './components/MyInterestField';
@@ -55,27 +63,123 @@ const AdditionalInfoPage = () => {
     fieldLimit: MY_INTERESTS_FIELDS_LIMIT,
   });
 
-  const submitHandler: SubmitHandler<IAddionalInfoType> = (values) => {
+  const { mutate: saveSocialAccount } = useAddSocialAccountMutation({});
+  const { mutate: removeSocialAccount } = useRemoveSocialAccountMutation({});
+
+  const { mutate: saveInterest } = useAddInterest({
+    onSuccess: (response) => {
+      console.log('saveInterest', response);
+    },
+    onError: (err) => {
+      console.log('saveInterest', err);
+    },
+  });
+  const { mutate: removeInterest } = useRemoveInterest({
+    onSuccess: (response) => {
+      console.log('removeInterest', response);
+    },
+    onError: (err) => {
+      console.log('removeInterest', err);
+    },
+  });
+
+  const submitHandler: SubmitHandler<IAddionalInfoType> = async (values) => {
     const { links, interests, myInterests } = values;
 
-    const myInterestsName = myInterests.map(({ myInterest }) => ({
-      userId: 1,
+    const userId = getUserId();
+
+    const myInterestsNames = myInterests.map(({ myInterest }) => ({
+      userId,
       interestName: myInterest,
     }));
-    const interestName = interests.map((interest) => ({
-      userId: 1,
-      interestName: interest,
+    const interestNames = interests.map((interestName) => ({
+      userId,
+      interestName,
     }));
 
-    const interestNames = [...interestName, ...myInterestsName];
-    const socialAccounts = links.map(({ link }) => link).filter((v) => !!v);
+    const wholeInterestName = [...myInterestsNames, ...interestNames];
 
-    const additionalInfo = {
-      links: socialAccounts,
-      interestNames,
-    };
+    const uniqueSocialAccounts = links.filter((v) => !!v.link);
 
-    console.log(additionalInfo);
+    if (uniqueSocialAccounts.length) {
+      const successfulSocialRequests: string[] = [];
+
+      try {
+        await Promise.all(
+          uniqueSocialAccounts.map(
+            async ({ link: socialAccountUrl }) =>
+              new Promise((res, rej) => {
+                saveSocialAccount(
+                  { socialAccountUrl },
+                  {
+                    onSuccess: (response) => {
+                      successfulSocialRequests.push(socialAccountUrl);
+                      res(response);
+                    },
+                    onError: (err) => {
+                      rej(err);
+                    },
+                  },
+                );
+              }),
+          ),
+        );
+      } catch (error) {
+        await Promise.all(
+          successfulSocialRequests.map(async (socialAccountUrl) => {
+            removeSocialAccount({ socialAccountUrl });
+          }),
+        );
+      }
+    }
+
+    const successfulIntersetRequests: {
+      userId: number;
+      interestName: string;
+    }[] = [];
+
+    console.log(wholeInterestName);
+
+    saveInterest(wholeInterestName[0]); //! 500 에러 발생
+    // removeInterest({ userId: gottenUserId, hashTagId: 2 });
+
+    const result = await authInstance({
+      method: 'GET',
+      url: `/users/${userId}/profile_page`,
+    });
+
+    console.log(result);
+
+    try {
+      await Promise.all(
+        wholeInterestName.map(
+          async ({ userId: interestUserId, interestName }) =>
+            new Promise((res, rej) => {
+              saveInterest(
+                { userId: interestUserId, interestName },
+                {
+                  onSuccess: (response) => {
+                    successfulIntersetRequests.push({ userId, interestName });
+                    console.log(response);
+                    res(response);
+                  },
+                  onError: (err) => {
+                    rej(err);
+                  },
+                },
+              );
+            }),
+        ),
+      );
+    } catch (error) {
+      await Promise.all(
+        successfulIntersetRequests.map(async ({ userId: interestUserId }) => {
+          removeInterest({ userId: interestUserId, hashTagId: 1 });
+        }),
+      );
+    }
+
+    console.log(interestNames);
   };
 
   const currentInterestList = [

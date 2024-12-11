@@ -29,7 +29,7 @@ const password: RegisterOptions<FieldValues> = {
     passwordValidate: (v) =>
       REG_EXP.PASSWORD.test(v) || ERROR_MESSAGE.PASSWORD.FORMAT_IS_NOT_CORRECT,
     test: (v, allVal) => {
-      if (allVal.repassword !== v) {
+      if (allVal.repassword && allVal.repassword !== v) {
         return ERROR_MESSAGE.PASSWORD.NOT_MATCH;
       }
 
@@ -52,7 +52,7 @@ const repassword: RegisterOptions<FieldValues> = {
     passwordValidate: (v) =>
       REG_EXP.PASSWORD.test(v) || ERROR_MESSAGE.PASSWORD.FORMAT_IS_NOT_CORRECT,
     test: (v, allVal) => {
-      if (allVal.password !== v) {
+      if (allVal.password && allVal.password !== v) {
         return ERROR_MESSAGE.PASSWORD.NOT_MATCH;
       }
 

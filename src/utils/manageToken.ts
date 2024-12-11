@@ -1,5 +1,6 @@
 const ACCESS_TOKEN = 'access_token';
 const REFRESH_TOKEN = 'refresh_token';
+const USER_ID = 'user_id';
 
 export const saveAccessToken = (token: string) => {
   if (token) {
@@ -13,6 +14,15 @@ export const saveAccessToken = (token: string) => {
 export const saveRefreshToken = (token: string) => {
   if (token) {
     localStorage.setItem(REFRESH_TOKEN, token);
+    return true;
+  }
+
+  throw new Error('Token string is empty!');
+};
+
+export const saveUserId = (userId: number) => {
+  if (userId) {
+    localStorage.setItem(USER_ID, userId.toString());
     return true;
   }
 
@@ -37,4 +47,14 @@ export const getRefreshToken = () => {
   }
 
   throw new Error('Refresh token is not erolled!');
+};
+
+export const getUserId = () => {
+  const userId = localStorage.getItem(USER_ID);
+
+  if (userId) {
+    return Number(userId);
+  }
+
+  throw new Error('User ID is not erolled!');
 };

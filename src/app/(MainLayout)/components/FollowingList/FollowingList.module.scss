@@ -1,0 +1,18 @@
+@use '../../../../styles/helpers/index' as *;
+
+.following_ul {
+  @include flex-start-center;
+  width: 100%;
+  gap: 30px;
+  overflow-x: auto;
+
+  .following_li {
+    @include flex-column;
+    justify-content: center;
+    cursor: pointer;
+
+    .user_img {
+      border-radius: 50%;
+    }
+  }
+}
