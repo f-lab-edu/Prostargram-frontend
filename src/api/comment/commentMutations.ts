@@ -28,12 +28,13 @@ export const useWriteComment = (postId: number, data: string, options = {}) => {
 };
 
 export const useWriteReplyComment = (
+  postId: string,
   parentId: string,
   data: string,
   options = {},
 ) => {
   return useMutation({
-    mutationFn: () => writeReplyComment(parentId, data),
+    mutationFn: () => writeReplyComment(postId, parentId, data),
     ...options,
   });
 };

@@ -50,14 +50,16 @@ const writeComment = (postId: number, data: string) => {
   return res;
 };
 
-const writeReplyComment = (parentId: string, data: string) => {
+const writeReplyComment = (postId: string, parentId: string, data: string) => {
   const res = authInstance({
     method: 'post',
-    url: `/posts/${parentId}/comments`,
+    url: `/posts/${postId}/comments`,
+    params: { parentId },
     data,
     headers: {
       Authorization:
         'Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdHkiOiJOT1JNQUxfVVNFUiIsInRva2VuVHlwZSI6IkFDQ0VTU19UT0tFTiIsInN1YiI6IjEiLCJleHAiOjE3NDI3MTUzMDV9.eFVccnbsYRqpJFzg2rL5LNgsMLoEFPESoj3W4e5bgm2Uzy7-DCjA6hgixDZ8MYgXeV6q7VetKQTab-pH-g0caw',
+      'Content-Type': 'text/plain',
     },
   });
   return res;
