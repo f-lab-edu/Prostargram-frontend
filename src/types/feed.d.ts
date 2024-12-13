@@ -50,4 +50,26 @@ declare module Feed {
     data: FeedData[];
     hasNext: boolean;
   }
+
+  interface BasicPostRequestBody {
+    content: string;
+    hashTagNames: string[];
+    createdAt: string;
+    imageCount: number;
+  }
+
+  interface BasicPostResponse {
+    commentCount: number;
+    content: string;
+    contentImageUrls: string[];
+    createdAt?: string;
+    hashTagNames?: string[];
+    isFollow: boolean;
+    isLike: boolean;
+    likeCount: number;
+    postId: number;
+    postType: string;
+    preSignedImageUrls: string[];
+    userId: number;
+  }
 }

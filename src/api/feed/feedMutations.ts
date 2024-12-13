@@ -1,15 +1,15 @@
 import { useMutation } from '@tanstack/react-query';
-import { deleteFeed, dislikeFeed, likeFeed } from './apis';
+import { createCommonFeed, deleteFeed, dislikeFeed, likeFeed } from './apis';
 
-// export const useCreateCommonFeed = (
-//   data: Feed.BasicPostRequestBody,
-//   options = {},
-// ) => {
-//   return useMutation({
-//     mutationFn: () => createCommonFeed(data),
-//     ...options,
-//   });
-// };
+export const useCreateCommonFeed = (
+  data: Feed.BasicPostRequestBody,
+  options = {},
+) => {
+  return useMutation({
+    mutationFn: () => createCommonFeed(data),
+    ...options,
+  });
+};
 
 export const useBatchImageUpload = (options = {}) => {
   return useMutation({

@@ -1,6 +1,7 @@
 import Image from 'next/image';
 
 import { compactTimeFormatter, digitNumberFormatter } from '@/utils/formatter';
+import DefaultAvatar from '@/assets/icons/default_avatar.svg';
 import ToggleWrapper from '@/components/common/ToggleWrapper';
 import LikeButton from '../LikeButton';
 import FeedReplyWriteInput from '../FeedReplyWriteInput';
@@ -20,43 +21,45 @@ export type FeedCommentType = {
 };
 
 interface FeedCommentProps {
-  commentData: FeedCommentType;
+  comment: Comment.Common;
+  user: Feed.BasicUser;
 }
 
-const FeedComment = ({ commentData }: FeedCommentProps) => {
-  const {
-    commentId,
-    nickname,
-    profileUrl,
-    feedContent,
-    createdAt,
-    updatedAt,
-    likeCount,
-    isLike,
-    childFeedComments,
-  } = commentData;
-
-  const isReply = !childFeedComments.length;
-
+const FeedComment = ({ comment, user }: FeedCommentProps) => {
   return (
-    <div className={isReply ? styles.reply_container : styles.container}>
+    <div
+      className={
+        comment.childrenCount > 0 ? styles.reply_container : styles.container
+      }
+    >
       <div className={styles.profile_wrapper}>
         <div className={styles.profile_nickname}>
           <div className={styles.profile}>
-            <Image src={profileUrl} width="32" height="32" alt="user-profile" />
+            {user.profileImgUrl ? (
+              <Image
+                src={user.profileImgUrl}
+                width="32"
+                height="32"
+                alt="user-profile"
+              />
+            ) : (
+              <DefaultAvatar />
+            )}
           </div>
-          <p>{nickname}</p>
+          <p>{user.userName}</p>
         </div>
-        <LikeButton commentId={+commentId} isLike={isLike} />
+        <LikeButton commentId={+comment.commentId} isLike={comment.isLike} />
       </div>
-      <p className={styles.feed_content}>{feedContent}</p>
+      <p className={styles.feed_content}>{comment.content}</p>
 
       <ToggleWrapper>
         {({ isToggle, toggleHandler }) => (
           <>
             <div className={styles.feed_coment_info}>
-              <span>{compactTimeFormatter(updatedAt ?? createdAt)}</span>
-              <span>좋아요 {digitNumberFormatter(likeCount)}개</span>
+              <span>
+                {compactTimeFormatter(comment.createdAt ?? comment.createdAt)}
+              </span>
+              <span>좋아요 {digitNumberFormatter(comment.likeCount)}개</span>
               <button
                 className={styles.replay_write_button}
                 onClick={toggleHandler}
@@ -64,7 +67,9 @@ const FeedComment = ({ commentData }: FeedCommentProps) => {
                 답글 달기
               </button>
             </div>
-            {isToggle && <FeedReplyWriteInput commentId={commentId} />}
+            {isToggle && (
+              <FeedReplyWriteInput commentId={String(comment.commentId)} />
+            )}
           </>
         )}
       </ToggleWrapper>
