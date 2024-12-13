@@ -7,6 +7,7 @@ import { useWriteComment } from '@/api/comment/commentMutations';
 
 import { useQueryClient } from '@tanstack/react-query';
 import { COMMENT_QUERY_KEYS } from '@/api/comment/commentQueries';
+import { FEED_QUERY_KEYS } from '@/api/feed/feedQueries';
 
 import styles from './FeedCommentWriteInput.module.scss';
 
@@ -45,6 +46,10 @@ const FeedCommentWriteInput = ({
         queryClient.invalidateQueries({
           queryKey: COMMENT_QUERY_KEYS.id(postId),
         });
+        queryClient.invalidateQueries({
+          queryKey: FEED_QUERY_KEYS.id(String(postId)),
+        });
+        setTextareaContent('');
       },
     },
   );
