@@ -1,6 +1,11 @@
+import { getAccessToken } from '@/utils/manageToken';
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
 
-type HttpResponseType = { isSuccess: boolean; code: number; message: string };
+export type HttpResponseType = {
+  isSuccess: boolean;
+  code: number;
+  message: string;
+};
 export type HttpSuccessType<T> = HttpResponseType & { result?: T };
 
 const BASE_URL = '/api';
@@ -9,6 +14,11 @@ const defaultAxios = axios.create({ baseURL: BASE_URL });
 const authAxios = axios.create({ baseURL: BASE_URL });
 
 authAxios.interceptors.request.use((config) => {
+  const accessToken = getAccessToken();
+  if (accessToken) {
+    config.headers.set('Authorization', `Bearer ${accessToken}`);
+  }
+
   return config;
 });
 
@@ -16,7 +26,7 @@ authAxios.interceptors.response.use((config) => {
   return config;
 });
 
-class ResponseError extends Error {
+export class ResponseError extends Error {
   isSuccess: boolean;
 
   code: number;
