@@ -7,6 +7,7 @@ import styles from './FeedTextContent.module.scss';
 
 interface FeedTextContentProps {
   feedData: {
+    userId: number;
     userName: string;
     profileUrl?: string;
     createdAt: string;
@@ -21,6 +22,7 @@ const DEFAULT_PROFILE =
 
 const FeedTextContent = ({ feedData }: FeedTextContentProps) => {
   const {
+    userId,
     userName,
     profileUrl = DEFAULT_PROFILE,
     isFollow,
@@ -39,7 +41,11 @@ const FeedTextContent = ({ feedData }: FeedTextContentProps) => {
           <p className={styles.feed_time}>{compactTimeFormatter(createdAt)}</p>
         </div>
         <div className={styles.profile_follow_btn}>
-          <ProfileFollowButton size="small" isFollow={isFollow} />
+          <ProfileFollowButton
+            userId={userId}
+            size="small"
+            isFollow={isFollow}
+          />
         </div>
       </div>
       <p className={styles.feed_content}>{content}</p>

@@ -6,7 +6,6 @@ import Button from '@/components/common/Button';
 import { FeedImage } from '@/hooks/useImageUpload';
 import styles from './AddImage.module.scss';
 import ImagePreview from '../ImagePreview/ImagePreview';
-import { CommonFeedData } from '../../types/feed';
 
 type AddImageProps = {
   onNext?: () => void;
@@ -15,7 +14,9 @@ type AddImageProps = {
   updateCurrentImage: (image: FeedImage) => void;
   selectImageFile: (e: FormEvent<HTMLInputElement>) => void;
   removeImage: (idx: number) => void;
-  updateImages?: (nextCommonFeedData: Partial<CommonFeedData>) => void;
+  updateImages?: (
+    nextCommonFeedData: Partial<Feed.BasicPostRequestBody>,
+  ) => void;
 };
 
 const AddImage = ({
@@ -28,8 +29,7 @@ const AddImage = ({
   updateImages,
 }: AddImageProps) => {
   useEffect(() => {
-    if (updateImages)
-      updateImages({ images: images.map((image) => image.file) });
+    if (updateImages) updateImages({ imageCount: images.length });
   }, [images]);
 
   return (

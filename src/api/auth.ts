@@ -3,6 +3,7 @@ import { defaultInstance } from './httpRequest';
 interface AuthTokenType {
   accessToken: string;
   refreshToken: string;
+  userId: number;
 }
 
 const postLogin = async (loginInfo: { email: string; password: string }) => {

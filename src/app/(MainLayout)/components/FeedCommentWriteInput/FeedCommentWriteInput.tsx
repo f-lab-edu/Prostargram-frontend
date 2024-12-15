@@ -3,6 +3,7 @@
 import { ChangeEvent } from 'react';
 
 import useAutoResizeTextArea from '@/hooks/useAutoResizeTextArea';
+import { useWriteComment } from '@/api/comment/commentMutations';
 
 import styles from './FeedCommentWriteInput.module.scss';
 
@@ -31,10 +32,15 @@ const FeedCommentWriteInput = ({
     }
   };
 
+  const { mutate: writeCommentMutation } = useWriteComment(
+    postId,
+    textareaContent,
+  );
   const submitHandler = () => {
     console.log(postId, parentId);
     if (textareaContent) {
       console.log(textareaContent);
+      writeCommentMutation();
     }
   };
 
