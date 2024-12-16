@@ -11,7 +11,7 @@ import Menu from '../Menu/Menu';
 import ModalMenu from '../ModalMenu/ModalMenu';
 import { MenuType, ModalMenuType } from '../../types/main';
 import CommonFeed from '../CommonFeed/CommonFeed';
-import DiscussionFeed from '../DiscussionFeed/DiscussionFeed';
+import DiscussionFeed from '../DebateFeed/DebateFeed';
 
 type CombinedMenuType = MenuType | ModalMenuType;
 

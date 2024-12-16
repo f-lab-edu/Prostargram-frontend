@@ -2,18 +2,15 @@ import Modal from '@/components/common/Modal';
 import ConfirmPopup from '@/components/common/Popup/ConfirmPopup/ConfirmPopup';
 import { useState } from 'react';
 import { DiscussionFeedData, FeedPopup } from '../../types/feed';
-import styles from './DiscussionFeed.module.scss';
+import styles from './DebateFeed.module.scss';
 import AddContent from '../AddContent/AddContent';
 
-type DiscussionFeedProps = {
+type DebateFeedProps = {
   modalStatus: boolean | string;
   setModalStatus: (modalStatus: boolean) => void;
 };
 
-const DiscussionFeed = ({
-  modalStatus,
-  setModalStatus,
-}: DiscussionFeedProps) => {
+const DebateFeed = ({ modalStatus, setModalStatus }: DebateFeedProps) => {
   const [popupState, setPopupState] = useState<FeedPopup>(null);
 
   const handleCloseModal = () => setPopupState('confirm');
@@ -90,4 +87,4 @@ const DiscussionFeed = ({
   );
 };
 
-export default DiscussionFeed;
+export default DebateFeed;

@@ -10,7 +10,7 @@ import { FeedImage } from '@/hooks/useImageUpload';
 import { DiscussionFeedData } from '../../types/feed';
 import ImagePreview from '../ImagePreview/ImagePreview';
 import styles from './AddContent.module.scss';
-import DiscussionSubject from '../DiscussionSubject/DiscussionSubject';
+import DiscussionSubject from '../DebateSubject/DebateSubject';
 
 type AddContentProps = {
   feedType: 'common' | 'discussion';

@@ -3,17 +3,17 @@ import BlueFlag from '@/assets/icons/blue_flag.svg';
 import RedFlag from '@/assets/icons/red_flag.svg';
 import Typo from '@/components/common/Typo';
 import Textarea from '@/components/common/Textarea/Textarea';
-import styles from './DiscussionSubject.module.scss';
+import styles from './DebateSubject.module.scss';
 
-type DiscussionSubjectProps = {
+type DebateSubjectProps = {
   updateSubject1: (sub1: string) => void;
   updateSubject2: (sub2: string) => void;
 };
 
-const DiscussionSubject = ({
+const DebateSubject = ({
   updateSubject1,
   updateSubject2,
-}: DiscussionSubjectProps) => {
+}: DebateSubjectProps) => {
   return (
     <div className={styles.left_content}>
       {/* 주제영역 */}
@@ -58,4 +58,4 @@ const DiscussionSubject = ({
   );
 };
 
-export default DiscussionSubject;
+export default DebateSubject;
