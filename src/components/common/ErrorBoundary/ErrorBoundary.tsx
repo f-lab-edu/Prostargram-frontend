@@ -1,12 +1,19 @@
+import { AxiosError } from 'axios';
 import React from 'react';
 
+interface ErrorBoundaryFallbackProps {
+  reset: () => void;
+  error: AxiosError;
+}
+
 interface ErrorBoundaryProps {
-  fallback: React.ReactNode;
+  fallbackComponent: (props: ErrorBoundaryFallbackProps) => React.ReactNode;
   children: React.ReactNode;
 }
 
 interface ErrorBoundaryState {
   hasError: boolean;
+  error: AxiosError | null;
 }
 
 class ErrorBoundary extends React.Component<
@@ -15,34 +22,31 @@ class ErrorBoundary extends React.Component<
 > {
   constructor(props: ErrorBoundaryProps) {
     super(props);
-    this.state = { hasError: false };
+    this.state = { hasError: false, error: null };
   }
 
-  static getDerivedStateFromError() {
-    console.log('a');
-    return { hasError: true };
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error };
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
-    console.log('a');
-    console.error('Error caught by componentDidCatch', error, errorInfo);
+    console.error(
+      'Error caught by ErrorBoundary componentDidCatch',
+      error,
+      errorInfo,
+    );
   }
 
   resetError = () => {
-    this.setState({ hasError: false });
+    this.setState({ hasError: false, error: null });
   };
 
   render() {
-    const { hasError } = this.state;
-    const { fallback, children } = this.props;
+    const { hasError, error } = this.state;
+    const { fallbackComponent, children } = this.props;
 
-    if (hasError) {
-      return (
-        <div>
-          {fallback}
-          <button onClick={this.resetError}>Retry</button>
-        </div>
-      );
+    if (hasError && error) {
+      return fallbackComponent({ reset: this.resetError, error });
     }
 
     return children;

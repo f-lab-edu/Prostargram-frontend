@@ -16,7 +16,12 @@ const AuthLayout = ({ children }: AuthLayoutProps) => {
         <div className={styles.left_box}>{children}</div>
 
         <div className={styles.right_box}>
-          <Image src={GroupImg} alt="group-image" priority />
+          <Image
+            className={styles.group_image}
+            src={GroupImg}
+            alt="group-image"
+            priority
+          />
         </div>
       </main>
     </div>

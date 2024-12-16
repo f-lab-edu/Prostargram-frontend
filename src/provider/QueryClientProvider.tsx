@@ -4,6 +4,8 @@ import { useState, PropsWithChildren } from 'react';
 import {
   QueryClient,
   QueryClientProvider as Provider,
+  QueryCache,
+  MutationCache,
 } from '@tanstack/react-query';
 
 const QueryClientProvider = ({ children }: PropsWithChildren) => {
@@ -13,6 +15,19 @@ const QueryClientProvider = ({ children }: PropsWithChildren) => {
         defaultOptions: {
           queries: { refetchOnWindowFocus: false },
         },
+        queryCache: new QueryCache({
+          onError: (err, query) => {
+            console.log(err, query);
+          },
+        }),
+        mutationCache: new MutationCache({
+          onError: (err, vars, ctx, mutation) => {
+            console.log(err);
+            console.log(vars);
+            console.log(ctx);
+            console.log(mutation);
+          },
+        }),
       }),
   );
 
