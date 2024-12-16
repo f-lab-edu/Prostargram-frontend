@@ -25,6 +25,8 @@ const ReadOnlyCommonFeed = ({ commonFeedData }: ReadOnlyCommonFeedProps) => {
 
   const { data } = useGetDetailCommonFeed(feedId!, {});
 
+  console.log('comment data', data?.result?.post);
+
   if (!feedId) {
     return null;
   }

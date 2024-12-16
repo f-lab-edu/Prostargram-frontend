@@ -23,9 +23,10 @@ export type FeedCommentType = {
 interface FeedCommentProps {
   comment: Comment.Common;
   user: Feed.BasicUser;
+  feedId: string;
 }
 
-const FeedComment = ({ comment, user }: FeedCommentProps) => {
+const FeedComment = ({ comment, user, feedId }: FeedCommentProps) => {
   return (
     <div
       className={
@@ -68,7 +69,10 @@ const FeedComment = ({ comment, user }: FeedCommentProps) => {
               </button>
             </div>
             {isToggle && (
-              <FeedReplyWriteInput commentId={String(comment.commentId)} />
+              <FeedReplyWriteInput
+                feedId={feedId}
+                commentId={String(comment.commentId)}
+              />
             )}
           </>
         )}

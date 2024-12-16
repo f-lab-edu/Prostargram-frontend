@@ -69,6 +69,7 @@ const FeedCommentList = ({
                 key={commentRes.comment.commentId}
                 comment={commentRes.comment}
                 user={commentRes.basicUser}
+                feedId={feedId!}
               />
               <If condition={Boolean(commentRes.comment.childrenCount)}>
                 <If.True>
