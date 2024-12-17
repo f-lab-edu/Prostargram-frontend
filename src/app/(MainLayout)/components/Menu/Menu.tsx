@@ -3,6 +3,7 @@ import { usePathname, useSearchParams } from 'next/navigation';
 import clsx from 'clsx';
 import styles from './Menu.module.scss';
 import { MenuType } from '../../types/main';
+import SettingMenu from '../SettingMenu/SettingMenu';
 
 type MenuProps = {
   menus: MenuType[];
@@ -28,16 +29,19 @@ const Menu = ({ menus }: MenuProps) => {
     <ul className={styles.menu}>
       {menus.map((menu) => {
         return (
-          <Link key={`${menu.name}`} href={menu.url}>
-            <li
-              className={clsx(styles.menu_item, {
-                [styles.active]: isActive(menu),
-              })}
-            >
-              {menu.icon}
-              <span>{menu.name}</span>
-            </li>
-          </Link>
+          <>
+            <Link key={`${menu.name}`} href={menu.url}>
+              <li
+                className={clsx(styles.menu_item, {
+                  [styles.active]: isActive(menu),
+                })}
+              >
+                {menu.icon}
+                <span>{menu.name}</span>
+                {menu.name === '설정' && <SettingMenu />}
+              </li>
+            </Link>
+          </>
         );
       })}
     </ul>
