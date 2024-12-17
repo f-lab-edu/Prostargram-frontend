@@ -19,4 +19,15 @@ type ModalMenuType = {
   order: number;
 };
 
-export type { MenuType, ModalMenuType };
+type ToggleMenuType = {
+  name: string;
+  type: string;
+  url: string;
+  icon: ReactNode;
+  component?: ReactNode;
+  activeStatus?: boolean;
+  setComponentStatus?: (str: string) => void;
+  order: number;
+};
+
+export type { MenuType, ModalMenuType, ToggleMenuType };

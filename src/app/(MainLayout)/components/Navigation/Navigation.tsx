@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import HomeIcon from '@/assets/icons/nav-home.svg';
 import ProfileIcon from '@/assets/icons/nav-profile.svg';
 import SettingIcon from '@/assets/icons/nav-setting.svg';
@@ -9,11 +8,11 @@ import CommonFeedIcon from '@/assets/icons/nav-common-feed.svg';
 import styles from './Navigation.module.scss';
 import Menu from '../Menu/Menu';
 import ModalMenu from '../ModalMenu/ModalMenu';
-import { MenuType, ModalMenuType } from '../../types/main';
+import { MenuType, ModalMenuType, ToggleMenuType } from '../../types/main';
 import CommonFeed from '../CommonFeed/CommonFeed';
-import DiscussionFeed from '../DiscussionFeed/DiscussionFeed';
+import DiscussionFeed from '../DebateFeed/DebateFeed';
 
-type CombinedMenuType = MenuType | ModalMenuType;
+type CombinedMenuType = MenuType | ModalMenuType | ToggleMenuType;
 
 const Navigation = () => {
   // TODO: 추후 menu url 수정 필요
@@ -28,58 +27,34 @@ const Navigation = () => {
     {
       name: '프로필',
       type: 'page',
-      url: '/profile',
+      url: '/my',
       icon: <ProfileIcon />,
       order: 2,
     },
     {
       name: '설정',
       type: 'page',
-      url: '/settings',
+      url: '/?mode=setting',
       icon: <SettingIcon />,
       order: 5,
     },
   ];
 
-  const [feedModal, setFeedModal] = useState<boolean | string>(false);
-
-  const changeFeedModalName = (modalName: string) => {
-    setFeedModal(modalName);
-  };
-
-  const changeFeedModalStatus = (modalStatus: boolean) => {
-    setFeedModal(modalStatus);
-  };
-
   const modalMenus: ModalMenuType[] = [
     {
       name: '일반 피드 작성',
       type: 'modal',
-      url: '/',
+      url: '/?mode=basic',
       icon: <CommonFeedIcon />,
-      component: (
-        <CommonFeed
-          modalStatus={feedModal}
-          setModalStatus={changeFeedModalStatus}
-        />
-      ),
-      modalStatus: feedModal === '일반 피드 작성',
-      setComponentStatus: changeFeedModalName,
+      component: <CommonFeed />,
       order: 3,
     },
     {
       name: '토론 피드 작성',
       type: 'modal',
-      url: '/',
+      url: '/?mode=debate',
       icon: <DiscussionFeedIcon />,
-      component: (
-        <DiscussionFeed
-          modalStatus={feedModal}
-          setModalStatus={changeFeedModalStatus}
-        />
-      ),
-      modalStatus: feedModal === '토론 피드 작성',
-      setComponentStatus: changeFeedModalName,
+      component: <DiscussionFeed />,
       order: 4,
     },
   ];
