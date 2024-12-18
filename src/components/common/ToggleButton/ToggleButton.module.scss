@@ -1,0 +1,43 @@
+@use '../../../styles/helpers/index' as *;
+
+.container {
+  position: relative;
+  width: 50px;
+  height: 20px;
+  background-color: $COLOR_GRAY_2;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-left: 10px;
+
+  &.checked {
+    background-color: $COLOR_PRIMARY_1;
+  }
+
+  .toggle {
+    position: absolute;
+    left: 3px;
+    top: 2px;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    background-color: $COLOR_WHITE;
+    transition: 0.4s;
+
+    &.checked {
+      transform: translateX(28px);
+    }
+  }
+
+  .text {
+    position: relative;
+    font-size: 10px;
+    color: $COLOR_GRAY_9;
+    line-height: 20px;
+    transition: 0.4s;
+    left: 8px;
+
+    &.checked {
+      transform: translateX(-15px);
+    }
+  }
+}
