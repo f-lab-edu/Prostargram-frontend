@@ -11,38 +11,29 @@ interface ToggleButtonProps {
 
 const ToggleButton = ({ onText, offText, on, off }: ToggleButtonProps) => {
   const [isActive, setIsActive] = useState(false);
+  const checkedStyle = {
+    [styles.checked]: isActive,
+  };
 
   const onToggle = () => {
-    if (!isActive && on) {
-      on();
-    }
-    if (isActive && off) {
-      off();
-    }
-    setIsActive(!isActive);
+    setIsActive((prev) => {
+      const newState = !prev;
+      if (newState && on) on();
+      if (!newState && off) off();
+      return newState;
+    });
   };
 
   return (
     <div
       role="presentation"
-      className={clsx(styles.container, {
-        [styles.checked]: isActive,
-      })}
+      className={clsx(styles.container, checkedStyle)}
       onClick={onToggle}
     >
-      <div
-        className={clsx(styles.text, {
-          [styles.checked]: isActive,
-        })}
-      >
+      <div className={clsx(styles.text, checkedStyle)}>
         {isActive ? onText : offText}
       </div>
-      <div
-        role="presentation"
-        className={clsx(styles.toggle, {
-          [styles.checked]: isActive,
-        })}
-      />
+      <div role="presentation" className={clsx(styles.toggle, checkedStyle)} />
     </div>
   );
 };
