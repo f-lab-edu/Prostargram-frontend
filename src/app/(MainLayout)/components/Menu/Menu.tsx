@@ -38,7 +38,7 @@ const Menu = ({ menus }: MenuProps) => {
               >
                 {menu.icon}
                 <span>{menu.name}</span>
-                {menu.name === '설정' && <SettingMenu />}
+                {menu.name === '설정' && mode === 'setting' && <SettingMenu />}
               </li>
             </Link>
           </>
