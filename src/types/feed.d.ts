@@ -59,11 +59,8 @@ declare module Feed {
   }
 
   interface DebatePostRequestBody {
-    postId: number;
     content: string;
     hashTagNames: string[];
-    createdAt: string;
-    imageCount: number;
     optionContents: string[];
   }
 

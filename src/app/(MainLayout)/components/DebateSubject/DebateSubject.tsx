@@ -1,4 +1,4 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import BlueFlag from '@/assets/icons/blue_flag.svg';
 import RedFlag from '@/assets/icons/red_flag.svg';
 import Typo from '@/components/common/Typo';
@@ -6,14 +6,16 @@ import Textarea from '@/components/common/Textarea/Textarea';
 import styles from './DebateSubject.module.scss';
 
 type DebateSubjectProps = {
-  updateSubject1: (sub1: string) => void;
-  updateSubject2: (sub2: string) => void;
+  updateSubject: (sub: [string, string]) => void;
 };
 
-const DebateSubject = ({
-  updateSubject1,
-  updateSubject2,
-}: DebateSubjectProps) => {
+const DebateSubject = ({ updateSubject }: DebateSubjectProps) => {
+  const [subject, setSubject] = useState<[string, string]>(['', '']);
+
+  useEffect(() => {
+    updateSubject(subject);
+  }, [subject]);
+
   return (
     <div className={styles.left_content}>
       {/* 주제영역 */}
@@ -23,9 +25,9 @@ const DebateSubject = ({
           <Textarea
             className={styles.textarea}
             placeholder="토론 주제 입력..."
-            onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
-              updateSubject1(e.target.value)
-            }
+            onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+              setSubject([e.target.value, subject[1]]);
+            }}
             maxLength={35}
           />
         </div>
@@ -34,9 +36,9 @@ const DebateSubject = ({
           <Textarea
             className={styles.textarea}
             placeholder="토론 주제 입력..."
-            onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
-              updateSubject2(e.target.value)
-            }
+            onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+              setSubject([subject[0], e.target.value]);
+            }}
             maxLength={35}
           />
         </div>

@@ -7,10 +7,9 @@ import MyInterestFieldForMyPage from '@/app/my/components/MyInterest/MyInterestF
 import If from '@/components/common/If';
 import Textarea from '@/components/common/Textarea/Textarea';
 import { FeedImage } from '@/hooks/useImageUpload';
-import { DiscussionFeedData } from '../../types/feed';
 import ImagePreview from '../ImagePreview/ImagePreview';
 import styles from './AddContent.module.scss';
-import DiscussionSubject from '../DebateSubject/DebateSubject';
+import DebateSubject from '../DebateSubject/DebateSubject';
 
 type AddContentProps = {
   feedType: 'common' | 'discussion';
@@ -20,12 +19,12 @@ type AddContentProps = {
   currentImage?: FeedImage | null;
   updateCurrentImage?: (image: FeedImage) => void;
   commonFeedData?: Feed.BasicPostRequestBody;
-  discussionFeedData?: DiscussionFeedData;
+  debateFeedData?: Feed.DebatePostRequestBody;
   updateCommonFeedData?: (
     nextCommonFeedData: Partial<Feed.BasicPostRequestBody>,
   ) => void;
-  updateDiscussionFeedData?: (
-    nextDiscussionFeedData: Partial<DiscussionFeedData>,
+  updateDebateFeedData?: (
+    nextDebateFeedData: Partial<Feed.DebatePostRequestBody>,
   ) => void;
 };
 
@@ -36,10 +35,10 @@ const AddContent = ({
   images,
   currentImage,
   updateCurrentImage,
-  discussionFeedData,
+  debateFeedData,
   commonFeedData,
   updateCommonFeedData,
-  updateDiscussionFeedData,
+  updateDebateFeedData,
 }: AddContentProps) => {
   const [hashtags, setHashtags] = useState<string[]>([]);
 
@@ -55,7 +54,7 @@ const AddContent = ({
     if (feedType === 'common') {
       updateCommonFeedData?.({ hashTagNames: hashtags });
     } else {
-      updateDiscussionFeedData?.({ hashtag: hashtags });
+      updateDebateFeedData?.({ hashTagNames: hashtags });
     }
   }, [hashtags]);
 
@@ -63,7 +62,7 @@ const AddContent = ({
     if (feedType === 'common') {
       updateCommonFeedData?.({ content: e.target.value });
     } else {
-      updateDiscussionFeedData?.({ content: e.target.value });
+      updateDebateFeedData?.({ content: e.target.value });
     }
   };
 
@@ -78,13 +77,10 @@ const AddContent = ({
         />
       )}
       {feedType === 'discussion' && (
-        <DiscussionSubject
-          updateSubject1={(value: string) =>
-            updateDiscussionFeedData?.({ subject1: value })
-          }
-          updateSubject2={(value: string) =>
-            updateDiscussionFeedData?.({ subject2: value })
-          }
+        <DebateSubject
+          updateSubject={(subjects) => {
+            updateDebateFeedData?.({ optionContents: subjects });
+          }}
         />
       )}
 
@@ -109,7 +105,7 @@ const AddContent = ({
             value={
               feedType === 'common'
                 ? commonFeedData?.content
-                : discussionFeedData?.content
+                : debateFeedData?.content
             }
             onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
               onChangeTextarea(e)
@@ -156,9 +152,7 @@ const AddContent = ({
               disabled={
                 feedType === 'common'
                   ? commonFeedData?.content.length === 0
-                  : discussionFeedData?.content.length === 0 ||
-                    discussionFeedData?.subject1.length === 0 ||
-                    discussionFeedData?.subject2.length === 0
+                  : debateFeedData?.content.length === 0
               }
               className={styles.next_btn}
               onClick={onNext}

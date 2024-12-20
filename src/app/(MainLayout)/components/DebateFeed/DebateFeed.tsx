@@ -1,9 +1,10 @@
 import Modal from '@/components/common/Modal';
 import ConfirmPopup from '@/components/common/Popup/ConfirmPopup/ConfirmPopup';
 import { useState } from 'react';
-import { DiscussionFeedData, FeedPopup } from '../../types/feed';
-import styles from './DebateFeed.module.scss';
+import { useCreateDebateFeed } from '@/api/feed/feedMutations';
+import { FeedPopup } from '../../types/feed';
 import AddContent from '../AddContent/AddContent';
+import styles from './DebateFeed.module.scss';
 
 type DebateFeedProps = {
   modalStatus: boolean | string;
@@ -17,17 +18,17 @@ const DebateFeed = ({ modalStatus, setModalStatus }: DebateFeedProps) => {
   const handleOpenPublishPopup = () => setPopupState('publish');
   const handleClosePopup = () => setPopupState(null);
 
-  const [discussionFeedData, setDiscussionFeedData] =
-    useState<DiscussionFeedData>({
-      subject1: '',
-      subject2: '',
+  const [debateFeedData, setDebateFeedData] =
+    useState<Feed.DebatePostRequestBody>({
       content: '',
-      hashtag: [],
+      hashTagNames: [],
+      optionContents: [],
     });
 
+  const { mutate: createDebateMutation } = useCreateDebateFeed(debateFeedData);
+
   const createDiscussionFeed = () => {
-    // TODO: 토론피드 작성 서버 API 연동
-    console.log('데이터', discussionFeedData);
+    createDebateMutation();
     handleClosePopup();
     setModalStatus(false);
   };
@@ -37,12 +38,12 @@ const DebateFeed = ({ modalStatus, setModalStatus }: DebateFeedProps) => {
     handleClosePopup();
   };
 
-  const updateDiscussionFeedData = (
-    nextDiscussionFeedData: Partial<DiscussionFeedData>,
+  const updateDebateFeedData = (
+    nextDebateFeedData: Partial<Feed.DebatePostRequestBody>,
   ) => {
-    setDiscussionFeedData((prev) => ({
+    setDebateFeedData((prev) => ({
       ...prev,
-      ...nextDiscussionFeedData,
+      ...nextDebateFeedData,
     }));
   };
 
@@ -53,8 +54,8 @@ const DebateFeed = ({ modalStatus, setModalStatus }: DebateFeedProps) => {
           <div className={styles.content_wrapper}>
             <AddContent
               feedType="discussion"
-              updateDiscussionFeedData={updateDiscussionFeedData}
-              discussionFeedData={discussionFeedData}
+              updateDebateFeedData={updateDebateFeedData}
+              debateFeedData={debateFeedData}
               onNext={() => handleOpenPublishPopup()}
             />
           </div>
