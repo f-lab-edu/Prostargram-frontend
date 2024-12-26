@@ -14,12 +14,7 @@ import AddImage from '../AddImage/AddImage';
 import AddContent from '../AddContent/AddContent';
 import { FeedPopup, CommonFeedStep } from '../../types/feed';
 
-type CommonFeedProps = {
-  modalStatus: boolean | string;
-  setModalStatus: (modalStatus: boolean) => void;
-};
-
-const CommonFeed = ({ modalStatus, setModalStatus }: CommonFeedProps) => {
+const CommonFeed = () => {
   const [step, setStep] = useState<CommonFeedStep>('이미지추가');
   const {
     images,
@@ -73,49 +68,47 @@ const CommonFeed = ({ modalStatus, setModalStatus }: CommonFeedProps) => {
     commonFeedMutation();
     // console.log('게시물 작성 완료!', data);
     handleClosePopup();
-    setModalStatus(false);
+    window.location.href = '/';
   };
 
   const handleDeleteFeed = () => {
-    setModalStatus(false);
+    window.location.href = '/';
     handleClosePopup();
   };
 
   return (
     <>
-      {modalStatus === '일반 피드 작성' && (
-        <Modal width="900px" onClose={() => handleCloseModal()}>
-          <div className={style.content_wrapper}>
-            {step === '이미지추가' && (
-              <AddImage
-                images={images}
-                currentImage={currentImage}
-                selectImageFile={selectImageFile}
-                updateCurrentImage={updateCurrentImage}
-                removeImage={removeImage}
-                updateImages={updateCommonFeedData}
-                onNext={() => {
-                  setStep('게시글작성');
-                }}
-              />
-            )}
-            {step === '게시글작성' && (
-              <AddContent
-                feedType="common"
-                images={images}
-                currentImage={currentImage}
-                updateCurrentImage={updateCurrentImage}
-                commonFeedData={commonFeedData}
-                updateCommonFeedData={updateCommonFeedData}
-                onPrev={() => {
-                  setStep('이미지추가');
-                }}
-                onNext={() => handleOpenPublishPopup()}
-              />
-            )}
-          </div>
-        </Modal>
-      )}
+      <Modal width="900px" onClose={() => handleCloseModal()}>
+        <div className={style.content_wrapper}>
+          {step === '이미지추가' && (
+            <AddImage
+              images={images}
+              currentImage={currentImage}
+              selectImageFile={selectImageFile}
+              updateCurrentImage={updateCurrentImage}
+              removeImage={removeImage}
+              updateImages={updateCommonFeedData}
+              onNext={() => {
+                setStep('게시글작성');
+              }}
+            />
+          )}
+          {step === '게시글작성' && (
+            <AddContent
+              feedType="common"
+              images={images}
+              currentImage={currentImage}
+              updateCurrentImage={updateCurrentImage}
+              commonFeedData={commonFeedData}
+              updateCommonFeedData={updateCommonFeedData}
+              onPrev={() => {
+                setStep('이미지추가');
+              }}
+              onNext={() => handleOpenPublishPopup()}
+            />
+          )}
+        </div>
+      </Modal>
       {popupState === 'confirm' && (
         <ConfirmPopup
           leftBtnColor="red"

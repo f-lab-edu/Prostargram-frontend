@@ -2,18 +2,10 @@ import Modal from '@/components/common/Modal';
 import ConfirmPopup from '@/components/common/Popup/ConfirmPopup/ConfirmPopup';
 import { useState } from 'react';
 import { DiscussionFeedData, FeedPopup } from '../../types/feed';
-import styles from './DiscussionFeed.module.scss';
+import styles from './DebateFeed.module.scss';
 import AddContent from '../AddContent/AddContent';
 
-type DiscussionFeedProps = {
-  modalStatus: boolean | string;
-  setModalStatus: (modalStatus: boolean) => void;
-};
-
-const DiscussionFeed = ({
-  modalStatus,
-  setModalStatus,
-}: DiscussionFeedProps) => {
+const DiscussionFeed = () => {
   const [popupState, setPopupState] = useState<FeedPopup>(null);
 
   const handleCloseModal = () => setPopupState('confirm');
@@ -32,11 +24,11 @@ const DiscussionFeed = ({
     // TODO: 토론피드 작성 서버 API 연동
     console.log('데이터', discussionFeedData);
     handleClosePopup();
-    setModalStatus(false);
+    window.location.href = '/';
   };
 
   const handleDeleteFeed = () => {
-    setModalStatus(false);
+    window.location.href = '/';
     handleClosePopup();
   };
 
@@ -51,18 +43,16 @@ const DiscussionFeed = ({
 
   return (
     <>
-      {modalStatus === '토론 피드 작성' && (
-        <Modal width="1200px" onClose={handleCloseModal}>
-          <div className={styles.content_wrapper}>
-            <AddContent
-              feedType="discussion"
-              updateDiscussionFeedData={updateDiscussionFeedData}
-              discussionFeedData={discussionFeedData}
-              onNext={() => handleOpenPublishPopup()}
-            />
-          </div>
-        </Modal>
-      )}
+      <Modal width="1200px" onClose={handleCloseModal}>
+        <div className={styles.content_wrapper}>
+          <AddContent
+            feedType="discussion"
+            updateDiscussionFeedData={updateDiscussionFeedData}
+            discussionFeedData={discussionFeedData}
+            onNext={() => handleOpenPublishPopup()}
+          />
+        </div>
+      </Modal>
       {popupState === 'confirm' && (
         <ConfirmPopup
           leftBtnColor="red"
