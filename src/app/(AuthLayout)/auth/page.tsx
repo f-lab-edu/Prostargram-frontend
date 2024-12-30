@@ -59,8 +59,7 @@ const LoginForm = () => {
         });
       }
     },
-    onError: (err) => {
-      addToast({ type: 'error', message: err.message });
+    onError: () => {
       setError('email', {
         type: 'deps',
         message: '알 수 없는 에러가 발생했습니다. 다시 로그인 해 주세요.',

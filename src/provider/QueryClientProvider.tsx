@@ -7,8 +7,10 @@ import {
   QueryCache,
   MutationCache,
 } from '@tanstack/react-query';
+import { useToastContext } from '@/components/common/Toast/ToastProvider';
 
 const QueryClientProvider = ({ children }: PropsWithChildren) => {
+  const { addToast } = useToastContext();
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -18,10 +20,12 @@ const QueryClientProvider = ({ children }: PropsWithChildren) => {
         queryCache: new QueryCache({
           onError: (err, query) => {
             console.log(err, query);
+            addToast({ type: 'error', message: err.message });
           },
         }),
         mutationCache: new MutationCache({
           onError: (err, vars, ctx, mutation) => {
+            addToast({ type: 'error', message: err.message });
             console.log(err);
             console.log(vars);
             console.log(ctx);

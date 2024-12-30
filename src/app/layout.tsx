@@ -26,9 +26,9 @@ const RootLayout = ({
   return (
     <html lang="ko">
       <body className={pretendard.className}>
-        <QueryClientProvider>
-          <ToastProvider>{children}</ToastProvider>
-        </QueryClientProvider>
+        <ToastProvider>
+          <QueryClientProvider>{children}</QueryClientProvider>
+        </ToastProvider>
         <div id="portal" />
       </body>
     </html>
