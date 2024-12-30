@@ -3,6 +3,7 @@ import localFont from 'next/font/local';
 
 import QueryClientProvider from '@/provider/QueryClientProvider';
 import '@/styles/global.scss';
+import ToastProvider from '@/components/common/Toast/ToastProvider/ToastProvider';
 
 const pretendard = localFont({
   src: [
@@ -25,7 +26,9 @@ const RootLayout = ({
   return (
     <html lang="ko">
       <body className={pretendard.className}>
-        <QueryClientProvider>{children}</QueryClientProvider>
+        <QueryClientProvider>
+          <ToastProvider>{children}</ToastProvider>
+        </QueryClientProvider>
         <div id="portal" />
       </body>
     </html>

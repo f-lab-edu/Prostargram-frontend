@@ -9,6 +9,7 @@ import Typo from '@/components/common/Typo';
 import Button from '@/components/common/Button';
 import InputField from '@/components/common/InputField';
 import ToggleWrapper from '@/components/common/ToggleWrapper';
+import { useToastContext } from '@/components/common/Toast/ToastProvider';
 import { useLogin } from '@/api/mutations/auth';
 import validator from '@/utils/validate';
 import {
@@ -29,6 +30,7 @@ interface IFormInput {
 
 const LoginForm = () => {
   const router = useRouter();
+  const { addToast } = useToastContext();
 
   const {
     register,
@@ -48,6 +50,7 @@ const LoginForm = () => {
         saveAccessToken(result.accessToken);
         saveRefreshToken(result.refreshToken);
         saveUserId(result.userId);
+        addToast({ type: 'success', message: '성공적으로 로그인 되었습니다.' });
         router.push('/');
       } else {
         setError('email', {
@@ -56,7 +59,8 @@ const LoginForm = () => {
         });
       }
     },
-    onError: () => {
+    onError: (err) => {
+      addToast({ type: 'error', message: err.message });
       setError('email', {
         type: 'deps',
         message: '알 수 없는 에러가 발생했습니다. 다시 로그인 해 주세요.',

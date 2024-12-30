@@ -13,7 +13,7 @@ const QueryClientProvider = ({ children }: PropsWithChildren) => {
     () =>
       new QueryClient({
         defaultOptions: {
-          queries: { refetchOnWindowFocus: false },
+          queries: { refetchOnWindowFocus: false, throwOnError: true },
         },
         queryCache: new QueryCache({
           onError: (err, query) => {
