@@ -1,3 +1,5 @@
+'use client';
+
 import { ReactNode } from 'react';
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import { QueryErrorResetBoundary } from '@tanstack/react-query';
@@ -17,8 +19,13 @@ const ErrorComponent = (props: ErrorComponentProps) => {
   return (
     <div className={styles.error_box}>
       <p className={styles.error_message}>{error?.message}</p>
-      <Button type="button" fill="gray" onClick={resetErrorBoundary}>
-        돌아가기
+      <Button
+        type="button"
+        className={styles.error_button}
+        fill="gray"
+        onClick={resetErrorBoundary}
+      >
+        다시 시도하기
       </Button>
     </div>
   );
