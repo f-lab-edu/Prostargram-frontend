@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 import QueryClientProvider from '@/provider/QueryClientProvider';
-import '@/styles/global.scss';
 import ToastProvider from '@/components/common/Toast/ToastProvider/ToastProvider';
+import '@/styles/global.scss';
 
 const pretendard = localFont({
   src: [
@@ -27,7 +28,10 @@ const RootLayout = ({
     <html lang="ko">
       <body className={pretendard.className}>
         <ToastProvider>
-          <QueryClientProvider>{children}</QueryClientProvider>
+          <QueryClientProvider>
+            <ReactQueryDevtools initialIsOpen />
+            {children}
+          </QueryClientProvider>
         </ToastProvider>
         <div id="portal" />
       </body>

@@ -4,15 +4,27 @@ import { ChangeEvent } from 'react';
 
 import useAutoResizeTextArea from '@/hooks/useAutoResizeTextArea';
 
+import { useWriteReplyComment } from '@/api/comment/commentMutations';
+
 import styles from './FeedReplyWriteInput.module.scss';
 
 interface FeedReplyWriteInputProps {
   commentId: string;
+  feedId: string;
 }
 
-const FeedReplyWriteInput = ({ commentId }: FeedReplyWriteInputProps) => {
+const FeedReplyWriteInput = ({
+  commentId,
+  feedId,
+}: FeedReplyWriteInputProps) => {
   const { textareaRef, textareaContent, setTextareaContent } =
     useAutoResizeTextArea({ maxLine: 3, lineHeight: 20 });
+
+  const { mutate: writeReplyCommentMutation } = useWriteReplyComment(
+    feedId,
+    commentId,
+    textareaContent,
+  );
 
   const textareaChangeHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const { value } = e.target;
@@ -20,7 +32,9 @@ const FeedReplyWriteInput = ({ commentId }: FeedReplyWriteInputProps) => {
   };
 
   const replySubmitHandler = () => {
-    console.log(commentId, textareaContent);
+    console.log(feedId, commentId, textareaContent);
+    // TODO: 서버 확인 필요
+    writeReplyCommentMutation();
   };
 
   return (
