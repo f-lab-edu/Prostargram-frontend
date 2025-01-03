@@ -67,7 +67,7 @@ const ToastProvider = ({ children }: PropsWithChildren) => {
     <ToastContext.Provider value={contextValues}>
       {children}
       <Portal>
-        {toasts.length && (
+        {toasts.length === 0 && (
           <ul className={styles.container}>
             {toasts.map(({ id, type, message }) => (
               <ToastItem key={id} id={id} type={type} removeToast={removeToast}>

@@ -20,7 +20,6 @@ const QueryClientProvider = ({ children }: PropsWithChildren) => {
         queryCache: new QueryCache({
           onError: (err, query) => {
             console.log(err, query);
-            addToast({ type: 'error', message: err.message });
           },
         }),
         mutationCache: new MutationCache({
