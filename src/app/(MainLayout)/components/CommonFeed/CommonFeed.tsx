@@ -28,7 +28,6 @@ const CommonFeed = () => {
       imageCount: images.length,
       content: '',
       hashTagNames: [],
-      createdAt: '',
     });
 
   const updateCommonFeedData = (
@@ -67,8 +66,8 @@ const CommonFeed = () => {
     console.log('데이터', commonFeedData);
     commonFeedMutation();
     // console.log('게시물 작성 완료!', data);
-    handleClosePopup();
-    window.location.href = '/';
+    // handleClosePopup();
+    // window.location.href = '/';
   };
 
   const handleDeleteFeed = () => {

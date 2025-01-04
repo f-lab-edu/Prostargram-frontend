@@ -54,7 +54,6 @@ declare module Feed {
   interface BasicPostRequestBody {
     content: string;
     hashTagNames: string[];
-    createdAt: string;
     imageCount: number;
   }
 
