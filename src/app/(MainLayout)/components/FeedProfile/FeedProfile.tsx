@@ -10,7 +10,7 @@ type FeedProfileProps = {
 const FeedProfile = ({ userInfo }: FeedProfileProps) => {
   return (
     <>
-      {userInfo.profileImgUrl === '' && (
+      {userInfo.profileImgUrl === null && (
         <Image
           className={styles.feed_top_profile}
           src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4vkwPhD-NHO6sV_3ailgWXjiP_WPM24J3IhkB3xZ-bQ&s"
@@ -20,7 +20,7 @@ const FeedProfile = ({ userInfo }: FeedProfileProps) => {
         />
       )}
       {/* TODO: profileImgUrl src 적용 */}
-      {userInfo.profileImgUrl !== '' && (
+      {userInfo.profileImgUrl !== null && (
         <Image
           className={styles.feed_top_profile}
           src=""

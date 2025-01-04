@@ -4,6 +4,7 @@ import { useCallback, useRef, useState } from 'react';
 
 import { useInfiniteFeeds } from '@/api/feed/feedQueries';
 import { ALL_FEEDS, MOCK_DATA_OF_DEBATE_FEED } from '@/data/mock';
+import SkeletonFeed from '@/components/common/SkletonFeed/SkeletonFeed';
 
 import Feed from '../Feed/Feed';
 import ReadOnlyCommonFeed from '../ReadOnlyCommonFeed';
@@ -12,10 +13,8 @@ import ReadOnlyDebateFeed from '../ReadOnlyDebateFeed';
 const FeedList = () => {
   const observer = useRef<IntersectionObserver | null>(null);
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfiniteFeeds();
-
-  console.log(data);
 
   const lastPostRef = useCallback(
     (node: HTMLDivElement) => {
@@ -45,20 +44,27 @@ const FeedList = () => {
 
   return (
     <>
-      {/* {data?.pages?.map((page) => (
-        <>
-          {page.result?.data?.map((result, idx) => {
-            return (
-              <Feed
-                ref={page.result?.data?.length === idx + 1 ? lastPostRef : null}
-                key={result.post.postId}
-                feed={result}
-              />
-            );
-          })}
-        </>
-      ))} */}
-      {ALL_FEEDS.map((feed, idx) => {
+      {isLoading && <SkeletonFeed />}
+      {!isLoading &&
+        data?.pages?.map((page) => (
+          <>
+            {page.result?.data?.map((result, idx) => {
+              return (
+                <Feed
+                  ref={
+                    page.result?.data?.length === idx + 1 ? lastPostRef : null
+                  }
+                  key={result.post.postId}
+                  feed={result}
+                  feedIndex={idx}
+                  setDetailFeedId={() => showDetailFeed(result.post.postId)}
+                />
+              );
+            })}
+          </>
+        ))}
+
+      {/* {ALL_FEEDS.map((feed, idx) => {
         return (
           <Feed
             ref={ALL_FEEDS.length === idx + 1 ? lastPostRef : null}
@@ -67,7 +73,7 @@ const FeedList = () => {
             setDetailFeedId={showDetailFeed}
           />
         );
-      })}
+      })} */}
       {detailFeedId && selectedFeedData && (
         <>
           <ReadOnlyCommonFeed commonFeedData={selectedFeedData} />

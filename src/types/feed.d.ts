@@ -48,7 +48,7 @@ declare module Feed {
 
   interface FeedsResponse {
     data: FeedData[];
-    hasNext: boolean;
+    hasNextPage: boolean;
   }
 
   interface BasicPostRequestBody {

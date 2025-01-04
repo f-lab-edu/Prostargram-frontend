@@ -12,7 +12,7 @@ export const useInfiniteFeeds = () => {
     queryFn: ({ pageParam }) => getFeeds(pageParam),
     initialPageParam: 0,
     getNextPageParam: (lastPage, pages) => {
-      return lastPage.result?.hasNext ? pages.length : null;
+      return lastPage.result?.hasNextPage ? pages.length : null;
     },
   });
 };
