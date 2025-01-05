@@ -1,5 +1,11 @@
 import { useMutation } from '@tanstack/react-query';
-import { createCommonFeed, deleteFeed, dislikeFeed, likeFeed } from './apis';
+import {
+  createCommonFeed,
+  deleteFeed,
+  dislikeFeed,
+  likeFeed,
+  updateCommonFeed,
+} from './apis';
 
 export const useCreateCommonFeed = (
   data: Feed.BasicPostRequestBody,
@@ -7,6 +13,16 @@ export const useCreateCommonFeed = (
 ) => {
   return useMutation({
     mutationFn: () => createCommonFeed(data),
+    ...options,
+  });
+};
+
+export const useUpdateCommonFeed = (
+  data: Feed.BasicPostRequestBody,
+  options = {},
+) => {
+  return useMutation({
+    mutationFn: () => updateCommonFeed(data),
     ...options,
   });
 };

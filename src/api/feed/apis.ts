@@ -29,6 +29,15 @@ const createCommonFeed = (data: Feed.BasicPostRequestBody) => {
   return res;
 };
 
+const updateCommonFeed = (data: Feed.BasicPostRequestBody) => {
+  const res = authInstance({
+    method: 'put',
+    url: `/posts/basic`,
+    data,
+  });
+  return res;
+};
+
 const likeFeed = (postId: number) => {
   const res = authInstance({
     method: 'post',
@@ -57,6 +66,7 @@ export {
   getFeeds,
   getDetailCommonFeed,
   createCommonFeed,
+  updateCommonFeed,
   likeFeed,
   dislikeFeed,
   deleteFeed,

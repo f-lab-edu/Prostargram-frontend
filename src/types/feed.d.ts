@@ -52,6 +52,7 @@ declare module Feed {
   }
 
   interface BasicPostRequestBody {
+    postId?: string;
     content: string;
     hashTagNames: string[];
     imageCount: number;
@@ -71,4 +72,6 @@ declare module Feed {
     preSignedImageUrls: string[];
     userId: number;
   }
+
+  type ActionType = 'CREATE' | 'UPDATE';
 }

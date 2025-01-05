@@ -41,7 +41,9 @@ const AddContent = ({
   updateCommonFeedData,
   updateDiscussionFeedData,
 }: AddContentProps) => {
-  const [hashtags, setHashtags] = useState<string[]>([]);
+  const [hashtags, setHashtags] = useState<string[]>(
+    commonFeedData?.hashTagNames ?? [],
+  );
 
   const removeInterest = (index: number) => {
     setHashtags((prev) => prev.filter((_, i) => i !== index));

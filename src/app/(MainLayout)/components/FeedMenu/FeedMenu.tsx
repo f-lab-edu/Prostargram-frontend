@@ -6,6 +6,7 @@ import MeatBallMenu from '@/assets/icons/meatball_menu.svg';
 import { useDeleteFeed } from '@/api/feed/feedMutations';
 import { getUserId } from '@/utils/manageToken';
 
+import { useRouter } from 'next/navigation';
 import styles from './FeedMenu.module.scss';
 
 type FeedMenuProps = {
@@ -19,9 +20,12 @@ const FeedMenu = ({ feed }: FeedMenuProps) => {
   const isFollow = feed?.post?.isFollow;
   const [isToggleMenuOn, setIsToggleMenuOn] = useState(false);
 
-  const updateFeed = () => {
-    //   TODO: 피드 업데이트 API 연동 (postType에 따른 분기 처리)
-    console.log('post', feed.post);
+  const router = useRouter();
+
+  const openUpdateFeedModal = () => {
+    router.push(
+      `?mode=${feed.post.postType.toLowerCase()}&postId=${feed.post.postId}`,
+    );
   };
 
   const { mutate: deleteFeedMutation } = useDeleteFeed(feed?.post?.postId);
@@ -47,7 +51,7 @@ const FeedMenu = ({ feed }: FeedMenuProps) => {
             <ul className={styles.toggle_menu}>
               <li
                 className={styles.update}
-                onClick={updateFeed}
+                onClick={openUpdateFeedModal}
                 aria-hidden="true"
               >
                 수정
