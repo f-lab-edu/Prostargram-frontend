@@ -4,24 +4,27 @@ import { useState } from 'react';
 import ProfileFollowButton from '@/app/my/components/Profile/ProfileFollowButton';
 import MeatBallMenu from '@/assets/icons/meatball_menu.svg';
 import { useDeleteFeed } from '@/api/feed/feedMutations';
+import { getUserId } from '@/utils/manageToken';
 
 import styles from './FeedMenu.module.scss';
 
 type FeedMenuProps = {
-  post: Feed.BasicPost | Feed.DebatePost | Feed.PollPost;
+  feed: Feed.FeedData;
 };
 
-const FeedMenu = ({ post }: FeedMenuProps) => {
-  const isMine = true;
-  const isFollow = false;
+const FeedMenu = ({ feed }: FeedMenuProps) => {
+  const userId = getUserId();
+
+  const isMine = userId === feed?.basicUser?.userId;
+  const isFollow = feed?.post?.isFollow;
   const [isToggleMenuOn, setIsToggleMenuOn] = useState(false);
 
   const updateFeed = () => {
     //   TODO: 피드 업데이트 API 연동 (postType에 따른 분기 처리)
-    console.log('post', post);
+    console.log('post', feed.post);
   };
 
-  const { mutate: deleteFeedMutation } = useDeleteFeed(post.postId);
+  const { mutate: deleteFeedMutation } = useDeleteFeed(feed?.post?.postId);
   const deleteFeed = () => {
     deleteFeedMutation();
   };

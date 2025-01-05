@@ -3,7 +3,7 @@
 import { useCallback, useRef, useState } from 'react';
 
 import { useInfiniteFeeds } from '@/api/feed/feedQueries';
-import { ALL_FEEDS, MOCK_DATA_OF_DEBATE_FEED } from '@/data/mock';
+import { MOCK_DATA_OF_DEBATE_FEED } from '@/data/mock';
 import SkeletonFeed from '@/components/common/SkletonFeed/SkeletonFeed';
 
 import Feed from '../Feed/Feed';
@@ -33,13 +33,14 @@ const FeedList = () => {
   );
 
   const [detailFeedId, setDetailFeedId] = useState<number>();
-  const [selectedFeedData, setSelectedFeedData] = useState();
+  const [selectedFeedData, setSelectedFeedData] = useState<Feed.FeedData>();
 
   const showDetailFeed = (feedId: number) => {
-    const feedData = ALL_FEEDS.filter((feed) => feed.post.postId === feedId);
+    const allFeedData = data?.pages.map((pages) => pages.result?.data).flat();
+    const feedData = allFeedData?.find((feed) => feed?.post.postId === feedId);
 
     setDetailFeedId(feedId);
-    setSelectedFeedData(feedData[0]);
+    if (feedData) setSelectedFeedData(feedData);
   };
 
   return (
@@ -63,17 +64,6 @@ const FeedList = () => {
             })}
           </>
         ))}
-
-      {/* {ALL_FEEDS.map((feed, idx) => {
-        return (
-          <Feed
-            ref={ALL_FEEDS.length === idx + 1 ? lastPostRef : null}
-            key={feed.post.postId}
-            feed={feed}
-            setDetailFeedId={showDetailFeed}
-          />
-        );
-      })} */}
       {detailFeedId && selectedFeedData && (
         <>
           <ReadOnlyCommonFeed commonFeedData={selectedFeedData} />

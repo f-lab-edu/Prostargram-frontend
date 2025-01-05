@@ -5,7 +5,6 @@ import { useSearchParams } from 'next/navigation';
 
 import FeedWrapper from '@/components/common/FeedWrapper';
 import { useGetDetailCommonFeed } from '@/api/feed/feedQueries';
-import { ReadOnlyCommonFeedType } from '../../types/feed';
 import Slide from '../Slide';
 import FeedLikeBox from '../FeedLikeBox';
 import FeedTextContent from '../FeedTextContent';
@@ -15,17 +14,17 @@ import FeedCommentWriteInput from '../FeedCommentWriteInput';
 import styles from './ReadOnlyCommonFeed.module.scss';
 
 interface ReadOnlyCommonFeedProps {
-  commonFeedData: ReadOnlyCommonFeedType;
+  commonFeedData: Feed.FeedData;
 }
 
 const ReadOnlyCommonFeed = ({ commonFeedData }: ReadOnlyCommonFeedProps) => {
   const feedId = new URLSearchParams(useSearchParams()).get('cf');
 
-  console.log(commonFeedData);
+  console.log('feedId::', feedId);
 
   const { data } = useGetDetailCommonFeed(feedId!, {});
 
-  console.log('comment data', data?.result?.post);
+  console.log('comment data', commonFeedData);
 
   if (!feedId) {
     return null;

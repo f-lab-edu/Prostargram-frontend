@@ -17,7 +17,7 @@ const FeedCountBox = ({ post, setDetailFeedId }: FeedCountBoxProps) => {
   const onClickMessageIcon = () => {
     setDetailFeedId(post.postId);
     if (post.postType === 'BASIC') {
-      router.push('?cf=1');
+      router.push(`?cf=${post.postId}`);
     }
     if (post.postType === 'DEBATE') {
       router.push('?df=1');

@@ -16,7 +16,7 @@ const FeedContentBox = ({ feed, setDetailFeedId }: FeedContentBoxProps) => {
   const onClickMoreButton = () => {
     setDetailFeedId(feed.post.postId);
     if (feed.post.postType === 'BASIC') {
-      router.push('?cf=1');
+      router.push(`?cf=${feed.post.postId}`);
     }
     if (feed.post.postType === 'DEBATE') {
       router.push('?df=1');
