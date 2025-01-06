@@ -47,7 +47,12 @@ const FeedMenu = ({ feed }: FeedMenuProps) => {
     <>
       {!isMine && (
         <div className={styles.follow_box}>
-          <ProfileFollowButton size="small" isFollow={isFollow} />
+          <ProfileFollowButton
+            fromUserId={userId}
+            toUserId={feed.basicUser.userId}
+            size="small"
+            isFollow={isFollow}
+          />
         </div>
       )}
       {isMine && (

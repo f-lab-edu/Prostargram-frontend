@@ -10,45 +10,55 @@ import UnfollowIcon from '@/assets/icons/unfollow.svg';
 import { useFollowUser, useUnfollowUser } from '@/api/follow/followMutations';
 
 interface ProfileFollowButtonProps {
-  userId?: number;
+  fromUserId?: number;
+  toUserId?: number;
   isFollow: boolean;
   size?: 'none' | 'small' | 'medium' | 'large';
 }
 
+// TODO: default 제거
 const ProfileFollowButton = ({
-  userId,
+  fromUserId = 1,
+  toUserId = 1,
   isFollow,
   size = 'large',
 }: ProfileFollowButtonProps) => {
   const [followStatus, setFollowStatus] = useState(isFollow);
 
-  // TODO: fromUserId 변경
-  const { mutate: followUserMutation } = useFollowUser({
-    fromUserId: 1,
-    toUserId: userId!,
-  });
-  const { mutate: unfollowUserMutation } = useUnfollowUser({
-    fromUserId: 1,
-    toUserId: userId!,
-  });
-
   const followHandler = () => {
     setFollowStatus(() => {
-      followUserMutation();
       return true;
     });
   };
   const unfollowHandler = () => {
     setFollowStatus(() => {
-      unfollowUserMutation();
       return false;
     });
   };
 
+  const { mutate: followUserMutation } = useFollowUser(
+    {
+      fromUserId,
+      toUserId,
+    },
+    {
+      onSuccess: () => followHandler(),
+    },
+  );
+  const { mutate: unfollowUserMutation } = useUnfollowUser(
+    {
+      fromUserId,
+      toUserId,
+    },
+    {
+      onSuccess: () => unfollowHandler(),
+    },
+  );
+
   return (
     <If condition={followStatus}>
       <If.True>
-        <Button size={size} fill="red" onClick={unfollowHandler}>
+        <Button size={size} fill="red" onClick={() => unfollowUserMutation()}>
           <UnfollowIcon
             width="20"
             height="20"
@@ -58,7 +68,7 @@ const ProfileFollowButton = ({
         </Button>
       </If.True>
       <If.False>
-        <Button size={size} onClick={followHandler}>
+        <Button size={size} onClick={() => followUserMutation()}>
           <FollowIcon
             width="20"
             height="20"

@@ -5,7 +5,7 @@ import styles from './page.module.scss';
 const MainPage = () => {
   return (
     <div className={styles.container}>
-      <FollowingList userId={1} />
+      <FollowingList />
       <FeedList />
     </div>
   );

@@ -4,13 +4,13 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Typo from '@/components/common/Typo';
 import { useGetFollowingList } from '@/api/follow/followQueries';
+import { getUserId } from '@/utils/manageToken';
+
 import styles from './FollowingList.module.scss';
 
-type FollowingListProps = {
-  userId: number;
-};
+const FollowingList = () => {
+  const userId = getUserId();
 
-const FollowingList = ({ userId }: FollowingListProps) => {
   const { data: followings } = useGetFollowingList(userId);
   const router = useRouter();
 
