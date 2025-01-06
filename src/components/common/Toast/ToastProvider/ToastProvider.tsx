@@ -41,10 +41,11 @@ const ToastProvider = ({ children }: PropsWithChildren) => {
   const [toasts, setToasts] = useState<ToastType[]>([]);
 
   const addToast = useCallback(({ type, message }: Omit<ToastType, 'id'>) => {
+    const id = Math.floor(Math.random() * 100_000_000).toString();
     setToasts((prev) => [
       ...prev,
       {
-        id: Math.floor(Math.random() * 100_000_000).toString(),
+        id,
         type,
         message,
       },
@@ -67,7 +68,7 @@ const ToastProvider = ({ children }: PropsWithChildren) => {
     <ToastContext.Provider value={contextValues}>
       {children}
       <Portal>
-        {toasts.length === 0 && (
+        {toasts.length !== 0 && (
           <ul className={styles.container}>
             {toasts.map(({ id, type, message }) => (
               <ToastItem key={id} id={id} type={type} removeToast={removeToast}>

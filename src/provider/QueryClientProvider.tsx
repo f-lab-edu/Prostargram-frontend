@@ -18,17 +18,14 @@ const QueryClientProvider = ({ children }: PropsWithChildren) => {
           queries: { refetchOnWindowFocus: false, throwOnError: true },
         },
         queryCache: new QueryCache({
-          onError: (err, query) => {
-            console.log(err, query);
-          },
+          onError: () => {},
         }),
         mutationCache: new MutationCache({
-          onError: (err, vars, ctx, mutation) => {
+          onSuccess: (p) => {
+            console.log(p);
+          },
+          onError: (err) => {
             addToast({ type: 'error', message: err.message });
-            console.log(err);
-            console.log(vars);
-            console.log(ctx);
-            console.log(mutation);
           },
         }),
       }),
