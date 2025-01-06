@@ -5,6 +5,8 @@ import ProfileFollowButton from '@/app/my/components/Profile/ProfileFollowButton
 import MeatBallMenu from '@/assets/icons/meatball_menu.svg';
 import { useDeleteFeed } from '@/api/feed/feedMutations';
 import { getUserId } from '@/utils/manageToken';
+import { useQueryClient } from '@tanstack/react-query';
+import { FEED_QUERY_KEYS } from '@/api/feed/feedQueries';
 
 import { useRouter } from 'next/navigation';
 import styles from './FeedMenu.module.scss';
@@ -28,7 +30,15 @@ const FeedMenu = ({ feed }: FeedMenuProps) => {
     );
   };
 
-  const { mutate: deleteFeedMutation } = useDeleteFeed(feed?.post?.postId);
+  const queryClient = useQueryClient();
+
+  const { mutate: deleteFeedMutation } = useDeleteFeed(feed?.post?.postId, {
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: FEED_QUERY_KEYS.feeds,
+      });
+    },
+  });
   const deleteFeed = () => {
     deleteFeedMutation();
   };
