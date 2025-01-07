@@ -12,7 +12,7 @@ const BasicFeedContent = ({ images, feedIndex }: BasicFeedContentProps) => {
     <Slide>
       {images.map((image, idx) => {
         return (
-          <div className={styles.image_wrap}>
+          <div key={`feed_${image}_wrap`} className={styles.image_wrap}>
             <Image
               priority={feedIndex === 0 && idx === 0}
               loading={feedIndex === 0 && idx === 0 ? 'eager' : 'lazy'}

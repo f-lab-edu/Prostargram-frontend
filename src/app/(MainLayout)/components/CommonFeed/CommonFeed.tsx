@@ -126,7 +126,7 @@ const CommonFeed = () => {
     // TODO: 일반피드 작성 서버 API 연동
     console.log('데이터', commonFeedData);
     commonFeedCreateMutation();
-    closePopup();
+    // closePopup();
   };
 
   const updateCommonFeed = () => {

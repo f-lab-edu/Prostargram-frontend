@@ -13,19 +13,15 @@ import FeedCommentWriteInput from '../FeedCommentWriteInput';
 import styles from './ReadOnlyCommonFeed.module.scss';
 
 interface ReadOnlyCommonFeedProps {
-  commonFeedData?: Feed.FeedData;
   feedId: string;
 }
 
-const ReadOnlyCommonFeed = ({
-  commonFeedData,
-  feedId,
-}: ReadOnlyCommonFeedProps) => {
+const ReadOnlyCommonFeed = ({ feedId }: ReadOnlyCommonFeedProps) => {
   const { data } = useGetDetailCommonFeed(feedId!, {
     enabled: feedId !== null,
   });
 
-  const feedData = commonFeedData ?? data?.result;
+  const feedData = data?.result;
 
   return (
     <FeedWrapper feedIdQuery="cf">

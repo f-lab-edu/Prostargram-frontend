@@ -8,9 +8,8 @@ import styles from './FeedContentBox.module.scss';
 
 type FeedContentBoxProps = {
   feed: Feed.FeedData;
-  setDetailFeedId: (feedId: number) => void;
 };
-const FeedContentBox = ({ feed, setDetailFeedId }: FeedContentBoxProps) => {
+const FeedContentBox = ({ feed }: FeedContentBoxProps) => {
   const router = useRouter();
 
   const onClickMoreButton = () => {
@@ -18,10 +17,8 @@ const FeedContentBox = ({ feed, setDetailFeedId }: FeedContentBoxProps) => {
       router.push(`?cf=${feed.post.postId}`);
     }
     if (feed.post.postType === 'DEBATE') {
-      router.push('?df=1');
+      router.push(`?df=${feed.post.postId}`);
     }
-
-    setDetailFeedId(feed.post.postId);
   };
 
   return (

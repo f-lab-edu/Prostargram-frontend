@@ -4,14 +4,13 @@ import styles from './FeedBottom.module.scss';
 
 type FeedBottomProps = {
   feed: Feed.FeedData;
-  setDetailFeedId: (feedId: number) => void;
 };
 
-const FeedBottom = ({ feed, setDetailFeedId }: FeedBottomProps) => {
+const FeedBottom = ({ feed }: FeedBottomProps) => {
   return (
     <div className={styles.feed_bottom}>
-      <FeedCountBox setDetailFeedId={setDetailFeedId} post={feed.post} />
-      <FeedContentBox setDetailFeedId={setDetailFeedId} feed={feed} />
+      <FeedCountBox post={feed.post} />
+      <FeedContentBox feed={feed} />
     </div>
   );
 };

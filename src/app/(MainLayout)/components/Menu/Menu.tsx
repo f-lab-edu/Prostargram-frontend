@@ -29,19 +29,17 @@ const Menu = ({ menus }: MenuProps) => {
     <ul className={styles.menu}>
       {menus.map((menu) => {
         return (
-          <>
-            <Link key={`${menu.name}`} href={menu.url}>
-              <li
-                className={clsx(styles.menu_item, {
-                  [styles.active]: isActive(menu),
-                })}
-              >
-                {menu.icon}
-                <span>{menu.name}</span>
-                {menu.name === '설정' && mode === 'setting' && <SettingMenu />}
-              </li>
-            </Link>
-          </>
+          <Link key={`${menu.name}`} href={menu.url}>
+            <li
+              className={clsx(styles.menu_item, {
+                [styles.active]: isActive(menu),
+              })}
+            >
+              {menu.icon}
+              <span>{menu.name}</span>
+              {menu.name === '설정' && mode === 'setting' && <SettingMenu />}
+            </li>
+          </Link>
         );
       })}
     </ul>

@@ -8,14 +8,12 @@ import styles from './FeedCountBox.module.scss';
 
 type FeedCountBoxProps = {
   post: Feed.BasicPost | Feed.DebatePost | Feed.PollPost;
-  setDetailFeedId: (feedId: number) => void;
 };
 
-const FeedCountBox = ({ post, setDetailFeedId }: FeedCountBoxProps) => {
+const FeedCountBox = ({ post }: FeedCountBoxProps) => {
   const router = useRouter();
 
   const onClickMessageIcon = () => {
-    setDetailFeedId(post.postId);
     if (post.postType === 'BASIC') {
       router.push(`?cf=${post.postId}`);
     }
