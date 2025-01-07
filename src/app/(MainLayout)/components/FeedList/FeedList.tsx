@@ -1,6 +1,7 @@
 'use client';
 
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 import { useInfiniteFeeds } from '@/api/feed/feedQueries';
 import { MOCK_DATA_OF_DEBATE_FEED } from '@/data/mock';
@@ -32,17 +33,24 @@ const FeedList = () => {
     [isFetchingNextPage, fetchNextPage, hasNextPage],
   );
 
-  const [detailFeedId, setDetailFeedId] = useState<number>();
+  const params = useSearchParams();
+  const [detailFeedId, setDetailFeedId] = useState<string | null>(
+    params.get('cf'),
+  );
   const [selectedFeedData, setSelectedFeedData] = useState<Feed.FeedData>();
 
-  const showDetailFeed = (feedId: number) => {
+  const showDetailFeed = (feedId: string) => {
     const allFeedData = data?.pages.map((pages) => pages.result?.data).flat();
-    const feedData = allFeedData?.find((feed) => feed?.post.postId === feedId);
+    const feedData = allFeedData?.find(
+      (feed) => feed?.post.postId === Number(feedId),
+    );
 
-    setDetailFeedId(feedId);
     if (feedData) setSelectedFeedData(feedData);
   };
 
+  useEffect(() => {
+    setDetailFeedId(params.get('cf'));
+  }, [params]);
   return (
     <>
       {isLoading && <SkeletonFeed />}
@@ -58,15 +66,20 @@ const FeedList = () => {
                   key={result.post.postId}
                   feed={result}
                   feedIndex={idx}
-                  setDetailFeedId={() => showDetailFeed(result.post.postId)}
+                  setDetailFeedId={() =>
+                    showDetailFeed(String(result.post.postId))
+                  }
                 />
               );
             })}
           </>
         ))}
-      {detailFeedId && selectedFeedData && (
+      {detailFeedId && (
         <>
-          <ReadOnlyCommonFeed commonFeedData={selectedFeedData} />
+          <ReadOnlyCommonFeed
+            commonFeedData={selectedFeedData}
+            feedId={detailFeedId}
+          />
           <ReadOnlyDebateFeed debateFeedData={MOCK_DATA_OF_DEBATE_FEED} />
         </>
       )}

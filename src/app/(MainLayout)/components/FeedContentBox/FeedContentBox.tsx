@@ -14,13 +14,14 @@ const FeedContentBox = ({ feed, setDetailFeedId }: FeedContentBoxProps) => {
   const router = useRouter();
 
   const onClickMoreButton = () => {
-    setDetailFeedId(feed.post.postId);
     if (feed.post.postType === 'BASIC') {
       router.push(`?cf=${feed.post.postId}`);
     }
     if (feed.post.postType === 'DEBATE') {
       router.push('?df=1');
     }
+
+    setDetailFeedId(feed.post.postId);
   };
 
   return (
