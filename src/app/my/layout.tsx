@@ -10,7 +10,9 @@ interface MypageLayoutProps {
 }
 
 const MypageLayout = async ({ children }: MypageLayoutProps) => {
-  const result = await fetch('http://localhost:3000/mock/user.json');
+  const result = await fetch(
+    `${process.env.NEXT_CURRENT_DOMAIN}/mock/user.json`,
+  );
   const userData = (await result.json()) as { data: UserType };
 
   return (

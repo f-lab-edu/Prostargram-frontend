@@ -1,5 +1,6 @@
 'use client';
 
+import { Suspense } from 'react';
 import HomeIcon from '@/assets/icons/nav-home.svg';
 import ProfileIcon from '@/assets/icons/nav-profile.svg';
 import SettingIcon from '@/assets/icons/nav-setting.svg';
@@ -66,19 +67,21 @@ const Navigation = () => {
   return (
     <nav className={styles.nav}>
       <div className={styles.logo}>Prostagram</div>
-      {combinedMenus.map((menu) => {
-        if (menu.type === 'page') {
-          const pageMenu = menu as MenuType;
-          // 페이지 메뉴일 경우 Menu 컴포넌트로 출력
-          return <Menu key={menu.name} menus={[pageMenu]} />;
-        }
-        if (menu.type === 'modal') {
-          // 모달 메뉴일 경우 ModalMenu 컴포넌트로 출력
-          const modalMenu = menu as ModalMenuType;
-          return <ModalMenu key={modalMenu.name} modalMenus={[modalMenu]} />;
-        }
-        return null;
-      })}
+      <Suspense>
+        {combinedMenus.map((menu) => {
+          if (menu.type === 'page') {
+            const pageMenu = menu as MenuType;
+            // 페이지 메뉴일 경우 Menu 컴포넌트로 출력
+            return <Menu key={menu.name} menus={[pageMenu]} />;
+          }
+          if (menu.type === 'modal') {
+            // 모달 메뉴일 경우 ModalMenu 컴포넌트로 출력
+            const modalMenu = menu as ModalMenuType;
+            return <ModalMenu key={modalMenu.name} modalMenus={[modalMenu]} />;
+          }
+          return null;
+        })}
+      </Suspense>
     </nav>
   );
 };

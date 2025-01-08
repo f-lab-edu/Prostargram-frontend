@@ -1,9 +1,11 @@
-import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
 import clsx from 'clsx';
-import styles from './Menu.module.scss';
+import Link from 'next/link';
+import { Suspense } from 'react';
+import { usePathname, useSearchParams } from 'next/navigation';
+
 import { MenuType } from '../../types/main';
 import SettingMenu from '../SettingMenu/SettingMenu';
+import styles from './Menu.module.scss';
 
 type MenuProps = {
   menus: MenuType[];
@@ -26,25 +28,29 @@ const Menu = ({ menus }: MenuProps) => {
   };
 
   return (
-    <ul className={styles.menu}>
-      {menus.map((menu) => {
-        return (
-          <>
-            <Link key={`${menu.name}`} href={menu.url}>
-              <li
-                className={clsx(styles.menu_item, {
-                  [styles.active]: isActive(menu),
-                })}
-              >
-                {menu.icon}
-                <span>{menu.name}</span>
-                {menu.name === '설정' && mode === 'setting' && <SettingMenu />}
-              </li>
-            </Link>
-          </>
-        );
-      })}
-    </ul>
+    <Suspense>
+      <ul className={styles.menu}>
+        {menus.map((menu) => {
+          return (
+            <>
+              <Link key={`${menu.name}`} href={menu.url}>
+                <li
+                  className={clsx(styles.menu_item, {
+                    [styles.active]: isActive(menu),
+                  })}
+                >
+                  {menu.icon}
+                  <span>{menu.name}</span>
+                  {menu.name === '설정' && mode === 'setting' && (
+                    <SettingMenu />
+                  )}
+                </li>
+              </Link>
+            </>
+          );
+        })}
+      </ul>
+    </Suspense>
   );
 };
 

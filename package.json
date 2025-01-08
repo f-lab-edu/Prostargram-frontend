@@ -26,6 +26,7 @@
     "next": "14.2.3",
     "react": "^18",
     "react-dom": "^18",
+    "react-error-boundary": "^5.0.0",
     "react-hook-form": "^7.51.3"
   },
   "devDependencies": {
