@@ -28,7 +28,7 @@ const Navigation = () => {
     {
       name: '프로필',
       type: 'page',
-      url: '/my',
+      url: '/profile',
       icon: <ProfileIcon />,
       order: 2,
     },

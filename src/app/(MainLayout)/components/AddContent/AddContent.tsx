@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Button from '@/components/common/Button';
 import Typo from '@/components/common/Typo';
 import CircleCloseIcon from '@/assets/icons/circle-close-gray.svg';
-import MyInterestFieldForMyPage from '@/app/my/components/MyInterest/MyInterestFieldForMyPage';
+import MyInterestFieldForMyPage from '@/app/profile/components/MyInterest/MyInterestFieldForMyPage';
 import If from '@/components/common/If';
 import Textarea from '@/components/common/Textarea/Textarea';
 import { FeedImage } from '@/hooks/useImageUpload';

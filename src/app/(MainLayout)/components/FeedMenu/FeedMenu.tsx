@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import ProfileFollowButton from '@/app/my/components/Profile/ProfileFollowButton';
+import ProfileFollowButton from '@/app/profile/components/Profile/ProfileFollowButton';
 import MeatBallMenu from '@/assets/icons/meatball_menu.svg';
 import { useDeleteFeed } from '@/api/feed/feedMutations';
 import { getUserId } from '@/utils/manageToken';

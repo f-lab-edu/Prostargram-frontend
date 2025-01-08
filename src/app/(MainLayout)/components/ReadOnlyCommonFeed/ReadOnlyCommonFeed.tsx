@@ -62,7 +62,7 @@ const ReadOnlyCommonFeed = ({ feedId }: ReadOnlyCommonFeedProps) => {
           {feedData?.post && (
             <div>
               <FeedLikeBox
-                postId={1}
+                postId={feedData.post.postId}
                 isLike={feedData.post.isLike}
                 likeCount={feedData.post.likeCount}
                 commentCount={feedData.post.commentCount}

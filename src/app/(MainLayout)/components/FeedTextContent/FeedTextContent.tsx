@@ -1,7 +1,7 @@
 import Image from 'next/image';
 
 import { compactTimeFormatter } from '@/utils/formatter';
-import ProfileFollowButton from '@/app/my/components/Profile/ProfileFollowButton';
+import ProfileFollowButton from '@/app/profile/components/Profile/ProfileFollowButton';
 import { getUserId } from '@/utils/manageToken';
 
 import styles from './FeedTextContent.module.scss';
