@@ -81,7 +81,8 @@ const MyEditInformation = ({
           maxLength={200}
         />
         <p>
-          <span className="gray">{nextMyInfo.description.length}</span> / 200
+          <span className="gray">{nextMyInfo.description?.length || 0}</span> /
+          200
         </p>
       </div>
       <div className={styles.confirm_button_wrapper}>

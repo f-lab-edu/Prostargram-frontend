@@ -63,10 +63,10 @@ const MyPage = ({ children, myData }: MyPageProps) => {
             />
           </div>
           <div className={styles.display_flex}>
-            <Follow title="팔로워" href="/my/follower">
+            <Follow title="팔로워" href="/profile/follower">
               {formattedFollowers}
             </Follow>
-            <Follow title="팔로잉" href="/my/following">
+            <Follow title="팔로잉" href="/profile/following">
               {formattedFollowings}
             </Follow>
           </div>
