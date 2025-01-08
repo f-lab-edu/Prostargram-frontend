@@ -27,8 +27,10 @@ const MyLink = ({ links, isMine }: MyLinkProps) => {
     const formData = new FormData(e.currentTarget);
     const submittedValue = [...formData.values()].filter((v) => Boolean(v));
 
-    const result = await updateMyLinks(submittedValue);
-    setMyLinks(result);
+    const response = await updateMyLinks(submittedValue);
+    if (response.result) {
+      setMyLinks(response.result);
+    }
 
     toggleEdit();
   };
