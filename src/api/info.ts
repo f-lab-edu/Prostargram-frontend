@@ -44,11 +44,14 @@ const postInterest = async ({
 const removeInterest = async ({
   userId,
   hashTagId,
+  name,
 }: {
   userId: number;
   hashTagId: number;
+  name: string;
 }) => {
-  const url = `/users/${userId}/interests?hashTagId=${hashTagId}`;
+  console.log(name);
+  const url = `/users/${userId}/interests?hashTagId=${hashTagId}&name=${encodeURIComponent(name)}`;
 
   const result = await authInstance({
     method: 'DELETE',

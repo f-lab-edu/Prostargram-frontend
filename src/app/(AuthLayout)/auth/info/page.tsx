@@ -1,22 +1,18 @@
 'use client';
 
 import clsx from 'clsx';
-// import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { FormProvider, SubmitHandler } from 'react-hook-form';
 
 import { RECOMMANED_INTERESTS } from '@/data/mock';
 import Logo from '@/components/common/Logo';
 import Field from '@/components/common/Field';
 import Button from '@/components/common/Button';
-import {
-  useAddInterest,
-  useAddSocialAccountMutation,
-  useRemoveInterest,
-  useRemoveSocialAccountMutation,
-} from '@/api/mutations/info';
 import { getUserId } from '@/utils/manageToken';
+import { useToastContext } from '@/components/common/Toast/ToastProvider';
+import useInterestsServerRequests from '@/hooks/useInterestsServerRequests';
+import useSocialAccountsServerRequest from '@/hooks/useSocialAccountsServerRequests';
 
-import { authInstance } from '@/api/httpRequest';
 import PlusIcon from '@/assets/icons/plus.svg';
 import AdditionalLink from './components/AdditionalLink';
 import MyInterestField from './components/MyInterestField';
@@ -31,7 +27,8 @@ const LINK_FIELDS_LIMIT = 3;
 const MY_INTERESTS_FIELDS_LIMIT = 10;
 
 const AdditionalInfoPage = () => {
-  // const router = useRouter();
+  const router = useRouter();
+  const { addToast } = useToastContext();
   const methods = useAdditionalInfoForm<IAddionalInfoType>({
     defaultValues: { links: [{ link: '' }], interests: [], myInterests: [] },
   });
@@ -63,31 +60,15 @@ const AdditionalInfoPage = () => {
     fieldLimit: MY_INTERESTS_FIELDS_LIMIT,
   });
 
-  const { mutate: saveSocialAccount } = useAddSocialAccountMutation({});
-  const { mutate: removeSocialAccount } = useRemoveSocialAccountMutation({});
-
-  const { mutate: saveInterest } = useAddInterest({
-    onSuccess: (response) => {
-      console.log('saveInterest', response);
-    },
-    onError: (err) => {
-      console.log('saveInterest', err);
-    },
-  });
-  const { mutate: removeInterest } = useRemoveInterest({
-    onSuccess: (response) => {
-      console.log('removeInterest', response);
-    },
-    onError: (err) => {
-      console.log('removeInterest', err);
-    },
-  });
+  const { requestSocialAccountSaveSocialAccounts } =
+    useSocialAccountsServerRequest();
+  const { requestSaveInterest } = useInterestsServerRequests();
 
   const submitHandler: SubmitHandler<IAddionalInfoType> = async (values) => {
     const { links, interests, myInterests } = values;
 
     const userId = getUserId();
-
+    const uniqueSocialAccounts = links.filter((v) => !!v.link);
     const myInterestsNames = myInterests.map(({ myInterest }) => ({
       userId,
       interestName: myInterest,
@@ -96,90 +77,25 @@ const AdditionalInfoPage = () => {
       userId,
       interestName,
     }));
-
     const wholeInterestName = [...myInterestsNames, ...interestNames];
 
-    const uniqueSocialAccounts = links.filter((v) => !!v.link);
-
     if (uniqueSocialAccounts.length) {
-      const successfulSocialRequests: string[] = [];
-
-      try {
-        await Promise.all(
-          uniqueSocialAccounts.map(
-            async ({ link: socialAccountUrl }) =>
-              new Promise((res, rej) => {
-                saveSocialAccount(
-                  { socialAccountUrl },
-                  {
-                    onSuccess: (response) => {
-                      successfulSocialRequests.push(socialAccountUrl);
-                      res(response);
-                    },
-                    onError: (err) => {
-                      rej(err);
-                    },
-                  },
-                );
-              }),
-          ),
-        );
-      } catch (error) {
-        await Promise.all(
-          successfulSocialRequests.map(async (socialAccountUrl) => {
-            removeSocialAccount({ socialAccountUrl });
-          }),
-        );
-      }
+      requestSocialAccountSaveSocialAccounts({
+        targetSocialAccounts: uniqueSocialAccounts,
+      });
     }
 
-    const successfulIntersetRequests: {
-      userId: number;
-      interestName: string;
-    }[] = [];
+    requestSaveInterest({
+      targetInterests: wholeInterestName,
+      onSuccess: () => {
+        addToast({
+          type: 'success',
+          message: '회원가입이 정상적으로 완료되었습니다.',
+        });
 
-    console.log(wholeInterestName);
-
-    saveInterest(wholeInterestName[0]); //! 500 에러 발생
-    // removeInterest({ userId: gottenUserId, hashTagId: 2 });
-
-    const result = await authInstance({
-      method: 'GET',
-      url: `/users/${userId}/profile_page`,
+        router.push('/');
+      },
     });
-
-    console.log(result);
-
-    try {
-      await Promise.all(
-        wholeInterestName.map(
-          async ({ userId: interestUserId, interestName }) =>
-            new Promise((res, rej) => {
-              saveInterest(
-                { userId: interestUserId, interestName },
-                {
-                  onSuccess: (response) => {
-                    successfulIntersetRequests.push({ userId, interestName });
-                    console.log(response);
-                    res(response);
-                  },
-                  onError: (err) => {
-                    rej(err);
-                  },
-                },
-              );
-            }),
-        ),
-      );
-    } catch (error) {
-      await Promise.all(
-        successfulIntersetRequests.map(async ({ userId: interestUserId }) => {
-          removeInterest({ userId: interestUserId, hashTagId: 1 });
-        }),
-      );
-    }
-
-    console.log(interestNames);
   };
 
   const currentInterestList = [

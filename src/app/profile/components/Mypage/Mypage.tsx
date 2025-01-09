@@ -50,6 +50,11 @@ const MyPage = ({ children, myData }: MyPageProps) => {
     ({ socialAccountUrl }) => socialAccountUrl,
   );
 
+  const interestsWithoutHash = interests.map(({ hashTagId, hashTagName }) => ({
+    hashTagId,
+    hashTagName: hashTagName.slice(1),
+  }));
+
   return (
     <>
       <div className={styles.user_background}>백그라운드 이미지</div>
@@ -91,7 +96,7 @@ const MyPage = ({ children, myData }: MyPageProps) => {
       <div className={styles.display_flex}>
         <div className={styles.my_interest_wrapper}>
           <p>관심사</p>
-          <MyInterest isMine={isMine} interests={interests} />
+          <MyInterest isMine={isMine} interests={interestsWithoutHash} />
         </div>
         <div className={styles.changeable_area}>{children}</div>
       </div>

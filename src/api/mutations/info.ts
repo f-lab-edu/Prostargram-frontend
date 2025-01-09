@@ -50,11 +50,12 @@ const useRemoveInterest = (
   options: UseMutationOptions<
     HttpSuccessType<unknown>,
     ResponseError,
-    { userId: number; hashTagId: number }
+    { userId: number; hashTagId: number; name: string }
   >,
 ) => {
   return useMutation({
     mutationFn: removeInterest,
+    throwOnError: false,
     ...options,
   });
 };
