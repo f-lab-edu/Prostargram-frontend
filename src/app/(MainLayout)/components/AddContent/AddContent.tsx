@@ -3,11 +3,11 @@ import Image from 'next/image';
 import Button from '@/components/common/Button';
 import Typo from '@/components/common/Typo';
 import CircleCloseIcon from '@/assets/icons/circle-close-gray.svg';
-import MyInterestFieldForMyPage from '@/app/my/components/MyInterest/MyInterestFieldForMyPage';
+import MyInterestFieldForMyPage from '@/app/profile/components/MyInterest/MyInterestFieldForMyPage';
 import If from '@/components/common/If';
 import Textarea from '@/components/common/Textarea/Textarea';
 import { FeedImage } from '@/hooks/useImageUpload';
-import { CommonFeedData, DiscussionFeedData } from '../../types/feed';
+import { DiscussionFeedData } from '../../types/feed';
 import ImagePreview from '../ImagePreview/ImagePreview';
 import styles from './AddContent.module.scss';
 import DiscussionSubject from '../DiscussionSubject/DiscussionSubject';
@@ -19,9 +19,11 @@ type AddContentProps = {
   images?: FeedImage[];
   currentImage?: FeedImage | null;
   updateCurrentImage?: (image: FeedImage) => void;
-  commonFeedData?: CommonFeedData;
+  commonFeedData?: Feed.BasicPostRequestBody;
   discussionFeedData?: DiscussionFeedData;
-  updateCommonFeedData?: (nextCommonFeedData: Partial<CommonFeedData>) => void;
+  updateCommonFeedData?: (
+    nextCommonFeedData: Partial<Feed.BasicPostRequestBody>,
+  ) => void;
   updateDiscussionFeedData?: (
     nextDiscussionFeedData: Partial<DiscussionFeedData>,
   ) => void;
@@ -51,7 +53,7 @@ const AddContent = ({
 
   useEffect(() => {
     if (feedType === 'common') {
-      updateCommonFeedData?.({ hashtag: hashtags });
+      updateCommonFeedData?.({ hashTagNames: hashtags });
     } else {
       updateDiscussionFeedData?.({ hashtag: hashtags });
     }

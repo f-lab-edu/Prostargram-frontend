@@ -2,6 +2,7 @@
 
 .nav {
   position: fixed;
+  z-index: 100;
   background-color: $COLOR_WHITE;
   width: 300px;
   height: 100%;

@@ -1,11 +1,10 @@
 import BlueFlag from '@/assets/icons/blue_flag.svg';
 import RedFlag from '@/assets/icons/red_flag.svg';
 import Typo from '@/components/common/Typo';
-import { Post } from '../../types/feed';
 import styles from './DebateFeedContent.module.scss';
 
 type DebateFeedContentProps = {
-  debate: Post;
+  debate: Feed.DebatePost;
 };
 
 const DebateFeedContent = ({ debate }: DebateFeedContentProps) => {

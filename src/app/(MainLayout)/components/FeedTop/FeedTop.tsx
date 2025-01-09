@@ -1,10 +1,9 @@
 import styles from './FeedTop.module.scss';
-import { MainFeed } from '../../types/feed';
 import FeedMenu from '../FeedMenu/FeedMenu';
 import FeedProfile from '../FeedProfile/FeedProfile';
 
 type FeedTopProps = {
-  feed: MainFeed;
+  feed: Feed.FeedData;
 };
 
 const FeedTop = ({ feed }: FeedTopProps) => {

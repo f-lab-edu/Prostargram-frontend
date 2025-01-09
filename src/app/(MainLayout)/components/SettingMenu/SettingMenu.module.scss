@@ -1,0 +1,31 @@
+@use '../../../../styles/helpers/index' as *;
+
+.menu {
+  position: absolute;
+  width: 200px;
+  border-top-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  background-color: $COLOR_WHITE;
+  border: 1px solid $COLOR_GRAY_1;
+  left: 250px;
+  top: 30px;
+
+  .menu_item {
+    cursor: pointer;
+    padding: 15px;
+    color: $COLOR_GRAY_2;
+    text-align: center;
+    @include flex-center;
+
+    &:first-child {
+      border-bottom: 1px solid $COLOR_GRAY_1;
+    }
+
+    .logout {
+      position: relative;
+      left: 3px;
+      color: $COLOR_RED;
+    }
+  }
+}

@@ -1,6 +1,6 @@
 import { defaultInstance } from './httpRequest';
 
-export interface AuthTokenType {
+interface AuthTokenType {
   accessToken: string;
   refreshToken: string;
   userId: number;

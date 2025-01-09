@@ -3,31 +3,40 @@
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Typo from '@/components/common/Typo';
-import { UserType } from '@/app/my/types/my';
+import { useGetFollowingList } from '@/api/follow/followQueries';
 import styles from './FollowingList.module.scss';
 
 type FollowingListProps = {
-  followingUsers: Partial<UserType>[];
+  userId: number;
 };
 
-const FollowingList = ({ followingUsers }: FollowingListProps) => {
+const FollowingList = ({ userId }: FollowingListProps) => {
+  const { data: followings } = useGetFollowingList(userId);
   const router = useRouter();
 
-  const moveUserProfilePage = (userId: number) => {
-    router.push(`/profile/${userId}`);
+  const moveUserProfilePage = (followingUserId: number) => {
+    router.push(`/profile/${followingUserId}`);
   };
 
   return (
     <ul className={styles.following_ul}>
-      {followingUsers.length > 0 &&
-        followingUsers.map((user) => {
+      {followings?.result &&
+        followings?.result?.map((user) => {
           return (
             <li
               className={styles.following_li}
               onClick={() => moveUserProfilePage(user.userId!)}
               aria-hidden="true"
             >
-              {user.profileUrl === '' && (
+              {user?.profileImgUrl !== null ? (
+                <Image
+                  className={styles.user_img}
+                  src={user.profileImgUrl}
+                  alt=""
+                  width="50"
+                  height="50"
+                />
+              ) : (
                 <Image
                   className={styles.user_img}
                   src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4vkwPhD-NHO6sV_3ailgWXjiP_WPM24J3IhkB3xZ-bQ&s"
@@ -36,13 +45,6 @@ const FollowingList = ({ followingUsers }: FollowingListProps) => {
                   height="50"
                 />
               )}
-              <Image
-                className={styles.user_img}
-                src={user.profileUrl!}
-                alt=""
-                width="50"
-                height="50"
-              />
               <Typo
                 as="div"
                 fontSize="body-14"

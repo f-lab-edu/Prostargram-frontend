@@ -9,6 +9,7 @@
   .following_li {
     @include flex-column;
     justify-content: center;
+    align-items: center;
     cursor: pointer;
 
     .user_img {

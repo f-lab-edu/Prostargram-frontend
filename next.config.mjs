@@ -6,6 +6,10 @@ const nextConfig = {
         source: '/api/:path*',
         destination: `${process.env.NEXT_PUBLIC_BASE_URL}/:path*`,
       },
+      {
+        source: '/ncloud/:path*',
+        destination: `${process.env.NEXT_NCLOUD_BASE_URL}/:path*`,
+      },
     ];
   },
   images: {
@@ -13,6 +17,10 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'encrypted-tbn0.gstatic.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'png.pngtree.com',
       },
     ],
   },
@@ -46,6 +54,7 @@ const nextConfig = {
   sassOptions: {
     includePaths: ['styles'],
   },
+  reactStrictMode: false,
 };
 
 export default nextConfig;

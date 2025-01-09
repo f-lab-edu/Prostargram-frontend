@@ -4,16 +4,17 @@ import { useRouter } from 'next/navigation';
 import Typo from '@/components/common/Typo';
 import { compactTimeFormatter } from '@/utils/formatter';
 import clsx from 'clsx';
-import { MainFeed } from '../../types/feed';
 import styles from './FeedContentBox.module.scss';
 
 type FeedContentBoxProps = {
-  feed: MainFeed;
+  feed: Feed.FeedData;
+  setDetailFeedId: (feedId: number) => void;
 };
-const FeedContentBox = ({ feed }: FeedContentBoxProps) => {
+const FeedContentBox = ({ feed, setDetailFeedId }: FeedContentBoxProps) => {
   const router = useRouter();
 
   const onClickMoreButton = () => {
+    setDetailFeedId(feed.post.postId);
     if (feed.post.postType === 'BASIC') {
       router.push('?cf=1');
     }

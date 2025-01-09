@@ -1,17 +1,17 @@
-import { MainFeed } from '../../types/feed';
 import FeedContentBox from '../FeedContentBox/FeedContentBox';
 import FeedCountBox from '../FeedCountBox/FeedCountBox';
 import styles from './FeedBottom.module.scss';
 
 type FeedBottomProps = {
-  feed: MainFeed;
+  feed: Feed.FeedData;
+  setDetailFeedId: (feedId: number) => void;
 };
 
-const FeedBottom = ({ feed }: FeedBottomProps) => {
+const FeedBottom = ({ feed, setDetailFeedId }: FeedBottomProps) => {
   return (
     <div className={styles.feed_bottom}>
-      <FeedCountBox post={feed.post} />
-      <FeedContentBox feed={feed} />
+      <FeedCountBox setDetailFeedId={setDetailFeedId} post={feed.post} />
+      <FeedContentBox setDetailFeedId={setDetailFeedId} feed={feed} />
     </div>
   );
 };

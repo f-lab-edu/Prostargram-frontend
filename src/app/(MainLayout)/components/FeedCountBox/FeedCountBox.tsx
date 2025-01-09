@@ -3,18 +3,19 @@
 import { useRouter } from 'next/navigation';
 import MessageIcon from '@/assets/icons/message.svg';
 import { digitNumberFormatter } from '@/utils/formatter';
-import { Post } from '../../types/feed';
 import LikeButton from '../LikeButton';
 import styles from './FeedCountBox.module.scss';
 
 type FeedCountBoxProps = {
-  post: Post;
+  post: Feed.BasicPost | Feed.DebatePost | Feed.PollPost;
+  setDetailFeedId: (feedId: number) => void;
 };
 
-const FeedCountBox = ({ post }: FeedCountBoxProps) => {
+const FeedCountBox = ({ post, setDetailFeedId }: FeedCountBoxProps) => {
   const router = useRouter();
 
   const onClickMessageIcon = () => {
+    setDetailFeedId(post.postId);
     if (post.postType === 'BASIC') {
       router.push('?cf=1');
     }
