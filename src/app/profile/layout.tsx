@@ -2,7 +2,7 @@
 
 import { ReactNode, useEffect, useState } from 'react';
 
-import { getProfile } from '@/api/my';
+import { getProfile } from '@/api/profile/apis';
 import { UserType } from './types/my';
 import Mypage from './components/Mypage';
 

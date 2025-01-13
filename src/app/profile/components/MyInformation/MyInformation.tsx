@@ -4,38 +4,55 @@ import { useState } from 'react';
 
 import If from '@/components/common/If';
 import Button from '@/components/common/Button';
+import { useProfileInfoMutation } from '@/api/profile/profileMutation';
 
 import styles from './MyInformation.module.scss';
 import MyEditInformation from './MyEditInformation';
 
-export interface MyInfoType {
-  nickname: string;
-  currentState: string;
-  description: string;
+export interface MyInfoType extends Record<string, string | boolean> {
+  username: string;
+  departmentName: string;
+  selfIntroduction: string;
 }
 
-interface MyInformationProps {
-  nickname: string;
-  currentState: string;
-  description: string;
+interface MyInformationProps extends MyInfoType {
   isMine: boolean;
 }
 
 const MyInformation = ({
-  nickname,
-  currentState,
-  description,
+  username,
+  departmentName,
+  selfIntroduction,
   isMine,
 }: MyInformationProps) => {
   const [isEdit, setIsEdit] = useState(false);
   const [myInfo, setMyInfo] = useState<MyInfoType>({
-    nickname,
-    currentState,
-    description,
+    username,
+    departmentName,
+    selfIntroduction,
   });
 
+  const { mutate: updateProfileInfo } = useProfileInfoMutation();
+
   const submitHandler = (nextInfo: MyInfoType) => {
-    setMyInfo(nextInfo);
+    const origin = Object.values(myInfo);
+    const next = Object.values(nextInfo);
+
+    const isSame = origin.every(
+      (originInfo, index) => originInfo === next[index],
+    );
+
+    if (isSame) {
+      setMyInfo(nextInfo);
+    } else {
+      updateProfileInfo(nextInfo, {
+        onSuccess: () => {
+          setMyInfo(nextInfo);
+        },
+      });
+    }
+
+    setIsEdit(false);
   };
 
   const toggleIsEdit = () => {
@@ -54,11 +71,11 @@ const MyInformation = ({
 
       <If.False>
         <div className={styles.nickname}>
-          <p>{myInfo.nickname}</p>
+          <p>{myInfo.username}</p>
           {isMine && <Button onClick={toggleIsEdit}>수정</Button>}
         </div>
-        <p className={styles.current_state}>{myInfo.currentState}</p>
-        <p className={styles.description}>{myInfo.description}</p>
+        <p className={styles.current_state}>{myInfo.departmentName}</p>
+        <p className={styles.description}>{myInfo.selfIntroduction}</p>
       </If.False>
     </If>
   );

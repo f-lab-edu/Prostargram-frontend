@@ -1,4 +1,4 @@
-import { getProfile } from '@/api/my';
+import { getProfile } from '@/api/profile/apis';
 import { useAddInterest, useRemoveInterest } from '@/api/mutations/info';
 import { getUserId } from '@/utils/manageToken';
 import { requestPromiseAll } from '@/utils/asyncLogic';

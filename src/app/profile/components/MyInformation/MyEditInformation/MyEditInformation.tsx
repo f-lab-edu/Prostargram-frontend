@@ -2,6 +2,7 @@
 
 import { ChangeEvent, useState } from 'react';
 
+import { useConfirmUsernameDuplicate } from '@/api/mutations/sign-up';
 import Button from '@/components/common/Button';
 import type { MyInfoType } from '../MyInformation';
 
@@ -21,26 +22,31 @@ const MyEditInformation = ({
   const [isConfirmDuplicate, setIsConfirmDuplicate] = useState<boolean>(true);
   const [nextMyInfo, setNextMyInfo] = useState<MyInfoType>(myInfo);
 
+  const { mutate: checkIsDuplicateUsername } = useConfirmUsernameDuplicate();
+
   const checkDuplicate = () => {
-    setIsConfirmDuplicate(true);
+    checkIsDuplicateUsername(nextMyInfo.username, {
+      onSuccess: (res) => {
+        setIsConfirmDuplicate(res.isSuccess);
+      },
+    });
   };
 
   const changeHandler = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { value } = e.target;
-    const target = e.target.name as keyof MyInfoType;
+    const targetInputName = e.target.name as keyof MyInfoType;
 
-    if (target === 'nickname') {
-      setIsConfirmDuplicate(false);
+    if (targetInputName === 'username') {
+      setIsConfirmDuplicate(myInfo.username === value);
     }
 
-    setNextMyInfo({ ...myInfo, [target]: value });
+    setNextMyInfo({ ...myInfo, [targetInputName]: value });
   };
 
-  const confirmmMyInfoHandler = () => {
-    if (isConfirmDuplicate) {
-      toggleEditHandler();
+  const confirmMyInfoHandler = () => {
+    if (nextMyInfo.username === myInfo.username || isConfirmDuplicate) {
       submitHandler(nextMyInfo);
       return;
     }
@@ -54,13 +60,13 @@ const MyEditInformation = ({
         <div className={styles.left}>
           <input
             className={styles.nickname}
-            name="nickname"
-            value={nextMyInfo.nickname}
+            name="username"
+            value={nextMyInfo.username || ''}
             onChange={changeHandler}
           />
           <input
-            name="currentState"
-            value={nextMyInfo.currentState}
+            name="departmentName"
+            value={nextMyInfo.departmentName || ''}
             onChange={changeHandler}
           />
         </div>
@@ -75,18 +81,20 @@ const MyEditInformation = ({
       </div>
       <div className={styles.textarea_wrapper}>
         <textarea
-          name="description"
-          value={nextMyInfo.description}
+          name="selfIntroduction"
+          value={nextMyInfo.selfIntroduction || ''}
           onChange={changeHandler}
           maxLength={200}
         />
         <p>
-          <span className="gray">{nextMyInfo.description?.length || 0}</span> /
-          200
+          <span className="gray">
+            {nextMyInfo.selfIntroduction?.length || 0}
+          </span>{' '}
+          / 200
         </p>
       </div>
       <div className={styles.confirm_button_wrapper}>
-        <Button onClick={confirmmMyInfoHandler}>확인</Button>
+        <Button onClick={confirmMyInfoHandler}>확인</Button>
         <Button fill="gray" onClick={toggleEditHandler}>
           취소
         </Button>

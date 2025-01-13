@@ -79,14 +79,14 @@ const MyPage = ({ children, myData }: MyPageProps) => {
         <div className={styles.my_information_wrapper}>
           <MyInformation
             isMine={isMine}
-            nickname={userName}
-            currentState={departmentName}
-            description={selfIntroduction}
+            username={userName}
+            departmentName={departmentName}
+            selfIntroduction={selfIntroduction}
           />
         </div>
       </div>
       <div className={styles.display_flex}>
-        <FeedCount title="피드 작성 개수" href="/my">
+        <FeedCount title="피드 작성 개수" href="/profile">
           {formattedFeedCounts}
         </FeedCount>
         <div className={styles.my_link_wrapper}>

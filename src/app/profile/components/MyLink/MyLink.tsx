@@ -2,9 +2,9 @@
 
 import { ChangeEvent, useState } from 'react';
 
-import { updateMyLinks } from '@/api/my';
 import If from '@/components/common/If';
 import Button from '@/components/common/Button';
+import useSocialAccountsServerRequest from '@/hooks/useSocialAccountsServerRequests';
 import EditMyLinkList from './EditMyLinkList';
 import ReadOnlyMyLinkList from './ReadOnlyMyLinkList';
 
@@ -15,9 +15,19 @@ interface MyLinkProps {
   isMine: boolean;
 }
 
+const makeLinkArrayExcludeB = <T,>(A: T[], B: T[]) =>
+  A.filter((link) => !B.includes(link)).map((link) => ({
+    link,
+  }));
+
 const MyLink = ({ links, isMine }: MyLinkProps) => {
   const [myLinks, setMyLinks] = useState(links);
   const [isEdit, setIsEdit] = useState<boolean>(false);
+
+  const {
+    requestSocialAccountSaveSocialAccounts,
+    requestSocialAccountRemoveSocialAccounts,
+  } = useSocialAccountsServerRequest();
 
   const toggleEdit = () => setIsEdit((prev) => !prev);
 
@@ -25,13 +35,24 @@ const MyLink = ({ links, isMine }: MyLinkProps) => {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
-    const submittedValue = [...formData.values()].filter((v) => Boolean(v));
+    const currentLinks = [...formData.values()]
+      .filter((v) => Boolean(v))
+      .map((link) => link.toString());
 
-    const response = await updateMyLinks(submittedValue);
-    if (response.result) {
-      setMyLinks(response.result);
-    }
+    const needToAddLinks = makeLinkArrayExcludeB(currentLinks, links);
+    const needToRemoveLinks = makeLinkArrayExcludeB(links, currentLinks);
 
+    requestSocialAccountSaveSocialAccounts({
+      targetSocialAccounts: needToAddLinks,
+      onError: () => setMyLinks(links),
+    });
+
+    requestSocialAccountRemoveSocialAccounts({
+      targetSocialAccounts: needToRemoveLinks,
+      onError: () => setMyLinks(links),
+    });
+
+    setMyLinks(currentLinks);
     toggleEdit();
   };
 

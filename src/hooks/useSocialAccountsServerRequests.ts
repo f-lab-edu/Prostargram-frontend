@@ -9,7 +9,7 @@ type SocialAccountType = {
   link: string;
 };
 
-type RequestSaveInterestType = {
+type RequestSocialAccountType = {
   targetSocialAccounts: SocialAccountType[];
   onSuccess?: () => void;
   onError?: () => void;
@@ -27,7 +27,7 @@ const useSocialAccountsServerRequest = () => {
     onSuccess,
     onError,
     successMessage,
-  }: RequestSaveInterestType) => {
+  }: RequestSocialAccountType) => {
     const successfulSocialRequests: SocialAccountType[] = [];
 
     try {
@@ -67,8 +67,58 @@ const useSocialAccountsServerRequest = () => {
       }
     }
   };
+  const requestSocialAccountRemoveSocialAccounts = async ({
+    targetSocialAccounts,
+    onSuccess,
+    onError,
+    successMessage,
+  }: RequestSocialAccountType) => {
+    const successfulSocialAccountRequests: SocialAccountType[] = [];
 
-  return { requestSocialAccountSaveSocialAccounts };
+    try {
+      await requestPromiseAll<SocialAccountType>(
+        targetSocialAccounts,
+        async ({ link: socialAccountUrl }) =>
+          removeSocialAccount(
+            { socialAccountUrl },
+            {
+              onSuccess: () => {
+                successfulSocialAccountRequests.push({
+                  link: socialAccountUrl,
+                });
+              },
+            },
+          ),
+      );
+
+      if (successMessage) {
+        addToast({
+          type: 'success',
+          message: successMessage,
+        });
+      }
+
+      if (onSuccess) {
+        onSuccess();
+      }
+    } catch (error) {
+      await requestPromiseAll<SocialAccountType>(
+        successfulSocialAccountRequests,
+        async ({ link: socialAccountUrl }) => {
+          saveSocialAccount({ socialAccountUrl });
+        },
+      );
+
+      if (onError) {
+        onError();
+      }
+    }
+  };
+
+  return {
+    requestSocialAccountSaveSocialAccounts,
+    requestSocialAccountRemoveSocialAccounts,
+  };
 };
 
 export default useSocialAccountsServerRequest;
