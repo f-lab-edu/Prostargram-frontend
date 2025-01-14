@@ -1,6 +1,6 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import {
   compactNumberFormatter,
@@ -23,19 +23,23 @@ interface MyPageProps {
   slug?: string;
 }
 
+type MyPageSearchParamsType = 'followings' | 'followers' | 'feeds';
+
 const isFollow = false;
 const isMine = true;
 
-type MyPageSearchParamsType = 'followings' | 'followers' | 'feeds';
+const paramCandidates = ['followers', 'followings', 'feeds'];
 
 const MyPage = ({ slug, userId }: MyPageProps) => {
+  const router = useRouter();
   const params = (new URLSearchParams(useSearchParams()).get('page') ||
     'feeds') as MyPageSearchParamsType;
   const { data: myData } = useGetProfileInformation(userId, [userId]);
 
   const url = slug ? `/profile/${slug}` : '/profile';
 
-  if (!myData || !myData.result) {
+  if (!myData || !myData.result || !paramCandidates.includes(params)) {
+    router.replace(url);
     return <p>데이터가 없음</p>;
   }
 
