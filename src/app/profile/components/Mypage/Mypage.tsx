@@ -4,8 +4,8 @@ import {
   compactNumberFormatter,
   digitNumberFormatter,
 } from '@/utils/formatter';
+import { useGetProfileInformation } from '@/api/profile/profileQuery';
 
-import { UserType } from '../../types/my';
 import Follow from '../Follow';
 import MyLink from '../MyLink';
 import Profile from '../Profile';
@@ -17,13 +17,19 @@ import styles from './Mypage.module.scss';
 
 interface MyPageProps {
   children?: ReactNode;
-  myData: UserType;
+  userId: number;
 }
 
 const isFollow = false;
 const isMine = true;
 
-const MyPage = ({ children, myData }: MyPageProps) => {
+const MyPage = ({ children, userId }: MyPageProps) => {
+  const { data: myData } = useGetProfileInformation(userId, [userId]);
+
+  if (!myData || !myData.result) {
+    return <p>데이터가 없음</p>;
+  }
+
   const {
     followerCount,
     followingCount,
@@ -34,7 +40,7 @@ const MyPage = ({ children, myData }: MyPageProps) => {
     departmentName,
     selfIntroduction,
     profileImgUrl,
-  } = myData;
+  } = myData.result;
 
   const formattedFollowers = compactNumberFormatter(
     followerCount ?? 0,

@@ -1,9 +1,8 @@
 'use client';
 
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode } from 'react';
 
-import { getProfile } from '@/api/profile/apis';
-import { UserType } from './types/my';
+import { getUserId } from '@/utils/manageToken';
 import Mypage from './components/Mypage';
 
 import styles from './layout.module.scss';
@@ -13,20 +12,11 @@ interface MypageLayoutProps {
 }
 
 const MypageLayout = ({ children }: MypageLayoutProps) => {
-  const [userData, setUserData] = useState<UserType | undefined>();
-
-  useEffect(() => {
-    (async function () {
-      const response = await getProfile();
-      if (response.isSuccess) {
-        setUserData(response.result);
-      }
-    })();
-  }, []);
+  const userId = getUserId();
 
   return (
     <div className={styles.container}>
-      {userData && <Mypage myData={userData}>{children}</Mypage>}
+      <Mypage userId={userId}>{children}</Mypage>
     </div>
   );
 };

@@ -69,7 +69,7 @@ const useInterestsServerRequests = () => {
         onSuccess();
       }
     } catch (error) {
-      const profileResponse = await getProfile();
+      const profileResponse = await getProfile(userId);
       if (profileResponse.isSuccess && profileResponse.result) {
         const { interests } = profileResponse.result;
 
