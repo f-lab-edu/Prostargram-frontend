@@ -33,7 +33,7 @@ const Profile = ({ profileUrl, isMine, isFollow }: ProfileProps) => {
     updateProfile(
       { formData },
       {
-        onSuccess: () => toggleEdit,
+        onSuccess: () => toggleEdit(),
       },
     );
   };
