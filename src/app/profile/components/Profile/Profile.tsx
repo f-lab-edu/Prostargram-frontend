@@ -1,9 +1,10 @@
 'use client';
 
 import Image from 'next/image';
-import { ChangeEvent, useRef, useState } from 'react';
+import { ChangeEvent, FormEvent, useRef, useState } from 'react';
 
 import If from '@/components/common/If';
+import { useProfileImageMutation } from '@/api/profile/profileMutation';
 
 import DefaultAvatar from '@/assets/icons/default_avatar.svg';
 import ProfileEditButton from './ProfileEditButton';
@@ -20,14 +21,21 @@ interface ProfileProps {
 const Profile = ({ profileUrl, isMine, isFollow }: ProfileProps) => {
   const [profile, setProfile] = useState<string | undefined>(profileUrl);
   const [isEdit, setIsEdit] = useState<boolean>(false);
-  const [file, setFile] = useState<File>();
   const fileRef = useRef<HTMLInputElement>(null);
+
+  const { mutate: updateProfile } = useProfileImageMutation();
 
   const toggleEdit = () => setIsEdit((prev) => !prev);
 
-  const saveHandler = () => {
-    toggleEdit();
-    console.log(file);
+  const submitHandler = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    updateProfile(
+      { formData },
+      {
+        onSuccess: () => toggleEdit,
+      },
+    );
   };
 
   const cancelHandler = () => {
@@ -48,60 +56,52 @@ const Profile = ({ profileUrl, isMine, isFollow }: ProfileProps) => {
         const result = data.target?.result;
         if (typeof result === 'string') {
           setProfile(result);
-          setFile(profileObject);
         }
       };
     }
   };
 
   return (
-    <div className={styles.profile_content}>
+    <form className={styles.profile_content} onSubmit={submitHandler}>
       <div className={styles.profile_image}>
-        <If condition={isEdit}>
-          <If.True>
+        {isEdit && (
+          <>
             <input
-              type="file"
               ref={fileRef}
               onChange={changeHandler}
+              type="file"
+              name="profileImage"
+              accept="image/png,image/jpg,image/jpeg"
               style={{ display: 'none' }}
             />
-            <If condition={Boolean(profile)}>
-              <If.True>
-                <Image
-                  src={profile!}
-                  width="150"
-                  height="150"
-                  alt="profile-image"
-                  onClick={clickHandler}
-                  priority
-                />
-              </If.True>
-              <If.False>
-                <DefaultAvatar
-                  width="150"
-                  height="150"
-                  onClick={clickHandler}
-                />
-              </If.False>
-            </If>
-          </If.True>
-        </If>
-        <If.False>
-          <If condition={Boolean(profile)}>
-            <If.True>
+            {profile ? (
               <Image
-                src={profile!}
+                src={profile}
                 width="150"
                 height="150"
-                alt="profile-image"
+                alt="profile-image1"
+                onClick={clickHandler}
                 priority
               />
-            </If.True>
-            <If.False>
-              <DefaultAvatar width="150" height="150" />
-            </If.False>
-          </If>
-        </If.False>
+            ) : (
+              <DefaultAvatar width="150" height="150" onClick={clickHandler} />
+            )}
+          </>
+        )}
+
+        {!isEdit &&
+          (profile ? (
+            <Image
+              src={profile}
+              width="150"
+              height="150"
+              alt="profile-image2"
+              onClick={clickHandler}
+              priority
+            />
+          ) : (
+            <DefaultAvatar width="150" height="150" onClick={clickHandler} />
+          ))}
       </div>
 
       <div className={styles.profile_button_wrapper}>
@@ -109,7 +109,6 @@ const Profile = ({ profileUrl, isMine, isFollow }: ProfileProps) => {
           <If.True>
             <ProfileEditButton
               isEdit={isEdit}
-              onSave={saveHandler}
               onCancel={cancelHandler}
               onToggle={toggleEdit}
             />
@@ -119,7 +118,7 @@ const Profile = ({ profileUrl, isMine, isFollow }: ProfileProps) => {
           </If.False>
         </If>
       </div>
-    </div>
+    </form>
   );
 };
 

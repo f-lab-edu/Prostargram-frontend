@@ -1,6 +1,6 @@
 import { UseMutationOptions, useMutation } from '@tanstack/react-query';
 
-import { updateProfileInfo } from './apis';
+import { updateProfileImage, updateProfileInfo } from './apis';
 import { HttpSuccessType, ResponseError } from '../httpRequest';
 
 const useProfileInfoMutation = (
@@ -20,4 +20,19 @@ const useProfileInfoMutation = (
   });
 };
 
-export { useProfileInfoMutation };
+const useProfileImageMutation = (
+  options?: UseMutationOptions<
+    HttpSuccessType<unknown>,
+    ResponseError,
+    {
+      formData: FormData;
+    }
+  >,
+) => {
+  return useMutation({
+    mutationFn: updateProfileImage,
+    ...options,
+  });
+};
+
+export { useProfileInfoMutation, useProfileImageMutation };

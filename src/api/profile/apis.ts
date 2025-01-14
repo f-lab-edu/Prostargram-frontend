@@ -28,9 +28,7 @@ export const updateProfileInfo = async (data: {
   return result;
 };
 
-export const updateProfileImage = async (data: {
-  formData: FormDataEntryValue;
-}) => {
+export const updateProfileImage = async (data: { formData: FormData }) => {
   const userId = getUserId();
 
   const result = await authInstance({
