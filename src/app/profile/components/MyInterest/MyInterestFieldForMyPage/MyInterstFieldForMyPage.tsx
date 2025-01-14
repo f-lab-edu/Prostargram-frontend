@@ -1,12 +1,12 @@
 'use client';
 
 import {
+  useRef,
   useState,
+  useEffect,
   ChangeEvent,
   KeyboardEvent,
   HTMLAttributes,
-  useRef,
-  useEffect,
 } from 'react';
 
 import { REG_EXP } from '@/constants/regExp';
@@ -25,8 +25,8 @@ const MyInterestFieldForMyPage = ({
   addInterestHandler,
   ...props
 }: MyInterestFieldForMyPageProps) => {
-  const [isInterestEdit, setInterestEdit] = useState<boolean>(false);
   const [word, setWord] = useState<string>('');
+  const [isInterestEdit, setInterestEdit] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const inputWidth = calculateWidth(word.length);
@@ -72,7 +72,7 @@ const MyInterestFieldForMyPage = ({
     const next = e.target.value.trim();
 
     if (REG_EXP.ONLY_ENG_NUM.test(next)) {
-      setWord(() => next);
+      setWord(() => next.toLocaleLowerCase());
     }
   };
 
