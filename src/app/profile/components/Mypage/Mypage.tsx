@@ -1,4 +1,6 @@
-import { ReactNode } from 'react';
+'use client';
+
+import { useSearchParams } from 'next/navigation';
 
 import {
   compactNumberFormatter,
@@ -11,20 +13,27 @@ import MyLink from '../MyLink';
 import Profile from '../Profile';
 import FeedCount from '../FeedCount';
 import MyInterest from '../MyInterest';
+import FollowList from '../FollowList';
 import MyInformation from '../MyInformation';
 
 import styles from './Mypage.module.scss';
 
 interface MyPageProps {
-  children?: ReactNode;
   userId: number;
+  slug?: string;
 }
 
 const isFollow = false;
 const isMine = true;
 
-const MyPage = ({ children, userId }: MyPageProps) => {
+type MyPageSearchParamsType = 'followings' | 'followers' | 'feeds';
+
+const MyPage = ({ slug, userId }: MyPageProps) => {
+  const params = (new URLSearchParams(useSearchParams()).get('page') ||
+    'feeds') as MyPageSearchParamsType;
   const { data: myData } = useGetProfileInformation(userId, [userId]);
+
+  const url = slug ? `/profile/${slug}` : '/profile';
 
   if (!myData || !myData.result) {
     return <p>데이터가 없음</p>;
@@ -74,10 +83,10 @@ const MyPage = ({ children, userId }: MyPageProps) => {
             />
           </div>
           <div className={styles.display_flex}>
-            <Follow title="팔로워" href="/profile/follower">
+            <Follow title="팔로워" href={`${url}?page=followers`}>
               {formattedFollowers}
             </Follow>
-            <Follow title="팔로잉" href="/profile/following">
+            <Follow title="팔로잉" href={`${url}?page=followings`}>
               {formattedFollowings}
             </Follow>
           </div>
@@ -92,7 +101,7 @@ const MyPage = ({ children, userId }: MyPageProps) => {
         </div>
       </div>
       <div className={styles.display_flex}>
-        <FeedCount title="피드 작성 개수" href="/profile">
+        <FeedCount title="피드 작성 개수" href={url}>
           {formattedFeedCounts}
         </FeedCount>
         <div className={styles.my_link_wrapper}>
@@ -104,7 +113,13 @@ const MyPage = ({ children, userId }: MyPageProps) => {
           <p>관심사</p>
           <MyInterest isMine={isMine} interests={interestsWithoutHash} />
         </div>
-        <div className={styles.changeable_area}>{children}</div>
+        <div className={styles.changeable_area}>
+          {params === 'feeds' ? (
+            <div>피드</div>
+          ) : (
+            <FollowList userId={userId} type={params} />
+          )}
+        </div>
       </div>
     </>
   );

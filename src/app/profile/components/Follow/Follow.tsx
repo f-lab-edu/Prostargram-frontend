@@ -13,7 +13,7 @@ const Follow = ({ title, href, children }: FollowProps) => {
   return (
     <div className={styles.follow}>
       <p>{title}</p>
-      <Link href={href}>
+      <Link href={href} scroll={false}>
         <p className={styles.text_blue}>{children}</p>
       </Link>
     </div>

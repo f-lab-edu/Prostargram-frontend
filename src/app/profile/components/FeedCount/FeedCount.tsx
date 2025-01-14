@@ -13,7 +13,7 @@ const FeedCount = ({ title, href, children }: FeedCountProps) => {
   return (
     <div className={styles.feed}>
       <p>{title}</p>
-      <Link href={href}>
+      <Link href={href} scroll={false}>
         <p className={styles.text_blue}>{children}</p>
       </Link>
     </div>
