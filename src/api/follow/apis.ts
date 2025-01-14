@@ -33,4 +33,13 @@ const getFollowingList = (userId: number) => {
   return res;
 };
 
-export { followUser, unfollowUser, getFollowingList };
+const getFollowerList = (userId: number) => {
+  const res = authInstance<FollowingRes[]>({
+    method: 'get',
+    url: `/users/${userId}/follows/all`,
+  });
+  return res;
+};
+
+export { followUser, unfollowUser, getFollowingList, getFollowerList };
+export type { FollowingRes };
