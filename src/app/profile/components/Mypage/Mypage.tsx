@@ -1,11 +1,13 @@
 'use client';
 
+import { useMemo } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import {
   compactNumberFormatter,
   digitNumberFormatter,
 } from '@/utils/formatter';
+import { getUserId } from '@/utils/manageToken';
 import { useGetProfileInformation } from '@/api/profile/profileQuery';
 
 import Follow from '../Follow';
@@ -26,7 +28,7 @@ interface MyPageProps {
 type MyPageSearchParamsType = 'followings' | 'followers' | 'feeds';
 
 const isFollow = false;
-const isMine = true;
+// const isMine = true;
 
 const paramCandidates = ['followers', 'followings', 'feeds'];
 
@@ -38,11 +40,15 @@ const MyPage = ({ slug, userId }: MyPageProps) => {
 
   const url = slug ? `/profile/${slug}` : '/profile';
 
-  if (!myData || !myData.result || !paramCandidates.includes(params)) {
+  const isMine = useMemo(() => {
+    const currentUserId = getUserId();
+    return currentUserId === userId;
+  }, [userId]);
+
+  if (!myData || !myData?.result || !paramCandidates.includes(params)) {
     router.replace(url);
     return <p>데이터가 없음</p>;
   }
-
   const {
     followerCount,
     followingCount,
@@ -81,6 +87,7 @@ const MyPage = ({ slug, userId }: MyPageProps) => {
         <div className={styles.profile_and_follow_wrapper}>
           <div className={styles.profile_wrapper}>
             <Profile
+              userId={userId}
               isFollow={isFollow}
               isMine={isMine}
               profileUrl={profileImgUrl}

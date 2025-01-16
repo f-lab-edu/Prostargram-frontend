@@ -13,12 +13,13 @@ import ProfileFollowButton from './ProfileFollowButton';
 import styles from './Profile.module.scss';
 
 interface ProfileProps {
+  userId: number;
   profileUrl?: string;
   isFollow: boolean;
   isMine: boolean;
 }
 
-const Profile = ({ profileUrl, isMine, isFollow }: ProfileProps) => {
+const Profile = ({ userId, profileUrl, isMine, isFollow }: ProfileProps) => {
   const [profile, setProfile] = useState<string | undefined>(profileUrl);
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -114,7 +115,7 @@ const Profile = ({ profileUrl, isMine, isFollow }: ProfileProps) => {
             />
           </If.True>
           <If.False>
-            <ProfileFollowButton isFollow={isFollow} />
+            <ProfileFollowButton userId={userId} isFollow={isFollow} />
           </If.False>
         </If>
       </div>

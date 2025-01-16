@@ -48,7 +48,7 @@ const FollowList = ({ type, userId }: FollowListProps) => {
       <ul className={styles.profile_list}>
         {data.result.map(
           ({ userId: followerId, userName, departmentName, profileImgUrl }) => (
-            <li className={styles.container}>
+            <li className={styles.container} key={followerId}>
               <div className={styles.profile_wrapper}>
                 <div className={styles.profile_image}>
                   {profileImgUrl ? (

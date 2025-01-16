@@ -4,10 +4,11 @@ import { useState } from 'react';
 
 import If from '@/components/common/If';
 import Button from '@/components/common/Button';
+import { getUserId } from '@/utils/manageToken';
+import { useFollowUser, useUnfollowUser } from '@/api/follow/followMutations';
 
 import FollowIcon from '@/assets/icons/follow.svg';
 import UnfollowIcon from '@/assets/icons/unfollow.svg';
-import { useFollowUser, useUnfollowUser } from '@/api/follow/followMutations';
 
 interface ProfileFollowButtonProps {
   userId?: number;
@@ -21,14 +22,15 @@ const ProfileFollowButton = ({
   size = 'large',
 }: ProfileFollowButtonProps) => {
   const [followStatus, setFollowStatus] = useState(isFollow);
+  const currentUserId = getUserId();
 
   // TODO: fromUserId 변경
   const { mutate: followUserMutation } = useFollowUser({
-    fromUserId: 1,
+    fromUserId: currentUserId,
     toUserId: userId!,
   });
   const { mutate: unfollowUserMutation } = useUnfollowUser({
-    fromUserId: 1,
+    fromUserId: currentUserId,
     toUserId: userId!,
   });
 

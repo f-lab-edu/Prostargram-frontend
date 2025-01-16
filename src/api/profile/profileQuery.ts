@@ -5,7 +5,7 @@ import { getProfile } from './apis';
 import { HttpSuccessType, ResponseError } from '../httpRequest';
 
 const PROPFILE_QUERY_KEYS = {
-  DEFAULT: 'defualt_profile',
+  DEFAULT: 'default_profile',
   PROFILE: (keys: (string | number)[]) =>
     [PROPFILE_QUERY_KEYS.DEFAULT, ...keys] as const,
 };
