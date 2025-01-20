@@ -1,3 +1,20 @@
+interface SocialAccountType {
+  iconUrl: string | null;
+  socialCountId: number;
+  socialAccountUrl: string;
+}
+
+interface UserInterestType {
+  hashTagId: number;
+  hashTagName: string;
+}
+
+type MakeOptional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
+type UserInterestWithOptionalHashTagIdType = MakeOptional<
+  UserInterestType,
+  'hashTagId'
+>;
+
 interface UserType {
   userId: number;
   profileImgUrl: string;
@@ -7,12 +24,13 @@ interface UserType {
   followerCount: number;
   followingCount: number;
   postCount: number;
-  socialAccounts: {
-    iconUrl: string | null;
-    socialCountId: number;
-    socialAccountUrl: string;
-  }[];
-  interests: string[];
+  socialAccounts: SocialAccountType[];
+  interests: UserInterestType[];
 }
 
-export type { UserType };
+export type {
+  UserType,
+  SocialAccountType,
+  UserInterestType,
+  UserInterestWithOptionalHashTagIdType,
+};
