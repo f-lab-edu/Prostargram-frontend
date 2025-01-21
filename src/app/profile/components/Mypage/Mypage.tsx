@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { redirect, useSearchParams } from 'next/navigation';
 
 import {
   compactNumberFormatter,
@@ -33,10 +33,11 @@ const isFollow = false;
 const paramCandidates = ['followers', 'followings', 'feeds'];
 
 const MyPage = ({ slug, userId }: MyPageProps) => {
-  const router = useRouter();
   const params = (new URLSearchParams(useSearchParams()).get('page') ||
     'feeds') as MyPageSearchParamsType;
-  const { data: myData } = useGetProfileInformation(userId, [userId]);
+  const { data: myData, isLoading } = useGetProfileInformation(userId, [
+    userId,
+  ]);
 
   const url = slug ? `/profile/${slug}` : '/profile';
 
@@ -45,9 +46,13 @@ const MyPage = ({ slug, userId }: MyPageProps) => {
     return currentUserId === userId;
   }, [userId]);
 
+  if (isLoading) {
+    return <p>로딩 중....</p>;
+  }
+
   if (!myData || !myData?.result || !paramCandidates.includes(params)) {
-    router.replace(url);
-    return <p>데이터가 없음</p>;
+    redirect('/auth');
+    return null;
   }
   const {
     followerCount,

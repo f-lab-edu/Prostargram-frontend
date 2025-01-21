@@ -14,6 +14,14 @@ export const useGetFollowingList = (userId: number, options = {}) => {
   });
 };
 
+export const useGetFollowerListByUserId = (userId: number, options = {}) => {
+  return useQuery({
+    queryKey: FOLLOWINGS_QUERY_KEYS.followings,
+    queryFn: () => getFollowerList(userId),
+    ...options,
+  });
+};
+
 export const useGetFollowerList = (userId: number, options = {}) => {
   return useQuery({
     queryKey: FOLLOWINGS_QUERY_KEYS.followings,

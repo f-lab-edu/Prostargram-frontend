@@ -6,7 +6,7 @@ import { UseQueryResult } from '@tanstack/react-query';
 import { FollowingRes } from '@/api/follow/apis';
 import { HttpSuccessType } from '@/api/httpRequest';
 import {
-  useGetFollowerList,
+  useGetFollowerListByUserId,
   useGetFollowingList,
 } from '@/api/follow/followQueries';
 import ProfileFollowButton from '../Profile/ProfileFollowButton';
@@ -26,7 +26,7 @@ const followApi: Record<
   ) => UseQueryResult<HttpSuccessType<FollowingRes[]>, Error>
 > = {
   followings: useGetFollowingList,
-  followers: useGetFollowerList,
+  followers: useGetFollowerListByUserId,
 };
 
 const FollowList = ({ type, userId }: FollowListProps) => {
