@@ -19,6 +19,7 @@ import FollowList from '../FollowList';
 import MyInformation from '../MyInformation';
 
 import styles from './Mypage.module.scss';
+import MyFeeds from '../MyFeeds/MyFeeds';
 
 interface MyPageProps {
   userId: number;
@@ -131,7 +132,7 @@ const MyPage = ({ slug, userId }: MyPageProps) => {
         </div>
         <div className={styles.changeable_area}>
           {params === 'feeds' ? (
-            <div>피드</div>
+            <MyFeeds userId={userId} />
           ) : (
             <FollowList userId={userId} type={params} />
           )}

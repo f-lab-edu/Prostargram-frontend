@@ -1,13 +1,15 @@
 import { UseQueryOptions, useQuery } from '@tanstack/react-query';
 
-import { UserType } from '@/app/profile/types/my';
-import { getProfile } from './apis';
+import { UserType } from '@/app/profile/types/profile';
+import { getMyFeeds, getProfile } from './apis';
 import { HttpSuccessType, ResponseError } from '../httpRequest';
 
 const PROPFILE_QUERY_KEYS = {
   DEFAULT: 'default_profile',
   PROFILE: (keys: (string | number)[]) =>
-    [PROPFILE_QUERY_KEYS.DEFAULT, ...keys] as const,
+    ['my_profile', PROPFILE_QUERY_KEYS.DEFAULT, ...keys] as const,
+  FEEDS: (keys: (string | number)[]) =>
+    ['feeds', PROPFILE_QUERY_KEYS.FEEDS, ...keys] as const,
 };
 
 const useGetProfileInformation = (
@@ -22,4 +24,15 @@ const useGetProfileInformation = (
   });
 };
 
-export { useGetProfileInformation };
+const useGetProfileFeeds = (
+  userId: number,
+  options?: UseQueryOptions<HttpSuccessType<unknown>, ResponseError>,
+) => {
+  return useQuery({
+    queryFn: () => getMyFeeds(userId),
+    queryKey: PROPFILE_QUERY_KEYS.FEEDS([userId]),
+    ...options,
+  });
+};
+
+export { useGetProfileInformation, useGetProfileFeeds };

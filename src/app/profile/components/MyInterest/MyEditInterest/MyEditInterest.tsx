@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 
 import If from '@/components/common/If';
 import Button from '@/components/common/Button';
-import { UserInterestWithOptionalHashTagIdType } from '@/app/profile/types/my';
+import { UserInterestWithOptionalHashTagIdType } from '@/app/profile/types/profile';
 
 import CircleCloseIcon from '@/assets/icons/circle-close-gray.svg';
 import MyInterestFieldForMyPage from '../MyInterestFieldForMyPage';

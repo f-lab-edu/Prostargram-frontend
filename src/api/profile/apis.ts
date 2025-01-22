@@ -1,11 +1,20 @@
 import { getUserId } from '@/utils/manageToken';
-import { UserType } from '@/app/profile/types/my';
+import { UserType } from '@/app/profile/types/profile';
 import { authInstance } from '../httpRequest';
 
 export const getProfile = async (userId: number) => {
   const result = await authInstance<UserType>({
     method: 'GET',
     url: `/users/${userId}/profile_page`,
+  });
+
+  return result;
+};
+
+export const getMyFeeds = async (userId: number) => {
+  const result = await authInstance({
+    method: 'GET',
+    url: `/users/${userId}/profile-feeds`,
   });
 
   return result;

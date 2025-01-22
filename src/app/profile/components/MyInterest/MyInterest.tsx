@@ -9,7 +9,7 @@ import MyEditInterest from './MyEditInterest';
 import {
   UserInterestType,
   UserInterestWithOptionalHashTagIdType,
-} from '../../types/my';
+} from '../../types/profile';
 
 import styles from './MyInterest.module.scss';
 
