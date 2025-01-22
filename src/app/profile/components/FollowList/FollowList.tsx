@@ -1,14 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { UseQueryResult } from '@tanstack/react-query';
-
-import { FollowingRes } from '@/api/follow/apis';
-import { HttpSuccessType } from '@/api/httpRequest';
-import {
-  useGetFollowerListByUserId,
-  useGetFollowingList,
-} from '@/api/follow/followQueries';
+import { useGetFollowList } from '@/api/follow/followQueries';
 import ProfileFollowButton from '../Profile/ProfileFollowButton';
 
 import styles from './FollowList.module.scss';
@@ -18,19 +11,11 @@ interface FollowListProps {
   userId: number;
 }
 
-const followApi: Record<
-  FollowListProps['type'],
-  (
-    userId: number,
-    options?: object,
-  ) => UseQueryResult<HttpSuccessType<FollowingRes[]>, Error>
-> = {
-  followings: useGetFollowingList,
-  followers: useGetFollowerListByUserId,
-};
-
 const FollowList = ({ type, userId }: FollowListProps) => {
-  const { data } = followApi[type](userId, {});
+  const { data } = useGetFollowList(
+    { userId, type },
+    { gcTime: 100_000_000, staleTime: 100_000_000 },
+  );
   const title = type === 'followers' ? '팔로워 페이지' : '팔로잉 페이지';
 
   if (!data || !data.result || data.result.length === 0) {

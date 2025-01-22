@@ -9,7 +9,7 @@ const PROPFILE_QUERY_KEYS = {
   PROFILE: (keys: (string | number)[]) =>
     ['my_profile', PROPFILE_QUERY_KEYS.DEFAULT, ...keys] as const,
   FEEDS: (keys: (string | number)[]) =>
-    ['feeds', PROPFILE_QUERY_KEYS.FEEDS, ...keys] as const,
+    ['feeds', PROPFILE_QUERY_KEYS.DEFAULT, ...keys] as const,
 };
 
 const useGetProfileInformation = (

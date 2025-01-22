@@ -25,35 +25,17 @@ interface FollowingRes {
   userName: string;
 }
 
-const getFollowingList = (userId: number) => {
+export type GetFollowListParamType = {
+  userId: number;
+  type: 'followings' | 'followers';
+};
+
+const getFollowList = ({ userId, type }: GetFollowListParamType) => {
   const res = authInstance<FollowingRes[]>({
     method: 'get',
-    url: `/users/${userId}/followings`,
+    url: `/users/${userId}/${type}`,
   });
   return res;
 };
-
-const getFollowerListByUserId = (userId: number) => {
-  const res = authInstance<FollowingRes[]>({
-    method: 'get',
-    url: `/users/${userId}/followers`,
-  });
-  return res;
-};
-
-const getFollowerList = (userId: number) => {
-  const res = authInstance<FollowingRes[]>({
-    method: 'get',
-    url: `/users/${userId}/follows/all`,
-  });
-  return res;
-};
-
-export {
-  followUser,
-  unfollowUser,
-  getFollowingList,
-  getFollowerListByUserId,
-  getFollowerList,
-};
+export { followUser, unfollowUser, getFollowList };
 export type { FollowingRes };

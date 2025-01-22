@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Typo from '@/components/common/Typo';
-import { useGetFollowingList } from '@/api/follow/followQueries';
+import { useGetFollowList } from '@/api/follow/followQueries';
 import styles from './FollowingList.module.scss';
 
 type FollowingListProps = {
@@ -11,7 +11,7 @@ type FollowingListProps = {
 };
 
 const FollowingList = ({ userId }: FollowingListProps) => {
-  const { data: followings } = useGetFollowingList(userId);
+  const { data: followings } = useGetFollowList({ userId, type: 'followings' });
   const router = useRouter();
 
   const moveUserProfilePage = (followingUserId: number) => {
