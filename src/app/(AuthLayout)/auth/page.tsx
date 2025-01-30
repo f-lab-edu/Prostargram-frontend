@@ -36,7 +36,7 @@ const LoginForm = () => {
     register,
     setError,
     handleSubmit,
-    formState: { errors, isDirty },
+    formState: { errors },
   } = useForm<IFormInput>({
     defaultValues: { email: '', password: '' },
     mode: 'onSubmit',
@@ -80,7 +80,7 @@ const LoginForm = () => {
           label="이메일"
           maxLength={30}
           placeholder="이메일을 입력해주세요."
-          errorMessage={isDirty ? errors.email?.message : undefined}
+          errorMessage={errors.email?.message}
           {...register('email', validator.email)}
         />
         <ToggleWrapper>
@@ -91,7 +91,7 @@ const LoginForm = () => {
               label="비밀번호"
               maxLength={20}
               placeholder="비밀번호를 입력해주세요."
-              errorMessage={isDirty ? errors.password?.message : undefined}
+              errorMessage={errors.password?.message}
               {...register('password', validator.password)}
               inputPostFix={
                 <button
