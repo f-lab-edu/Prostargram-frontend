@@ -76,10 +76,10 @@ const useSignupMutation = ({
       changeUsernameState(CONFIRM_STATES.CONFIRM);
       clearErrors('username');
     },
-    onError: (data) => {
+    onError: (err) => {
       setError('username', {
         type: 'validate',
-        message: data.message,
+        message: err.message,
       });
     },
   });

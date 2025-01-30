@@ -69,9 +69,50 @@ const SignupPage = () => {
     changeUsernameState,
   });
 
+  const isReadyToMoveNextStep =
+    !isEmailConfirmed ||
+    !isUsernameConfirmed ||
+    !isValid ||
+    isRequestSignupPending;
+
   const preventEnter = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
+    }
+  };
+
+  const sendEmailWithCode = () => {
+    requestCodeByEmail(watch('email'));
+  };
+
+  const keydownHandlerToSendEmail = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      sendEmailWithCode();
+    }
+  };
+
+  const requestToConfirmWithCode = () => {
+    requestConfirmCode({
+      email: watch('email'),
+      code: watch('confirm'),
+    });
+  };
+
+  const keydownHandlerToConfirmCode = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      requestToConfirmWithCode();
+    }
+  };
+
+  const requestToCheckIsDuplicateUsername = () => {
+    requestCheckDuplicateUsername(watch('username'));
+  };
+
+  const keydownHandlerToCheckIsDuplicateUsername = (
+    e: KeyboardEvent<HTMLInputElement>,
+  ) => {
+    if (e.key === 'Enter') {
+      requestToCheckIsDuplicateUsername();
     }
   };
 
@@ -136,7 +177,7 @@ const SignupPage = () => {
               placeholder="이메일을 입력해주세요."
               maxLength={30}
               disabled={!isEmailPending}
-              onKeyDown={preventEnter}
+              onKeyDown={keydownHandlerToSendEmail}
               state={(errors.email?.message && 'fail') || 'normal'}
               {...register('email', validators.email)}
             />
@@ -144,7 +185,7 @@ const SignupPage = () => {
               <Button
                 type="button"
                 className={styles.button}
-                onClick={() => requestCodeByEmail(watch('email'))}
+                onClick={sendEmailWithCode}
                 disabled={
                   !watch('email').length ||
                   !!errors.email?.message ||
@@ -193,18 +234,13 @@ const SignupPage = () => {
                 maxLength={7}
                 disabled={isEmailConfirmed}
                 state={(errors.confirm?.message && 'fail') || 'normal'}
-                onKeyDown={preventEnter}
+                onKeyDown={keydownHandlerToConfirmCode}
                 {...register('confirm', validators.confirm)}
               />
               <Button
                 type="button"
                 className={styles.button}
-                onClick={() =>
-                  requestConfirmCode({
-                    email: watch('email'),
-                    code: watch('confirm'),
-                  })
-                }
+                onClick={requestToConfirmWithCode}
                 disabled={
                   isRequestConfirmPending || isEmailRetry || isEmailConfirmed
                 }
@@ -272,13 +308,13 @@ const SignupPage = () => {
               maxLength={16}
               state={errors.username?.message ? 'fail' : 'normal'}
               disabled={isUsernameConfirmed}
-              onKeyDown={preventEnter}
+              onKeyDown={keydownHandlerToCheckIsDuplicateUsername}
               {...register('username', validators.username)}
             />
             <Button
               type="button"
               className={styles.button}
-              onClick={() => requestCheckDuplicateUsername(watch('username'))}
+              onClick={requestToCheckIsDuplicateUsername}
               disabled={
                 !watch('username')?.length ||
                 isDuplicateUsernamePending ||
@@ -291,10 +327,7 @@ const SignupPage = () => {
           </Field.Box>
           <Field.ErrorMessage>{errors.username?.message}</Field.ErrorMessage>
         </Field>
-        <Button
-          className={styles.next_button}
-          disabled={!isValid || isRequestSignupPending}
-        >
+        <Button className={styles.next_button} disabled={isReadyToMoveNextStep}>
           {isRequestSignupPending ? '...' : '다음 단계로'}
         </Button>
       </form>
