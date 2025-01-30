@@ -69,6 +69,14 @@ const SignupPage = () => {
     changeUsernameState,
   });
 
+  const [email, confirmCode, password, repassword, username] = watch([
+    'email',
+    'confirm',
+    'password',
+    'repassword',
+    'username',
+  ]);
+
   const isReadyToMoveNextStep =
     !isEmailConfirmed ||
     !isUsernameConfirmed ||
@@ -82,7 +90,7 @@ const SignupPage = () => {
   };
 
   const sendEmailWithCode = () => {
-    requestCodeByEmail(watch('email'));
+    requestCodeByEmail(email);
   };
 
   const keydownHandlerToSendEmail = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -93,8 +101,8 @@ const SignupPage = () => {
 
   const requestToConfirmWithCode = () => {
     requestConfirmCode({
-      email: watch('email'),
-      code: watch('confirm'),
+      email,
+      code: confirmCode,
     });
   };
 
@@ -105,7 +113,7 @@ const SignupPage = () => {
   };
 
   const requestToCheckIsDuplicateUsername = () => {
-    requestCheckDuplicateUsername(watch('username'));
+    requestCheckDuplicateUsername(username);
   };
 
   const keydownHandlerToCheckIsDuplicateUsername = (
@@ -123,19 +131,20 @@ const SignupPage = () => {
   };
 
   const onSubmit = (values: ISignUpFormValueType) => {
-    const { email, password, username } = values;
-
     const payload = {
-      email,
-      password,
-      username,
+      email: values.email,
+      password: values.password,
+      username: values.username,
       ...signupToken,
     };
 
     requestSignupUser(payload, {
       onSuccess: async (res) => {
         if (res.isSuccess) {
-          const authResults = await postLogin({ email, password });
+          const authResults = await postLogin({
+            email: values.email,
+            password: values.password,
+          });
           const { result, isSuccess } = authResults;
 
           if (isSuccess && result) {
@@ -148,8 +157,6 @@ const SignupPage = () => {
       },
     });
   };
-
-  const [password, repassword] = watch(['password', 'repassword']);
 
   useEffect(() => {
     if (password !== '' && password === repassword) {
@@ -187,7 +194,7 @@ const SignupPage = () => {
                 className={styles.button}
                 onClick={sendEmailWithCode}
                 disabled={
-                  !watch('email').length ||
+                  !email.length ||
                   !!errors.email?.message ||
                   isRequestEmailPending
                 }
@@ -207,7 +214,7 @@ const SignupPage = () => {
                 disabled={isRequestEmailPending || !isEmailRetry}
               />
             )}
-            {isEmailConfirmed && (
+            {(isEmailRequest || isEmailConfirmed) && (
               <Button
                 type="button"
                 className={styles.button}
@@ -316,7 +323,7 @@ const SignupPage = () => {
               className={styles.button}
               onClick={requestToCheckIsDuplicateUsername}
               disabled={
-                !watch('username')?.length ||
+                !username?.length ||
                 isDuplicateUsernamePending ||
                 !!errors.username?.message ||
                 isUsernameConfirmed
