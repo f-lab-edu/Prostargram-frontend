@@ -119,7 +119,7 @@ const SignupPage = () => {
   return (
     <div className={styles.container}>
       <div className={styles.logo_box}>
-        <Logo />
+        <Logo isGoHome={false} />
       </div>
 
       <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>

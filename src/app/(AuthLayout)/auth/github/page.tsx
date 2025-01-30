@@ -118,7 +118,7 @@ const GithubSignupPage = () => {
 
   return (
     <div className={styles.container}>
-      <Logo />
+      <Logo isGoHome={false} />
 
       <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
         <div>

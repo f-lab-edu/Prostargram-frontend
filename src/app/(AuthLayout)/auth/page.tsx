@@ -136,7 +136,7 @@ const LoginPage = () => {
     <div className={styles.container}>
       <div className={styles.inner_container}>
         <div style={{ marginBottom: 40 }}>
-          <Logo />
+          <Logo isGoHome={false} />
         </div>
 
         <LoginForm />

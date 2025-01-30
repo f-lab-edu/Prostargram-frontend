@@ -105,7 +105,7 @@ const AdditionalInfoPage = () => {
 
   return (
     <div className={styles.container}>
-      <Logo />
+      <Logo isGoHome={false} />
 
       <form onSubmit={handleSubmit(submitHandler)}>
         <FormProvider {...methods}>
