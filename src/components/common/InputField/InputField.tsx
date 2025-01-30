@@ -1,4 +1,5 @@
 import {
+  ClipboardEvent,
   HTMLAttributes,
   HTMLInputTypeAttribute,
   InputHTMLAttributes,
@@ -44,6 +45,14 @@ const InputField = forwardRef(
     }: InputFieldProps,
     ref: Ref<HTMLInputElement>,
   ) => {
+    const preventCopy = (e: ClipboardEvent<HTMLInputElement>) => {
+      e.preventDefault();
+    };
+
+    const preventPaste = (e: ClipboardEvent<HTMLInputElement>) => {
+      e.preventDefault();
+    };
+
     return (
       <div className={styles.container}>
         <label htmlFor={id} className={styles.label}>
@@ -61,6 +70,8 @@ const InputField = forwardRef(
           state={errorMessage ? 'fail' : 'normal'}
           variants={variants}
           postfix={inputPostFix}
+          onCopy={preventCopy}
+          onPaste={preventPaste}
           {...props}
         />
 
