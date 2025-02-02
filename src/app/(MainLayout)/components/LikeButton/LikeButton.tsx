@@ -9,6 +9,8 @@ import {
   useLikeComment,
 } from '@/api/comment/commentMutations';
 import clsx from 'clsx';
+import { useQueryClient } from '@tanstack/react-query';
+import { FEED_QUERY_KEYS } from '@/api/feed/feedQueries';
 import styles from './LikeButton.module.scss';
 
 interface LikeButtonProps {
@@ -24,9 +26,23 @@ const LikeButton = ({
   commentId,
   isLike,
 }: LikeButtonProps) => {
+  const queryClient = useQueryClient();
+
   const [isToggle, setIsToggle] = useState<boolean>(isLike);
-  const { mutate: likeFeedMutation } = useLikeFeed(postId!);
-  const { mutate: dislikeFeedMutation } = useDislikeFeed(postId!);
+  const { mutate: likeFeedMutation } = useLikeFeed(postId!, {
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: FEED_QUERY_KEYS.feeds,
+      });
+    },
+  });
+  const { mutate: dislikeFeedMutation } = useDislikeFeed(postId!, {
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: FEED_QUERY_KEYS.feeds,
+      });
+    },
+  });
   const { mutate: likeCommentMutation } = useLikeComment(commentId!);
   const { mutate: dislikeCommentMutation } = useDislikeComment(commentId!);
 

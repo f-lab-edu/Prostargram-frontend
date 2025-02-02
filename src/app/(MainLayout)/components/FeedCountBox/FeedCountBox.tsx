@@ -24,7 +24,7 @@ const FeedCountBox = ({ post }: FeedCountBoxProps) => {
 
   return (
     <div className={styles.count_box}>
-      <LikeButton isLike={false} size="medium" postId={post.postId} />
+      <LikeButton isLike={post.isLike} size="medium" postId={post.postId} />
       <div className={styles.like_count}>
         {digitNumberFormatter(post.likeCount)}
       </div>
