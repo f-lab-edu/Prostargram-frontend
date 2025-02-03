@@ -1,13 +1,13 @@
 'use client';
 
-import { useState } from 'react';
-
 import If from '@/components/common/If';
 import Button from '@/components/common/Button';
 
 import FollowIcon from '@/assets/icons/follow.svg';
 import UnfollowIcon from '@/assets/icons/unfollow.svg';
 import { useFollowUser, useUnfollowUser } from '@/api/follow/followMutations';
+import { useQueryClient } from '@tanstack/react-query';
+import { FEED_QUERY_KEYS } from '@/api/feed/feedQueries';
 
 interface ProfileFollowButtonProps {
   fromUserId?: number;
@@ -23,18 +23,7 @@ const ProfileFollowButton = ({
   isFollow,
   size = 'large',
 }: ProfileFollowButtonProps) => {
-  const [followStatus, setFollowStatus] = useState(isFollow);
-
-  const followHandler = () => {
-    setFollowStatus(() => {
-      return true;
-    });
-  };
-  const unfollowHandler = () => {
-    setFollowStatus(() => {
-      return false;
-    });
-  };
+  const queryClient = useQueryClient();
 
   const { mutate: followUserMutation } = useFollowUser(
     {
@@ -42,7 +31,11 @@ const ProfileFollowButton = ({
       toUserId,
     },
     {
-      onSuccess: () => followHandler(),
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: FEED_QUERY_KEYS.feeds,
+        });
+      },
     },
   );
   const { mutate: unfollowUserMutation } = useUnfollowUser(
@@ -51,12 +44,16 @@ const ProfileFollowButton = ({
       toUserId,
     },
     {
-      onSuccess: () => unfollowHandler(),
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: FEED_QUERY_KEYS.feeds,
+        });
+      },
     },
   );
 
   return (
-    <If condition={followStatus}>
+    <If condition={isFollow}>
       <If.True>
         <Button size={size} fill="red" onClick={() => unfollowUserMutation()}>
           <UnfollowIcon
