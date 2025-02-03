@@ -1,10 +1,9 @@
 import Image from 'next/image';
 import Typo from '@/components/common/Typo';
 import styles from './FeedProfile.module.scss';
-import { BasicUser } from '../../types/feed';
 
 type FeedProfileProps = {
-  userInfo: BasicUser;
+  userInfo: Feed.BasicUser;
 };
 
 const FeedProfile = ({ userInfo }: FeedProfileProps) => {
@@ -19,11 +18,10 @@ const FeedProfile = ({ userInfo }: FeedProfileProps) => {
           height="50"
         />
       )}
-      {/* TODO: profileImgUrl src 적용 */}
       {userInfo.profileImgUrl !== null && (
         <Image
           className={styles.feed_top_profile}
-          src=""
+          src={userInfo?.profileImgUrl}
           alt=""
           width="50"
           height="50"
