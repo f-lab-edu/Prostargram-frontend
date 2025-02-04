@@ -16,7 +16,7 @@ import {
 
 interface UseSignupMutationParamType {
   formMethods: UseFormReturn<ISignUpFormValueType>;
-  changeConfirmState: (state: ConfirmStateType) => void;
+  changeConfirmCodeState: (state: ConfirmStateType) => void;
   changeUsernameState: (state: ConfirmStateType) => void;
   changeSignupToken: (token: {
     tokenName: keyof SignUpTokenType;
@@ -26,7 +26,7 @@ interface UseSignupMutationParamType {
 
 const useSignupMutation = ({
   formMethods,
-  changeConfirmState,
+  changeConfirmCodeState,
   changeUsernameState,
   changeSignupToken,
 }: UseSignupMutationParamType) => {
@@ -35,7 +35,7 @@ const useSignupMutation = ({
   const { isPending: isRequestEmailPending, mutate: requestCodeByEmail } =
     useSelfSignUpMutation({
       onSuccess: () => {
-        changeConfirmState(CONFIRM_STATES.REQUEST);
+        changeConfirmCodeState(CONFIRM_STATES.REQUEST);
         clearErrors('email');
       },
       onError: (data) => {
@@ -53,7 +53,7 @@ const useSignupMutation = ({
           tokenName: 'emailToken',
           token: res.result!.emailToken,
         });
-        changeConfirmState(CONFIRM_STATES.CONFIRM);
+        changeConfirmCodeState(CONFIRM_STATES.CONFIRM);
         clearErrors(['email', 'confirm']);
       },
       onError: (data) => {
@@ -94,7 +94,7 @@ const useSignupMutation = ({
           err.message.includes('이메일 인증')
         ) {
           setError('email', { type: 'validate', message: err.message });
-          changeConfirmState('pending');
+          changeConfirmCodeState('pending');
           resetField('confirm');
         }
         if (err.message.includes('크기가 8에서')) {
