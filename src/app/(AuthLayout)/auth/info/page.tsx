@@ -1,13 +1,17 @@
 'use client';
 
 import clsx from 'clsx';
-// import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { FormProvider, SubmitHandler } from 'react-hook-form';
 
 import { RECOMMANED_INTERESTS } from '@/data/mock';
 import Logo from '@/components/common/Logo';
 import Field from '@/components/common/Field';
 import Button from '@/components/common/Button';
+import { getUserId } from '@/utils/manageToken';
+import { useToastContext } from '@/components/common/Toast/ToastProvider';
+import useInterestsServerRequests from '@/hooks/useInterestsServerRequests';
+import useSocialAccountsServerRequest from '@/hooks/useSocialAccountsServerRequests';
 
 import PlusIcon from '@/assets/icons/plus.svg';
 import AdditionalLink from './components/AdditionalLink';
@@ -23,7 +27,8 @@ const LINK_FIELDS_LIMIT = 3;
 const MY_INTERESTS_FIELDS_LIMIT = 10;
 
 const AdditionalInfoPage = () => {
-  // const router = useRouter();
+  const router = useRouter();
+  const { addToast } = useToastContext();
   const methods = useAdditionalInfoForm<IAddionalInfoType>({
     defaultValues: { links: [{ link: '' }], interests: [], myInterests: [] },
   });
@@ -55,27 +60,42 @@ const AdditionalInfoPage = () => {
     fieldLimit: MY_INTERESTS_FIELDS_LIMIT,
   });
 
-  const submitHandler: SubmitHandler<IAddionalInfoType> = (values) => {
+  const { requestSocialAccountSaveSocialAccounts } =
+    useSocialAccountsServerRequest();
+  const { requestSaveInterest } = useInterestsServerRequests();
+
+  const submitHandler: SubmitHandler<IAddionalInfoType> = async (values) => {
     const { links, interests, myInterests } = values;
 
-    const myInterestsName = myInterests.map(({ myInterest }) => ({
-      userId: 1,
+    const userId = getUserId();
+    const uniqueSocialAccounts = links.filter((v) => !!v.link);
+    const myInterestsNames = myInterests.map(({ myInterest }) => ({
+      userId,
       interestName: myInterest,
     }));
-    const interestName = interests.map((interest) => ({
-      userId: 1,
-      interestName: interest,
+    const interestNames = interests.map((interestName) => ({
+      userId,
+      interestName,
     }));
+    const wholeInterestName = [...myInterestsNames, ...interestNames];
 
-    const interestNames = [...interestName, ...myInterestsName];
-    const socialAccounts = links.map(({ link }) => link).filter((v) => !!v);
+    if (uniqueSocialAccounts.length) {
+      requestSocialAccountSaveSocialAccounts({
+        targetSocialAccounts: uniqueSocialAccounts,
+      });
+    }
 
-    const additionalInfo = {
-      links: socialAccounts,
-      interestNames,
-    };
+    requestSaveInterest({
+      targetInterests: wholeInterestName,
+      onSuccess: () => {
+        addToast({
+          type: 'success',
+          message: '회원가입이 정상적으로 완료되었습니다.',
+        });
 
-    console.log(additionalInfo);
+        router.push('/');
+      },
+    });
   };
 
   const currentInterestList = [

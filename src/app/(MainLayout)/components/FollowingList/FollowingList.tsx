@@ -45,7 +45,6 @@ const FollowingList = () => {
                   height="50"
                 />
               )}
-
               <Typo
                 as="div"
                 fontSize="body-14"

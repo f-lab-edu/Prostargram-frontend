@@ -31,13 +31,34 @@ export class ResponseError extends Error {
 
   code: number;
 
-  constructor(response: HttpResponseType) {
-    super(response?.message);
+  originError: AxiosError;
 
-    this.isSuccess = response?.isSuccess;
-    this.code = response?.code;
+  constructor(err: AxiosError<HttpResponseType>) {
+    if (err.response) {
+      super(err.response.data.message);
+      this.isSuccess = err.response.data.isSuccess;
+      this.code = err.response.data.code;
+    } else {
+      super(err.message);
+      this.isSuccess = false;
+      this.code = 0;
+    }
+
+    this.originError = err;
   }
 }
+// export class ResponseError extends Error {
+//   isSuccess: boolean;
+
+//   code: number;
+
+//   constructor(err: AxiosError<HttpResponseType>) {
+//     super(err.message);
+
+//     this.isSuccess = !!err.response?.data.isSuccess || false;
+//     this.code = err.response?.data.code || 499;
+//   }
+// }
 
 const makeInstance =
   (instance: AxiosInstance) =>
@@ -48,13 +69,9 @@ const makeInstance =
       return result.data;
     } catch (e) {
       const err = e as AxiosError<HttpResponseType>;
+      console.log(err);
 
-      console.error('error', err);
-      if (err.response) {
-        throw new ResponseError(err.response.data);
-      }
-
-      throw err;
+      throw new ResponseError(err);
     }
   };
 

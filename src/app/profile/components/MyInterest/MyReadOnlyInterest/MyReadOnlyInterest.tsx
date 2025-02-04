@@ -1,11 +1,12 @@
 import If from '@/components/common/If';
 import Button from '@/components/common/Button';
+import { UserInterestWithOptionalHashTagIdType } from '@/app/profile/types/my';
 
 import styles from './MyReadOnlyInterest.module.scss';
 
 interface MyReadOnlyInterestProps {
   isMine: boolean;
-  interests: string[];
+  interests: UserInterestWithOptionalHashTagIdType[];
   toggleHandler: () => void;
 }
 
@@ -17,9 +18,9 @@ const MyReadOnlyInterest = ({
   return (
     <>
       <ul className={styles.my_interest_list}>
-        {interests.map((interest) => (
-          <li key={interest} className={styles.my_interest}>
-            #{interest}
+        {interests.map(({ hashTagName }) => (
+          <li key={hashTagName} className={styles.my_interest}>
+            #{hashTagName}
           </li>
         ))}
       </ul>
