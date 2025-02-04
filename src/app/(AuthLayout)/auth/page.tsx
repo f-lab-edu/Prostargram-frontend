@@ -59,10 +59,14 @@ const LoginForm = () => {
         });
       }
     },
-    onError: () => {
+    onError: (err) => {
       setError('email', {
         type: 'deps',
-        message: '알 수 없는 에러가 발생했습니다. 다시 로그인 해 주세요.',
+        message: err.message,
+      });
+      setError('password', {
+        type: 'deps',
+        message: err.message,
       });
     },
   });
