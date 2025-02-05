@@ -11,8 +11,8 @@ interface AuthLayoutProps {
 
 const AuthLayout = ({ children }: AuthLayoutProps) => {
   return (
-    <div className={styles.container}>
-      <main className={styles.inner_container}>
+    <main className={styles.container}>
+      <div className={styles.inner_container}>
         <div className={styles.left_box}>{children}</div>
 
         <div className={styles.right_box}>
@@ -23,8 +23,8 @@ const AuthLayout = ({ children }: AuthLayoutProps) => {
             priority
           />
         </div>
-      </main>
-    </div>
+      </div>
+    </main>
   );
 };
 
