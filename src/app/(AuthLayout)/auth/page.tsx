@@ -9,6 +9,7 @@ import Typo from '@/components/common/Typo';
 import Button from '@/components/common/Button';
 import InputField from '@/components/common/InputField';
 import ToggleWrapper from '@/components/common/ToggleWrapper';
+import { useToastContext } from '@/components/common/Toast/ToastProvider';
 import { useLogin } from '@/api/mutations/auth';
 import validator from '@/utils/validate';
 import {
@@ -27,8 +28,9 @@ interface IFormInput {
   password: string;
 }
 
-const LoginPage = () => {
+const LoginForm = () => {
   const router = useRouter();
+  const { addToast } = useToastContext();
 
   const {
     register,
@@ -48,6 +50,7 @@ const LoginPage = () => {
         saveAccessToken(result.accessToken);
         saveRefreshToken(result.refreshToken);
         saveUserId(result.userId);
+        addToast({ type: 'success', message: '성공적으로 로그인 되었습니다.' });
         router.push('/');
       } else {
         setError('email', {
@@ -69,66 +72,75 @@ const LoginPage = () => {
   };
 
   return (
+    <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+      <div className={styles.input_wrapper}>
+        <InputField
+          id="email"
+          type="text"
+          label="이메일"
+          maxLength={30}
+          placeholder="이메일을 입력해주세요."
+          errorMessage={isDirty ? errors.email?.message : undefined}
+          {...register('email', validator.email)}
+        />
+        <ToggleWrapper>
+          {({ isToggle, toggleHandler }) => (
+            <InputField
+              id="password"
+              type={isToggle ? 'text' : 'password'}
+              label="비밀번호"
+              maxLength={20}
+              placeholder="비밀번호를 입력해주세요."
+              errorMessage={isDirty ? errors.password?.message : undefined}
+              {...register('password', validator.password)}
+              inputPostFix={
+                <button
+                  type="button"
+                  onClick={toggleHandler}
+                  style={{ display: 'flex' }}
+                >
+                  {isToggle ? (
+                    <OpenEyeIcon width="22" height="22" />
+                  ) : (
+                    <CloseEyeIcon />
+                  )}
+                </button>
+              }
+            />
+          )}
+        </ToggleWrapper>
+      </div>
+
+      <Typo
+        as="span"
+        color="gray-3"
+        fontSize="body-14"
+        textAlign="right"
+        marginTop={10}
+        marginBottom={40}
+        underline
+      >
+        비밀번호를 잊으셨나요?
+      </Typo>
+      <Button disabled={isPending}>
+        {isPending ? '요청 중...' : '로그인'}
+      </Button>
+    </form>
+  );
+};
+
+const LoginPage = () => {
+  const router = useRouter();
+
+  return (
     <div className={styles.container}>
-      <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+      <div className={styles.inner_container}>
         <div style={{ marginBottom: 40 }}>
           <Logo />
         </div>
 
-        <div className={styles.input_wrapper}>
-          <InputField
-            id="email"
-            type="text"
-            label="이메일"
-            maxLength={30}
-            placeholder="이메일을 입력해주세요."
-            errorMessage={isDirty ? errors.email?.message : undefined}
-            {...register('email', validator.email)}
-          />
-          <ToggleWrapper>
-            {({ isToggle, toggleHandler }) => (
-              <InputField
-                id="password"
-                type={isToggle ? 'text' : 'password'}
-                label="비밀번호"
-                maxLength={20}
-                placeholder="비밀번호를 입력해주세요."
-                errorMessage={isDirty ? errors.password?.message : undefined}
-                {...register('password', validator.password)}
-                inputPostFix={
-                  <button
-                    type="button"
-                    onClick={toggleHandler}
-                    style={{ display: 'flex' }}
-                  >
-                    {isToggle ? (
-                      <OpenEyeIcon width="22" height="22" />
-                    ) : (
-                      <CloseEyeIcon />
-                    )}
-                  </button>
-                }
-              />
-            )}
-          </ToggleWrapper>
-        </div>
-
-        <Typo
-          as="span"
-          color="gray-3"
-          fontSize="body-14"
-          textAlign="right"
-          marginTop={10}
-          marginBottom={40}
-          underline
-        >
-          비밀번호를 잊으셨나요?
-        </Typo>
-        <Button disabled={isPending}>
-          {isPending ? '요청 중...' : '로그인'}
-        </Button>
-      </form>
-
+        <LoginForm />
+      </div>
       <div className={styles.or_line}>
         <hr className={styles.horizontal_line} />
         <span className={styles.or_span}>OR</span>

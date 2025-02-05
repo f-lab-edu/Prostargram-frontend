@@ -11,6 +11,8 @@
   position: relative;
   background-color: $COLOR_WHITE;
   z-index: 1;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
 
   .follow_button {
     width: 120px;

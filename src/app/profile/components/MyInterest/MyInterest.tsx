@@ -5,24 +5,40 @@ import { useState } from 'react';
 import If from '@/components/common/If';
 import MyReadOnlyInterest from './MyReadOnlyInterest';
 import MyEditInterest from './MyEditInterest';
+import {
+  UserInterestType,
+  UserInterestWithOptionalHashTagIdType,
+} from '../../types/my';
 
 import styles from './MyInterest.module.scss';
 
 interface MyInterestProps {
-  interests: string[];
+  interests: UserInterestType[];
   isMine: boolean;
 }
 
 const MyInterest = ({ isMine, interests }: MyInterestProps) => {
   const [isEdit, setIsEdit] = useState<boolean>(false);
-  const [myInterests, setMyInterests] = useState<string[]>(interests);
+  const [myInterests, setMyInterests] =
+    useState<UserInterestWithOptionalHashTagIdType[]>(interests);
 
   const toggleHandler = () => {
     setIsEdit((prev) => !prev);
   };
 
-  const submitHandler = (next: string[]) => {
-    setMyInterests(next);
+  const submitHandler = ({
+    nextInterestsState,
+    add,
+    remove,
+  }: {
+    nextInterestsState: UserInterestWithOptionalHashTagIdType[];
+    add: UserInterestWithOptionalHashTagIdType[];
+    remove: UserInterestWithOptionalHashTagIdType[];
+  }) => {
+    console.log('add', add);
+    console.log('remove', remove);
+
+    setMyInterests(nextInterestsState);
     toggleHandler();
   };
 

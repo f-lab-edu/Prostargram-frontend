@@ -5,6 +5,7 @@ import {
   deleteFeed,
   dislikeFeed,
   likeFeed,
+  updateCommonFeed,
 } from './apis';
 
 export const useCreateCommonFeed = (
@@ -13,6 +14,16 @@ export const useCreateCommonFeed = (
 ) => {
   return useMutation({
     mutationFn: () => createCommonFeed(data),
+    ...options,
+  });
+};
+
+export const useUpdateCommonFeed = (
+  data: Feed.BasicPostRequestBody,
+  options = {},
+) => {
+  return useMutation({
+    mutationFn: () => updateCommonFeed(data),
     ...options,
   });
 };
@@ -36,10 +47,10 @@ export const useBatchImageUpload = (options = {}) => {
       preSignedImageUrls: string[];
       images: File[];
     }) => {
-      console.log('batch image upload', images);
+      console.log('batch image upload', preSignedImageUrls);
       const results = await Promise.all(
         preSignedImageUrls.map((url, index) =>
-          fetch(`/ncloud/${url}`, {
+          fetch(`${url}`, {
             method: 'PUT',
             headers: {
               'Content-Type': images[index].type,

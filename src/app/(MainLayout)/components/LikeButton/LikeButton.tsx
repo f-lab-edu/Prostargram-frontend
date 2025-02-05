@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import HeartFillIcon from '@/assets/icons/heart-fill.svg';
 import HeartIcon from '@/assets/icons/heart.svg';
 import { useDislikeFeed, useLikeFeed } from '@/api/feed/feedMutations';
@@ -9,6 +8,8 @@ import {
   useLikeComment,
 } from '@/api/comment/commentMutations';
 import clsx from 'clsx';
+import { useQueryClient } from '@tanstack/react-query';
+import { FEED_QUERY_KEYS } from '@/api/feed/feedQueries';
 import styles from './LikeButton.module.scss';
 
 interface LikeButtonProps {
@@ -24,41 +25,42 @@ const LikeButton = ({
   commentId,
   isLike,
 }: LikeButtonProps) => {
-  const [isToggle, setIsToggle] = useState<boolean>(isLike);
-  const { mutate: likeFeedMutation } = useLikeFeed(postId!);
-  const { mutate: dislikeFeedMutation } = useDislikeFeed(postId!);
+  const queryClient = useQueryClient();
+
+  const { mutate: likeFeedMutation } = useLikeFeed(postId!, {
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: FEED_QUERY_KEYS.feeds,
+      });
+    },
+  });
+  const { mutate: dislikeFeedMutation } = useDislikeFeed(postId!, {
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: FEED_QUERY_KEYS.feeds,
+      });
+    },
+  });
   const { mutate: likeCommentMutation } = useLikeComment(commentId!);
   const { mutate: dislikeCommentMutation } = useDislikeComment(commentId!);
 
   const clickHandler = () => {
     if (postId) {
-      setIsToggle((prev: boolean) => {
-        if (prev) {
-          dislikeFeedMutation();
-          return false;
-        }
-        if (!prev) {
-          likeFeedMutation();
-          return true;
-        }
-
-        return false;
-      });
+      if (isLike) {
+        dislikeFeedMutation();
+      }
+      if (!isLike) {
+        likeFeedMutation();
+      }
     }
 
     if (commentId) {
-      setIsToggle((prev: boolean) => {
-        if (prev) {
-          dislikeCommentMutation();
-          return false;
-        }
-        if (!prev) {
-          likeCommentMutation();
-          return true;
-        }
-
-        return false;
-      });
+      if (isLike) {
+        dislikeCommentMutation();
+      }
+      if (!isLike) {
+        likeCommentMutation();
+      }
     }
   };
 
@@ -67,7 +69,7 @@ const LikeButton = ({
       className={clsx(styles.heart_icon, styles[size])}
       onClick={clickHandler}
     >
-      {isToggle ? <HeartFillIcon /> : <HeartIcon />}
+      {isLike ? <HeartFillIcon /> : <HeartIcon />}
     </button>
   );
 };

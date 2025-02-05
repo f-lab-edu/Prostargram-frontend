@@ -65,15 +65,25 @@ const Profile = ({ profileUrl, isMine, isFollow }: ProfileProps) => {
               onChange={changeHandler}
               style={{ display: 'none' }}
             />
-            <Image
-              src={profile!}
-              width="150"
-              height="150"
-              alt="profile-image"
-              style={{ cursor: 'pointer' }}
-              priority
-              onClick={clickHandler}
-            />
+            <If condition={Boolean(profile)}>
+              <If.True>
+                <Image
+                  src={profile!}
+                  width="150"
+                  height="150"
+                  alt="profile-image"
+                  onClick={clickHandler}
+                  priority
+                />
+              </If.True>
+              <If.False>
+                <DefaultAvatar
+                  width="150"
+                  height="150"
+                  onClick={clickHandler}
+                />
+              </If.False>
+            </If>
           </If.True>
         </If>
         <If.False>

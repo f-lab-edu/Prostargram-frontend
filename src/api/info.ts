@@ -1,10 +1,22 @@
-import { defaultInstance } from './httpRequest';
+import { authInstance } from './httpRequest';
 
 const postSocialAccount = async (account: { socialAccountUrl: string }) => {
   const url = `/social-accounts`;
 
-  const result = await defaultInstance({
+  const result = await authInstance({
     method: 'POST',
+    url,
+    data: account,
+  });
+
+  return result;
+};
+
+const removeSocialAccount = async (account: { socialAccountUrl: string }) => {
+  const url = `/social-accounts`;
+
+  const result = await authInstance({
+    method: 'DELETE',
     url,
     data: account,
   });
@@ -21,7 +33,7 @@ const postInterest = async ({
 }) => {
   const url = `/users/${userId}/interests`;
 
-  const result = await defaultInstance({
+  const result = await authInstance({
     method: 'POST',
     url,
     data: { userId, interestName },
@@ -29,5 +41,24 @@ const postInterest = async ({
 
   return result;
 };
+const removeInterest = async ({
+  userId,
+  hashTagId,
+  name,
+}: {
+  userId: number;
+  hashTagId: number;
+  name: string;
+}) => {
+  console.log(name);
+  const url = `/users/${userId}/interests?hashTagId=${hashTagId}&name=${encodeURIComponent(name)}`;
 
-export { postSocialAccount, postInterest };
+  const result = await authInstance({
+    method: 'DELETE',
+    url,
+  });
+
+  return result;
+};
+
+export { postSocialAccount, removeSocialAccount, postInterest, removeInterest };

@@ -1,5 +1,5 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
-import { getFeeds, getDetailCommonFeed } from './apis';
+import { getFeeds, getDetailCommonFeed, getDetailDebateFeed } from './apis';
 
 export const FEED_QUERY_KEYS = {
   feeds: ['feeds'] as const,
@@ -12,7 +12,7 @@ export const useInfiniteFeeds = () => {
     queryFn: ({ pageParam }) => getFeeds(pageParam),
     initialPageParam: 0,
     getNextPageParam: (lastPage, pages) => {
-      return lastPage.result?.hasNext ? pages.length : null;
+      return lastPage.result?.hasNextPage ? pages.length : null;
     },
   });
 };
@@ -21,6 +21,14 @@ export const useGetDetailCommonFeed = (postId: string, options = {}) => {
   return useQuery({
     queryKey: FEED_QUERY_KEYS.id(postId),
     queryFn: () => getDetailCommonFeed(postId),
+    ...options,
+  });
+};
+
+export const useGetDetailDebateFeed = (postId: string, options = {}) => {
+  return useQuery({
+    queryKey: FEED_QUERY_KEYS.id(postId),
+    queryFn: () => getDetailDebateFeed(postId),
     ...options,
   });
 };

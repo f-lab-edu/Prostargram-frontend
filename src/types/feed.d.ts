@@ -48,13 +48,13 @@ declare module Feed {
 
   interface FeedsResponse {
     data: FeedData[];
-    hasNext: boolean;
+    hasNextPage: boolean;
   }
 
   interface BasicPostRequestBody {
+    postId?: string;
     content: string;
     hashTagNames: string[];
-    createdAt: string;
     imageCount: number;
   }
 
@@ -78,4 +78,6 @@ declare module Feed {
     preSignedImageUrls: string[];
     userId: number;
   }
+
+  type ActionType = 'CREATE' | 'UPDATE';
 }

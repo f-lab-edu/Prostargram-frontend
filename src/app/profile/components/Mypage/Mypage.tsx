@@ -25,26 +25,35 @@ const isMine = true;
 
 const MyPage = ({ children, myData }: MyPageProps) => {
   const {
-    followers,
-    followings,
-    feeds,
-    links,
+    followerCount,
+    followingCount,
+    postCount,
+    socialAccounts,
     interests,
-    nickname,
-    currentState,
-    description,
-    profileUrl,
+    userName,
+    departmentName,
+    selfIntroduction,
+    profileImgUrl,
   } = myData;
 
   const formattedFollowers = compactNumberFormatter(
-    followers ?? 0,
+    followerCount ?? 0,
   ).toLowerCase();
 
   const formattedFollowings = compactNumberFormatter(
-    followings ?? 0,
+    followingCount ?? 0,
   ).toLowerCase();
 
-  const formattedFeedCounts = digitNumberFormatter(feeds ?? 0);
+  const formattedFeedCounts = digitNumberFormatter(postCount ?? 0);
+
+  const linkStrings = socialAccounts.map(
+    ({ socialAccountUrl }) => socialAccountUrl,
+  );
+
+  const interestsWithoutHash = interests.map(({ hashTagId, hashTagName }) => ({
+    hashTagId,
+    hashTagName: hashTagName.slice(1),
+  }));
 
   return (
     <>
@@ -55,14 +64,14 @@ const MyPage = ({ children, myData }: MyPageProps) => {
             <Profile
               isFollow={isFollow}
               isMine={isMine}
-              profileUrl={profileUrl}
+              profileUrl={profileImgUrl}
             />
           </div>
           <div className={styles.display_flex}>
-            <Follow title="팔로워" href="/my/follower">
+            <Follow title="팔로워" href="/profile/follower">
               {formattedFollowers}
             </Follow>
-            <Follow title="팔로잉" href="/my/following">
+            <Follow title="팔로잉" href="/profile/following">
               {formattedFollowings}
             </Follow>
           </div>
@@ -70,9 +79,9 @@ const MyPage = ({ children, myData }: MyPageProps) => {
         <div className={styles.my_information_wrapper}>
           <MyInformation
             isMine={isMine}
-            nickname={nickname}
-            currentState={currentState}
-            description={description}
+            nickname={userName}
+            currentState={departmentName}
+            description={selfIntroduction}
           />
         </div>
       </div>
@@ -81,13 +90,13 @@ const MyPage = ({ children, myData }: MyPageProps) => {
           {formattedFeedCounts}
         </FeedCount>
         <div className={styles.my_link_wrapper}>
-          <MyLink links={links} isMine={isMine} />
+          <MyLink links={linkStrings} isMine={isMine} />
         </div>
       </div>
       <div className={styles.display_flex}>
         <div className={styles.my_interest_wrapper}>
           <p>관심사</p>
-          <MyInterest isMine={isMine} interests={interests} />
+          <MyInterest isMine={isMine} interests={interestsWithoutHash} />
         </div>
         <div className={styles.changeable_area}>{children}</div>
       </div>

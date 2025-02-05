@@ -8,16 +8,14 @@ import styles from './FeedCountBox.module.scss';
 
 type FeedCountBoxProps = {
   post: Feed.BasicPost | Feed.DebatePost | Feed.PollPost;
-  setDetailFeedId: (feedId: number) => void;
 };
 
-const FeedCountBox = ({ post, setDetailFeedId }: FeedCountBoxProps) => {
+const FeedCountBox = ({ post }: FeedCountBoxProps) => {
   const router = useRouter();
 
   const onClickMessageIcon = () => {
-    setDetailFeedId(post.postId);
     if (post.postType === 'BASIC') {
-      router.push('?cf=1');
+      router.push(`?cf=${post.postId}`);
     }
     if (post.postType === 'DEBATE') {
       router.push('?df=1');
@@ -26,7 +24,7 @@ const FeedCountBox = ({ post, setDetailFeedId }: FeedCountBoxProps) => {
 
   return (
     <div className={styles.count_box}>
-      <LikeButton isLike={false} size="medium" postId={post.postId} />
+      <LikeButton isLike={post.isLike} size="medium" postId={post.postId} />
       <div className={styles.like_count}>
         {digitNumberFormatter(post.likeCount)}
       </div>

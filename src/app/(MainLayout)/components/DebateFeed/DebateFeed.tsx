@@ -1,17 +1,21 @@
+import { useEffect, useState } from 'react';
 import Modal from '@/components/common/Modal';
 import ConfirmPopup from '@/components/common/Popup/ConfirmPopup/ConfirmPopup';
-import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { useGetDetailDebateFeed } from '@/api/feed/feedQueries';
 import { useCreateDebateFeed } from '@/api/feed/feedMutations';
 import { FeedPopup } from '../../types/feed';
 import AddContent from '../AddContent/AddContent';
 import styles from './DebateFeed.module.scss';
 
-type DebateFeedProps = {
-  modalStatus: boolean | string;
-  setModalStatus: (modalStatus: boolean) => void;
-};
+const DebateFeed = () => {
+  const pathname = useSearchParams();
+  const postId = pathname.get('postId');
 
-const DebateFeed = ({ modalStatus, setModalStatus }: DebateFeedProps) => {
+  const { data: postData } = useGetDetailDebateFeed(postId!, {
+    enabled: postId !== null,
+  });
+
   const [popupState, setPopupState] = useState<FeedPopup>(null);
 
   const handleCloseModal = () => setPopupState('confirm');
@@ -25,16 +29,30 @@ const DebateFeed = ({ modalStatus, setModalStatus }: DebateFeedProps) => {
       optionContents: [],
     });
 
+  const setPostData = () => {
+    if (postId && postData) {
+      const debatePostData = postData.result?.post as Feed.BasicPost;
+
+      setDebateFeedData((prev) => ({
+        ...prev,
+        content: debatePostData?.content,
+        hashTagNames: debatePostData?.hashTagNames,
+      }));
+    }
+  };
+
+  useEffect(() => {
+    setPostData();
+  }, []);
+
   const { mutate: createDebateMutation } = useCreateDebateFeed(debateFeedData);
 
   const createDiscussionFeed = () => {
     createDebateMutation();
-    handleClosePopup();
-    setModalStatus(false);
   };
 
   const handleDeleteFeed = () => {
-    setModalStatus(false);
+    window.location.href = '/';
     handleClosePopup();
   };
 
@@ -49,18 +67,16 @@ const DebateFeed = ({ modalStatus, setModalStatus }: DebateFeedProps) => {
 
   return (
     <>
-      {modalStatus === '토론 피드 작성' && (
-        <Modal width="1200px" onClose={handleCloseModal}>
-          <div className={styles.content_wrapper}>
-            <AddContent
-              feedType="discussion"
-              updateDebateFeedData={updateDebateFeedData}
-              debateFeedData={debateFeedData}
-              onNext={() => handleOpenPublishPopup()}
-            />
-          </div>
-        </Modal>
-      )}
+      <Modal width="1200px" onClose={handleCloseModal}>
+        <div className={styles.content_wrapper}>
+          <AddContent
+            feedType="discussion"
+            updateDebateFeedData={updateDebateFeedData}
+            debateFeedData={debateFeedData}
+            onNext={() => handleOpenPublishPopup()}
+          />
+        </div>
+      </Modal>
       {popupState === 'confirm' && (
         <ConfirmPopup
           leftBtnColor="red"

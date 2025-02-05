@@ -1,27 +1,44 @@
 'use client';
 
 import { useState } from 'react';
-import ProfileFollowButton from '@/app/my/components/Profile/ProfileFollowButton';
+import ProfileFollowButton from '@/app/profile/components/Profile/ProfileFollowButton';
 import MeatBallMenu from '@/assets/icons/meatball_menu.svg';
 import { useDeleteFeed } from '@/api/feed/feedMutations';
+import { getUserId } from '@/utils/manageToken';
+import { useQueryClient } from '@tanstack/react-query';
+import { FEED_QUERY_KEYS } from '@/api/feed/feedQueries';
 
+import { useRouter } from 'next/navigation';
 import styles from './FeedMenu.module.scss';
 
 type FeedMenuProps = {
-  post: Feed.BasicPost | Feed.DebatePost | Feed.PollPost;
+  feed: Feed.FeedData;
 };
 
-const FeedMenu = ({ post }: FeedMenuProps) => {
-  const isMine = true;
-  const isFollow = false;
+const FeedMenu = ({ feed }: FeedMenuProps) => {
+  const userId = getUserId();
+
+  const isMine = userId === feed?.basicUser?.userId;
+  const isFollow = feed?.post?.isFollow;
   const [isToggleMenuOn, setIsToggleMenuOn] = useState(false);
 
-  const updateFeed = () => {
-    //   TODO: 피드 업데이트 API 연동 (postType에 따른 분기 처리)
-    console.log('post', post);
+  const router = useRouter();
+
+  const openUpdateFeedModal = () => {
+    router.push(
+      `?mode=${feed.post.postType.toLowerCase()}&postId=${feed.post.postId}`,
+    );
   };
 
-  const { mutate: deleteFeedMutation } = useDeleteFeed(post.postId);
+  const queryClient = useQueryClient();
+
+  const { mutate: deleteFeedMutation } = useDeleteFeed(feed?.post?.postId, {
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: FEED_QUERY_KEYS.feeds,
+      });
+    },
+  });
   const deleteFeed = () => {
     deleteFeedMutation();
   };
@@ -30,7 +47,12 @@ const FeedMenu = ({ post }: FeedMenuProps) => {
     <>
       {!isMine && (
         <div className={styles.follow_box}>
-          <ProfileFollowButton size="small" isFollow={isFollow} />
+          <ProfileFollowButton
+            fromUserId={userId}
+            toUserId={feed.basicUser.userId}
+            size="small"
+            isFollow={isFollow}
+          />
         </div>
       )}
       {isMine && (
@@ -44,7 +66,7 @@ const FeedMenu = ({ post }: FeedMenuProps) => {
             <ul className={styles.toggle_menu}>
               <li
                 className={styles.update}
-                onClick={updateFeed}
+                onClick={openUpdateFeedModal}
                 aria-hidden="true"
               >
                 수정

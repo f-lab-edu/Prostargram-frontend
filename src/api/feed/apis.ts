@@ -16,9 +16,26 @@ const getDetailCommonFeed = (postId: string) => {
   return res;
 };
 
+const getDetailDebateFeed = (postId: string) => {
+  const res = authInstance<Feed.FeedData>({
+    method: 'get',
+    url: `/posts/${postId}/debate-post`,
+  });
+  return res;
+};
+
 const createCommonFeed = (data: Feed.BasicPostRequestBody) => {
   const res = authInstance({
     method: 'post',
+    url: `/posts/basic`,
+    data,
+  });
+  return res;
+};
+
+const updateCommonFeed = (data: Feed.BasicPostRequestBody) => {
+  const res = authInstance({
+    method: 'put',
     url: `/posts/basic`,
     data,
   });
@@ -61,9 +78,11 @@ const deleteFeed = (postId: number) => {
 export {
   getFeeds,
   getDetailCommonFeed,
+  getDetailDebateFeed,
   createCommonFeed,
+  updateCommonFeed,
+  createDebateFeed,
   likeFeed,
   dislikeFeed,
   deleteFeed,
-  createDebateFeed,
 };
