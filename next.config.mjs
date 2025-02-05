@@ -22,7 +22,12 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'png.pngtree.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'kr.object.ncloudstorage.com',
+      },
     ],
+    formats: ['image/avif', 'image/webp'],
   },
   webpack(config) {
     // Grab the existing rule that handles SVG imports

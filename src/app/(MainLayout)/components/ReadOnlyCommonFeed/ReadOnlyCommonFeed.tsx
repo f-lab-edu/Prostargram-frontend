@@ -1,11 +1,9 @@
 'use client';
 
 import Image from 'next/image';
-import { useSearchParams } from 'next/navigation';
 
 import FeedWrapper from '@/components/common/FeedWrapper';
 import { useGetDetailCommonFeed } from '@/api/feed/feedQueries';
-import { ReadOnlyCommonFeedType } from '../../types/feed';
 import Slide from '../Slide';
 import FeedLikeBox from '../FeedLikeBox';
 import FeedTextContent from '../FeedTextContent';
@@ -15,30 +13,24 @@ import FeedCommentWriteInput from '../FeedCommentWriteInput';
 import styles from './ReadOnlyCommonFeed.module.scss';
 
 interface ReadOnlyCommonFeedProps {
-  commonFeedData: ReadOnlyCommonFeedType;
+  feedId: string;
 }
 
-const ReadOnlyCommonFeed = ({ commonFeedData }: ReadOnlyCommonFeedProps) => {
-  const feedId = new URLSearchParams(useSearchParams()).get('cf');
+const ReadOnlyCommonFeed = ({ feedId }: ReadOnlyCommonFeedProps) => {
+  const { data } = useGetDetailCommonFeed(feedId!, {
+    enabled: feedId !== null,
+  });
 
-  console.log(commonFeedData);
-
-  const { data } = useGetDetailCommonFeed(feedId!, {});
-
-  console.log('comment data', data?.result?.post);
-
-  if (!feedId) {
-    return null;
-  }
+  const feedData = data?.result;
 
   return (
     <FeedWrapper feedIdQuery="cf">
       <div className={styles.container}>
         <div className={styles.left}>
           <Slide>
-            {data?.result?.post &&
-              'contentImageUrls' in data.result.post &&
-              data.result.post.contentImageUrls.map((url, index) => (
+            {feedData?.post &&
+              'contentImageUrls' in feedData.post &&
+              feedData.post.contentImageUrls.map((url, index) => (
                 <Image
                   key={url}
                   width="200"
@@ -51,14 +43,14 @@ const ReadOnlyCommonFeed = ({ commonFeedData }: ReadOnlyCommonFeedProps) => {
         </div>
         <div className={styles.right}>
           <div className={styles.right_up}>
-            {data?.result?.post && (
+            {feedData?.post && (
               <FeedTextContent
                 feedData={{
-                  content: data.result.post.content,
-                  createdAt: data.result.post.createdAt,
-                  hashTagNames: data.result.post.hashTagNames,
-                  isFollow: data.result.post.isFollow,
-                  ...data?.result?.basicUser,
+                  content: feedData.post.content,
+                  createdAt: feedData.post.createdAt,
+                  hashTagNames: feedData.post.hashTagNames,
+                  isFollow: feedData.post.isFollow,
+                  ...feedData.basicUser,
                 }}
               />
             )}
@@ -67,15 +59,15 @@ const ReadOnlyCommonFeed = ({ commonFeedData }: ReadOnlyCommonFeedProps) => {
           <div className={styles.right_down}>
             <FeedCommentList feedId={feedId} feedCommentIds={['1', '2', '3']} />
           </div>
-          {data?.result?.post && (
+          {feedData?.post && (
             <div>
               <FeedLikeBox
-                postId={1}
-                isLike={data.result.post.isLike}
-                likeCount={data.result.post.likeCount}
-                commentCount={data.result.post.commentCount}
+                postId={feedData.post.postId}
+                isLike={feedData.post.isLike}
+                likeCount={feedData.post.likeCount}
+                commentCount={feedData.post.commentCount}
               />
-              <FeedCommentWriteInput postId={data.result.post.postId} />
+              <FeedCommentWriteInput postId={feedData.post.postId} />
             </div>
           )}
         </div>

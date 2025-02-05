@@ -1,6 +1,7 @@
 'use client';
 
 import { Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import HomeIcon from '@/assets/icons/nav-home.svg';
 import ProfileIcon from '@/assets/icons/nav-profile.svg';
 import SettingIcon from '@/assets/icons/nav-setting.svg';
@@ -28,7 +29,7 @@ const Navigation = () => {
     {
       name: '프로필',
       type: 'page',
-      url: '/my',
+      url: '/profile',
       icon: <ProfileIcon />,
       order: 2,
     },
@@ -41,11 +42,15 @@ const Navigation = () => {
     },
   ];
 
+  const searchParams = useSearchParams();
+  const mode = searchParams.get('mode');
+  const postId = searchParams.get('postId');
+
   const modalMenus: ModalMenuType[] = [
     {
       name: '일반 피드 작성',
       type: 'modal',
-      url: '/?mode=basic',
+      url: `/?mode=basic${postId ? `&postId=${postId}` : ''}`,
       icon: <CommonFeedIcon />,
       component: <CommonFeed />,
       order: 3,
@@ -53,7 +58,7 @@ const Navigation = () => {
     {
       name: '토론 피드 작성',
       type: 'modal',
-      url: '/?mode=debate',
+      url: `/?mode=debate${postId ? `&postId=${postId}` : ''}`,
       icon: <DiscussionFeedIcon />,
       component: <DiscussionFeed />,
       order: 4,
@@ -77,7 +82,13 @@ const Navigation = () => {
           if (menu.type === 'modal') {
             // 모달 메뉴일 경우 ModalMenu 컴포넌트로 출력
             const modalMenu = menu as ModalMenuType;
-            return <ModalMenu key={modalMenu.name} modalMenus={[modalMenu]} />;
+            return (
+              <ModalMenu
+                key={modalMenu.name}
+                modalMenus={[modalMenu]}
+                mode={mode ?? ''}
+              />
+            );
           }
           return null;
         })}

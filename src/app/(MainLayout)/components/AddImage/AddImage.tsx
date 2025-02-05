@@ -52,7 +52,7 @@ const AddImage = ({
                 return (
                   <div className={styles.image_preview_box}>
                     <Image
-                      key={image.file.name}
+                      key={`image_preview_${image.index}`}
                       src={image.src}
                       className={styles.feed_image_preview}
                       width={100}
@@ -60,7 +60,7 @@ const AddImage = ({
                       alt="feed_image_preview"
                     />
                     <Remove
-                      key={`${image.file.name}_remove`}
+                      key={`image_preview_${image.index}_remove`}
                       className={styles.image_remove}
                       onClick={() => removeImage(idx)}
                     />

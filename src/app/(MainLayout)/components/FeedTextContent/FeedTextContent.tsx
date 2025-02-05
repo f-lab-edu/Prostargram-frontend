@@ -2,6 +2,7 @@ import Image from 'next/image';
 
 import { compactTimeFormatter } from '@/utils/formatter';
 import ProfileFollowButton from '@/app/profile/components/Profile/ProfileFollowButton';
+import { getUserId } from '@/utils/manageToken';
 
 import styles from './FeedTextContent.module.scss';
 
@@ -22,7 +23,7 @@ const DEFAULT_PROFILE =
 
 const FeedTextContent = ({ feedData }: FeedTextContentProps) => {
   const {
-    userId,
+    userId: toUserId,
     userName,
     profileUrl = DEFAULT_PROFILE,
     isFollow,
@@ -30,6 +31,9 @@ const FeedTextContent = ({ feedData }: FeedTextContentProps) => {
     content,
     hashTagNames,
   } = feedData;
+
+  const userId = getUserId();
+
   return (
     <div className={styles.container}>
       <div className={styles.profile_wrapper}>
@@ -42,7 +46,8 @@ const FeedTextContent = ({ feedData }: FeedTextContentProps) => {
         </div>
         <div className={styles.profile_follow_btn}>
           <ProfileFollowButton
-            userId={userId}
+            fromUserId={userId}
+            toUserId={toUserId}
             size="small"
             isFollow={isFollow}
           />

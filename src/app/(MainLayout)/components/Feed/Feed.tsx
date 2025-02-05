@@ -6,16 +6,16 @@ import FeedCenter from '../FeedCenter/FeedCenter';
 
 type FeedProps = {
   feed: Feed.FeedData;
-  setDetailFeedId: (feedId: number) => void;
+  feedIndex: number;
 };
 
 const Feed = forwardRef<HTMLDivElement, FeedProps>(
-  ({ feed, setDetailFeedId }, ref) => {
+  ({ feed, feedIndex }, ref) => {
     return (
       <div ref={ref} className={styles.feed_container}>
         <FeedTop feed={feed} />
-        <FeedCenter post={feed.post} />
-        <FeedBottom setDetailFeedId={setDetailFeedId} feed={feed} />
+        <FeedCenter feedIndex={feedIndex} post={feed.post} />
+        <FeedBottom feed={feed} />
       </div>
     );
   },

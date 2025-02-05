@@ -1,7 +1,7 @@
 import { FormEvent, useState, useEffect } from 'react';
 
 export type FeedImage = {
-  file: File;
+  file?: File;
   index: number;
   src: string;
 };
@@ -66,6 +66,16 @@ const useImageUpload = () => {
     setCurrentImage(image);
   };
 
+  const setPostImage = (imageUrl: string[]) => {
+    const postImages = imageUrl.map((url, idx) => ({
+      index: idx,
+      src: url,
+    }));
+
+    setImages(postImages);
+    setCurrentImage(postImages[0]);
+  };
+
   useEffect(() => {
     initCurrentImage();
   }, [images]);
@@ -76,6 +86,7 @@ const useImageUpload = () => {
     selectImageFile,
     updateCurrentImage,
     removeImage,
+    setPostImage,
   };
 };
 

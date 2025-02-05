@@ -1,6 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+
 import Modal from '@/components/common/Modal';
 import useImageUpload from '@/hooks/useImageUpload';
 import ConfirmPopup from '@/components/common/Popup/ConfirmPopup/ConfirmPopup';
@@ -9,27 +11,55 @@ import {
   useCreateCommonFeed,
 } from '@/api/feed/feedMutations';
 import { HttpSuccessType } from '@/api/httpRequest';
-import style from './CommonFeed.module.scss';
+import { useGetDetailCommonFeed } from '@/api/feed/feedQueries';
+
 import AddImage from '../AddImage/AddImage';
 import AddContent from '../AddContent/AddContent';
 import { FeedPopup, CommonFeedStep } from '../../types/feed';
+import style from './CommonFeed.module.scss';
 
 const CommonFeed = () => {
+  const pathname = useSearchParams();
+  const postId = pathname.get('postId');
+
+  const { data: postData } = useGetDetailCommonFeed(postId!, {
+    enabled: postId !== null,
+  });
+
   const [step, setStep] = useState<CommonFeedStep>('이미지추가');
+
   const {
     images,
     currentImage,
     selectImageFile,
     updateCurrentImage,
     removeImage,
+    setPostImage,
   } = useImageUpload();
+
   const [commonFeedData, setCommonFeedData] =
     useState<Feed.BasicPostRequestBody>({
       imageCount: images.length,
       content: '',
       hashTagNames: [],
-      createdAt: '',
     });
+
+  const setPostData = () => {
+    if (postId && postData) {
+      const basicPostData = postData.result?.post as Feed.BasicPost;
+
+      setCommonFeedData((prev) => ({
+        ...prev,
+        content: basicPostData?.content,
+        hashTagNames: basicPostData?.hashTagNames,
+      }));
+      setPostImage(basicPostData?.contentImageUrls);
+    }
+  };
+
+  useEffect(() => {
+    setPostData();
+  }, []);
 
   const updateCommonFeedData = (
     nextCommonFeedData: Partial<Feed.BasicPostRequestBody>,
@@ -43,32 +73,65 @@ const CommonFeed = () => {
   const [popupState, setPopupState] = useState<FeedPopup>(null);
 
   const handleCloseModal = () => setPopupState('confirm');
+
   const handleOpenPublishPopup = () => setPopupState('publish');
   const handleClosePopup = () => setPopupState(null);
 
   const { mutate: batchImageUploadMutation } = useBatchImageUpload();
-  const { mutate: commonFeedMutation } = useCreateCommonFeed(commonFeedData, {
-    onSuccess: (data: HttpSuccessType<Feed.BasicPostResponse>) => {
-      const imageFiles = images.map((image) => image.file);
+  const batchImageUpload = (
+    data: HttpSuccessType<Feed.BasicPostResponse>,
+    imageFiles: File[],
+  ) => {
+    if (data.result?.preSignedImageUrls) {
+      const res = batchImageUploadMutation({
+        preSignedImageUrls: data.result?.preSignedImageUrls,
+        images: imageFiles,
+      });
 
-      if (data.result?.preSignedImageUrls) {
-        const res = batchImageUploadMutation({
-          preSignedImageUrls: data.result?.preSignedImageUrls,
-          images: imageFiles,
-        });
+      console.log('NCP 이미지 업로드', res);
+    }
+  };
 
-        console.log('NCP 이미지 업로드', res);
-      }
+  const { mutate: commonFeedCreateMutation } = useCreateCommonFeed(
+    commonFeedData,
+    {
+      onSuccess: (data: HttpSuccessType<Feed.BasicPostResponse>) => {
+        const imageFiles = images.map((image) => image.file!);
+        batchImageUpload(data, imageFiles);
+      },
     },
-  });
+  );
+  const { mutate: commonFeedUpdateMutation } = useCreateCommonFeed(
+    { ...commonFeedData, postId: postId! },
+    {
+      onSuccess: (data: HttpSuccessType<Feed.BasicPostResponse>) => {
+        // 기존 이미지는 제거
+        if (images.some((image) => image.file)) {
+          const imageFiles = images
+            .filter((image) => image.file)
+            .map((image) => image.file!);
+
+          batchImageUpload(data, imageFiles);
+        }
+      },
+    },
+  );
+
+  const closePopup = () => {
+    handleClosePopup();
+    window.location.href = '/';
+  };
 
   const createCommonFeed = () => {
     // TODO: 일반피드 작성 서버 API 연동
     console.log('데이터', commonFeedData);
-    commonFeedMutation();
-    // console.log('게시물 작성 완료!', data);
-    handleClosePopup();
-    window.location.href = '/';
+    commonFeedCreateMutation();
+    // closePopup();
+  };
+
+  const updateCommonFeed = () => {
+    commonFeedUpdateMutation();
+    closePopup();
   };
 
   const handleDeleteFeed = () => {
@@ -125,10 +188,10 @@ const CommonFeed = () => {
         <ConfirmPopup
           leftBtnColor="blue"
           rightBtnColor="gray"
-          mainText="피드를 게시하시겠습니까?"
-          leftBtnText="게시"
+          mainText={`피드를 ${postId ? '수정' : '게시'}하시겠습니까?`}
+          leftBtnText={`${postId ? '수정' : '게시'}`}
           rightBtnText="취소"
-          onAction={createCommonFeed}
+          onAction={postId ? updateCommonFeed : createCommonFeed}
           onCancel={handleClosePopup}
         />
       )}
