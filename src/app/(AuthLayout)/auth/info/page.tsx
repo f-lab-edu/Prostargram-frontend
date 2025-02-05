@@ -35,10 +35,12 @@ type UserInterestsType = {
 const AdditionalInfoPage = () => {
   const router = useRouter();
   const { addToast } = useToastContext();
+  const { requestSaveSocialAccounts } = useSocialAccountsServerRequest();
+  const { requestSaveInterest } = useInterestsServerRequests();
 
   const [userSocialAccounts, setUserSocialAccounts] = useState<
     UserSocialAccountType[]
-  >([{ id: Date.now().toLocaleString(), socialAccount: '' }]);
+  >([{ id: generateId(), socialAccount: '' }]);
   const [userInterests, setUserInterests] = useState<UserInterestsType>({
     recommended: [],
     user: [],
@@ -63,7 +65,7 @@ const AdditionalInfoPage = () => {
   const addUserSocialAccount = () => {
     setUserSocialAccounts((prev) => [
       ...prev,
-      { id: Date.now().toLocaleString(), socialAccount: '' },
+      { id: generateId(), socialAccount: '' },
     ]);
   };
 
@@ -73,32 +75,23 @@ const AdditionalInfoPage = () => {
     );
   };
 
-  const addUserInterest = (interstName?: string) => {
+  const addInterest = (type: 'user' | 'recommended', interestName?: string) => {
     if (isMax) return;
-    setUserInterests(({ recommended, user }) => ({
-      recommended,
-      user: [
-        ...user,
-        {
-          id: generateId(),
-          interestName: interstName ?? '',
-        },
-      ],
-    }));
-  };
+    setUserInterests(({ user, recommended }) => {
+      const newInterest = {
+        id: generateId(),
+        interestName: interestName ?? '',
+      };
 
-  const addRecommendedInterest = (interstName?: string) => {
-    if (isMax) return;
-    setUserInterests(({ user, recommended }) => ({
-      user,
-      recommended: [
-        ...recommended,
-        {
-          id: generateId(),
-          interestName: interstName ?? '',
-        },
-      ],
-    }));
+      const nextUser = type === 'user' ? [...user, newInterest] : user;
+      const nextRecommended =
+        type === 'recommended' ? [...recommended, newInterest] : recommended;
+
+      return {
+        user: nextUser,
+        recommended: nextRecommended,
+      };
+    });
   };
 
   const updateUserInterest = (field: UserInterestType) => {
@@ -120,11 +113,6 @@ const AdditionalInfoPage = () => {
   const changeError = (bool: boolean) => {
     setIsError(bool);
   };
-
-  console.log(userInterests);
-
-  const { requestSaveSocialAccounts } = useSocialAccountsServerRequest();
-  const { requestSaveInterest } = useInterestsServerRequests();
 
   const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -160,6 +148,8 @@ const AdditionalInfoPage = () => {
       },
     });
   };
+
+  console.log(userInterests);
 
   return (
     <div className={styles.container}>
@@ -213,7 +203,9 @@ const AdditionalInfoPage = () => {
                   isMax={isMax}
                   isCheckedInterest={Boolean(findedInterestId)}
                   onClickWithChecked={removeInterestIfinterestIsMatched}
-                  onClickWithUnchecked={() => addRecommendedInterest(interest)}
+                  onClickWithUnchecked={() =>
+                    addInterest('recommended', interest)
+                  }
                 />
               );
             })}
@@ -244,7 +236,7 @@ const AdditionalInfoPage = () => {
                 type="button"
                 fill="white"
                 className={styles.interest_button}
-                onClick={() => addUserInterest()}
+                onClick={() => addInterest('user')}
               >
                 <PlusIcon width="20" />
               </Button>
