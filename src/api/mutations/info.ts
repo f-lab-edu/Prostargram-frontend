@@ -8,11 +8,7 @@ import {
 } from '../info';
 
 const useAddSocialAccountMutation = (
-  options: UseMutationOptions<
-    HttpSuccessType<unknown>,
-    ResponseError,
-    { socialAccountUrl: string }
-  >,
+  options: UseMutationOptions<HttpSuccessType<unknown>, ResponseError, string>,
 ) => {
   return useMutation({
     mutationFn: postSocialAccount,
@@ -21,11 +17,7 @@ const useAddSocialAccountMutation = (
 };
 
 const useRemoveSocialAccountMutation = (
-  options: UseMutationOptions<
-    HttpSuccessType<unknown>,
-    ResponseError,
-    { socialAccountUrl: string }
-  >,
+  options: UseMutationOptions<HttpSuccessType<unknown>, ResponseError, string>,
 ) => {
   return useMutation({
     mutationFn: removeSocialAccount,

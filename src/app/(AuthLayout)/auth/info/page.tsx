@@ -1,6 +1,7 @@
 'use client';
 
 import clsx from 'clsx';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 
@@ -31,6 +32,23 @@ const AdditionalInfoPage = () => {
   const methods = useForm<IAddionalInfoType>({
     defaultValues: { links: [{ link: '' }], interests: [], myInterests: [] },
   });
+  const [userSocialAccounts, setUserSocialAccounts] = useState<
+    { id: string; socialAccount: string }[]
+  >([{ id: Date.now().toLocaleString(), socialAccount: '' }]);
+  // const [userInterests, setUserInterests] = useState<string[]>([]);
+
+  const addUserSocialAccount = () => {
+    setUserSocialAccounts((prev) => [
+      ...prev,
+      { id: Date.now().toLocaleString(), socialAccount: '' },
+    ]);
+  };
+
+  const removeUserSocialAccount = (removeTargetId: string) => {
+    setUserSocialAccounts((prev) =>
+      prev.filter(({ id }) => id !== removeTargetId),
+    );
+  };
 
   const {
     control,
@@ -38,16 +56,6 @@ const AdditionalInfoPage = () => {
     handleSubmit,
     formState: { errors },
   } = methods;
-
-  const {
-    fields: linkFields,
-    appendField: appendLink,
-    removeField: removeLink,
-  } = useAdditionalInfoFieldArray<IAddionalInfoType>({
-    name: 'links',
-    control,
-    fieldLimit: LINK_FIELDS_LIMIT,
-  });
 
   const {
     fields: myInterestsFields,
@@ -63,10 +71,13 @@ const AdditionalInfoPage = () => {
   const { requestSaveInterest } = useInterestsServerRequests();
 
   const submitHandler: SubmitHandler<IAddionalInfoType> = async (values) => {
-    const { links, interests, myInterests } = values;
+    const { interests, myInterests } = values;
 
     const userId = getUserId();
-    const uniqueSocialAccounts = links.filter((v) => !!v.link);
+    const uniqueSocialAccounts = userSocialAccounts
+      .map(({ socialAccount }) => socialAccount)
+      .filter((socialAccount) => !!socialAccount);
+
     const myInterestsNames = myInterests.map(({ myInterest }) => ({
       userId,
       interestName: myInterest,
@@ -111,19 +122,20 @@ const AdditionalInfoPage = () => {
           <Field>
             <Field.Label htmlFor="links">링크 (최대 3개)</Field.Label>
             <Field.Box className={styles.link_field}>
-              {linkFields.map((field, index) => (
+              {userSocialAccounts.map((field, index) => (
                 <AdditionalLink
                   key={field.id}
+                  id={field.id}
                   index={index}
-                  removeHandler={() => removeLink(index)}
+                  removeHandler={removeUserSocialAccount}
                 />
               ))}
-              {linkFields.length !== LINK_FIELDS_LIMIT && (
+              {userSocialAccounts.length !== LINK_FIELDS_LIMIT && (
                 <Button
                   type="button"
                   fill="white"
                   className={styles.link_button}
-                  onClick={() => appendLink({ link: '' })}
+                  onClick={addUserSocialAccount}
                 >
                   <PlusIcon width="20" />
                 </Button>

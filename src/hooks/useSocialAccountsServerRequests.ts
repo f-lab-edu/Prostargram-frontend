@@ -5,12 +5,8 @@ import {
 import { requestPromiseAll } from '@/utils/asyncLogic';
 import { useToastContext } from '@/components/common/Toast/ToastProvider';
 
-type SocialAccountType = {
-  link: string;
-};
-
 type RequestSaveInterestType = {
-  targetSocialAccounts: SocialAccountType[];
+  targetSocialAccounts: string[];
   onSuccess?: () => void;
   onError?: () => void;
   successMessage?: string;
@@ -28,20 +24,17 @@ const useSocialAccountsServerRequest = () => {
     onError,
     successMessage,
   }: RequestSaveInterestType) => {
-    const successfulSocialRequests: SocialAccountType[] = [];
+    const successfulSocialRequests: string[] = [];
 
     try {
-      await requestPromiseAll<SocialAccountType>(
+      await requestPromiseAll<string>(
         targetSocialAccounts,
-        async ({ link: socialAccountUrl }) =>
-          saveSocialAccount(
-            { socialAccountUrl },
-            {
-              onSuccess: () => {
-                successfulSocialRequests.push({ link: socialAccountUrl });
-              },
+        async (socialAccount: string) =>
+          saveSocialAccount(socialAccount, {
+            onSuccess: () => {
+              successfulSocialRequests.push(socialAccount);
             },
-          ),
+          }),
       );
 
       if (successMessage) {
@@ -55,10 +48,10 @@ const useSocialAccountsServerRequest = () => {
         onSuccess();
       }
     } catch (error) {
-      await requestPromiseAll<SocialAccountType>(
+      await requestPromiseAll<string>(
         successfulSocialRequests,
-        async ({ link: socialAccountUrl }) => {
-          removeSocialAccount({ socialAccountUrl });
+        async (socialAccount) => {
+          removeSocialAccount(socialAccount);
         },
       );
 
