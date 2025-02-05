@@ -22,7 +22,7 @@ const useSocialAccountsServerRequest = () => {
   const { mutate: removeSocialAccount } = useRemoveSocialAccountMutation({});
   const { addToast } = useToastContext();
 
-  const requestSocialAccountSaveSocialAccounts = async ({
+  const requestSaveSocialAccounts = async ({
     targetSocialAccounts,
     onSuccess,
     onError,
@@ -68,7 +68,7 @@ const useSocialAccountsServerRequest = () => {
     }
   };
 
-  return { requestSocialAccountSaveSocialAccounts };
+  return { requestSaveSocialAccounts };
 };
 
 export default useSocialAccountsServerRequest;

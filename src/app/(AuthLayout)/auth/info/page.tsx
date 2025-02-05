@@ -2,7 +2,7 @@
 
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
-import { FormProvider, SubmitHandler } from 'react-hook-form';
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 
 import { RECOMMANED_INTERESTS } from '@/data/mock';
 import Logo from '@/components/common/Logo';
@@ -18,7 +18,6 @@ import AdditionalLink from './components/AdditionalLink';
 import MyInterestField from './components/MyInterestField';
 import InterestCheckbox from './components/InterestCheckbox';
 import { IAddionalInfoType } from './types/AdditionalInfoTypes';
-import useAdditionalInfoForm from './hooks/useAdditionalInfoForm';
 import useAdditionalInfoFieldArray from './hooks/useAdditionalInfoFieldArray';
 
 import styles from './page.module.scss';
@@ -29,7 +28,7 @@ const MY_INTERESTS_FIELDS_LIMIT = 10;
 const AdditionalInfoPage = () => {
   const router = useRouter();
   const { addToast } = useToastContext();
-  const methods = useAdditionalInfoForm<IAddionalInfoType>({
+  const methods = useForm<IAddionalInfoType>({
     defaultValues: { links: [{ link: '' }], interests: [], myInterests: [] },
   });
 
@@ -60,8 +59,7 @@ const AdditionalInfoPage = () => {
     fieldLimit: MY_INTERESTS_FIELDS_LIMIT,
   });
 
-  const { requestSocialAccountSaveSocialAccounts } =
-    useSocialAccountsServerRequest();
+  const { requestSaveSocialAccounts } = useSocialAccountsServerRequest();
   const { requestSaveInterest } = useInterestsServerRequests();
 
   const submitHandler: SubmitHandler<IAddionalInfoType> = async (values) => {
@@ -80,7 +78,7 @@ const AdditionalInfoPage = () => {
     const wholeInterestName = [...myInterestsNames, ...interestNames];
 
     if (uniqueSocialAccounts.length) {
-      requestSocialAccountSaveSocialAccounts({
+      requestSaveSocialAccounts({
         targetSocialAccounts: uniqueSocialAccounts,
       });
     }
