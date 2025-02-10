@@ -3,15 +3,16 @@
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Typo from '@/components/common/Typo';
+
+import { getUserId } from '@/utils/manageToken';
 import { useGetFollowList } from '@/api/follow/followQueries';
+
 import styles from './FollowingList.module.scss';
 
-type FollowingListProps = {
-  userId: number;
-};
+const FollowingList = () => {
+  const userId = getUserId();
 
-const FollowingList = ({ userId }: FollowingListProps) => {
-  const { data: followings } = useGetFollowList({ userId, type: 'followings' });
+  const { data: followings } = useGetFollowList({ type: 'followings', userId });
   const router = useRouter();
 
   const moveUserProfilePage = (followingUserId: number) => {
@@ -24,6 +25,7 @@ const FollowingList = ({ userId }: FollowingListProps) => {
         followings?.result?.map((user) => {
           return (
             <li
+              key={user.userId}
               className={styles.following_li}
               onClick={() => moveUserProfilePage(user.userId!)}
               aria-hidden="true"

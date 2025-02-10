@@ -28,9 +28,6 @@ interface MyPageProps {
 
 type MyPageSearchParamsType = 'followings' | 'followers' | 'feeds';
 
-const isFollow = false;
-// const isMine = true;
-
 const paramCandidates = ['followers', 'followings', 'feeds'];
 
 const MyPage = ({ slug, userId }: MyPageProps) => {
@@ -39,6 +36,7 @@ const MyPage = ({ slug, userId }: MyPageProps) => {
   const { data: myData, isLoading } = useGetProfileInformation(userId, [
     userId,
   ]);
+  console.log(myData);
 
   const url = slug ? `/profile/${slug}` : '/profile';
 
@@ -65,6 +63,7 @@ const MyPage = ({ slug, userId }: MyPageProps) => {
     departmentName,
     selfIntroduction,
     profileImgUrl,
+    isFollow,
   } = myData.result;
 
   const formattedFollowers = compactNumberFormatter(

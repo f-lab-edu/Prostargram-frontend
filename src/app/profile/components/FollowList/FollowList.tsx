@@ -1,6 +1,8 @@
 'use client';
 
 import Image from 'next/image';
+
+import { getUserId } from '@/utils/manageToken';
 import { useGetFollowList } from '@/api/follow/followQueries';
 import ProfileFollowButton from '../Profile/ProfileFollowButton';
 
@@ -16,6 +18,7 @@ const FollowList = ({ type, userId }: FollowListProps) => {
     { userId, type },
     { gcTime: 100_000_000, staleTime: 100_000_000 },
   );
+  const myUserId = getUserId();
   const title = type === 'followers' ? '팔로워 페이지' : '팔로잉 페이지';
 
   if (!data || !data.result || data.result.length === 0) {
@@ -38,7 +41,7 @@ const FollowList = ({ type, userId }: FollowListProps) => {
                 <div className={styles.profile_image}>
                   {profileImgUrl ? (
                     <Image
-                      src={profileImgUrl}
+                      src=""
                       width="50"
                       height="50"
                       alt={`${userName}-profile`}
@@ -52,7 +55,11 @@ const FollowList = ({ type, userId }: FollowListProps) => {
                   <p>{departmentName}</p>
                 </div>
               </div>
-              <ProfileFollowButton userId={followerId} isFollow={false} />
+              <ProfileFollowButton
+                fromUserId={myUserId}
+                toUserId={followerId}
+                isFollow
+              />
             </li>
           ),
         )}

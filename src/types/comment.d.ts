@@ -12,7 +12,9 @@ declare module Comment {
   }
 
   interface CommentResponse {
-    basicUser: Feed.BasicUser;
-    comment: Common;
+    data: {
+      basicUser: Feed.BasicUser;
+      comment: Common;
+    }[];
   }
 }

@@ -1,24 +1,24 @@
 import { authInstance } from './httpRequest';
 
-const postSocialAccount = async (account: { socialAccountUrl: string }) => {
+const postSocialAccount = async (socialAccountUrl: string) => {
   const url = `/social-accounts`;
 
   const result = await authInstance({
     method: 'POST',
     url,
-    data: account,
+    data: { socialAccountUrl },
   });
 
   return result;
 };
 
-const removeSocialAccount = async (account: { socialAccountUrl: string }) => {
+const removeSocialAccount = async (socialAccountUrl: string) => {
   const url = `/social-accounts`;
 
   const result = await authInstance({
     method: 'DELETE',
     url,
-    data: account,
+    data: { socialAccountUrl },
   });
 
   return result;

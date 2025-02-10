@@ -15,19 +15,15 @@ interface MyLinkProps {
   isMine: boolean;
 }
 
-const makeLinkArrayExcludeB = <T,>(A: T[], B: T[]) =>
-  A.filter((link) => !B.includes(link)).map((link) => ({
-    link,
-  }));
+const makeArrayExcludeB = <T,>(A: T[], B: T[]) =>
+  A.filter((link) => !B.includes(link));
 
 const MyLink = ({ links, isMine }: MyLinkProps) => {
-  const [myLinks, setMyLinks] = useState(links);
+  const [myLinks, setMyLinks] = useState<string[]>(links);
   const [isEdit, setIsEdit] = useState<boolean>(false);
 
-  const {
-    requestSocialAccountSaveSocialAccounts,
-    requestSocialAccountRemoveSocialAccounts,
-  } = useSocialAccountsServerRequest();
+  const { requestSaveSocialAccounts, requestRemoveSocialAccounts } =
+    useSocialAccountsServerRequest();
 
   const toggleEdit = () => setIsEdit((prev) => !prev);
 
@@ -39,15 +35,15 @@ const MyLink = ({ links, isMine }: MyLinkProps) => {
       .filter((v) => Boolean(v))
       .map((link) => link.toString());
 
-    const needToAddLinks = makeLinkArrayExcludeB(currentLinks, links);
-    const needToRemoveLinks = makeLinkArrayExcludeB(links, currentLinks);
+    const needToAddLinks = makeArrayExcludeB(currentLinks, links);
+    const needToRemoveLinks = makeArrayExcludeB(links, currentLinks);
 
-    requestSocialAccountSaveSocialAccounts({
+    requestSaveSocialAccounts({
       targetSocialAccounts: needToAddLinks,
       onError: () => setMyLinks(links),
     });
 
-    requestSocialAccountRemoveSocialAccounts({
+    requestRemoveSocialAccounts({
       targetSocialAccounts: needToRemoveLinks,
       onError: () => setMyLinks(links),
     });

@@ -35,7 +35,7 @@ const useSignUpState = () => {
     CONFIRM_STATES.PENDING,
   );
 
-  const changeConfirmState = (state: ConfirmStateType) =>
+  const changeConfirmCodeState = (state: ConfirmStateType) =>
     setConfirmState(state);
 
   const changeUsernameState = (state: ConfirmStateType) =>
@@ -65,7 +65,7 @@ const useSignUpState = () => {
     isEmailRequest,
     isEmailRetry,
     isUsernameConfirmed,
-    changeConfirmState,
+    changeConfirmCodeState,
     changeUsernameState,
     changeSignupToken,
   };

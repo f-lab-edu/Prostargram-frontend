@@ -26,6 +26,7 @@ interface UserType {
   postCount: number;
   socialAccounts: SocialAccountType[];
   interests: UserInterestType[];
+  isFollow: boolean;
 }
 
 export type {

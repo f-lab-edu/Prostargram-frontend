@@ -1,17 +1,14 @@
 import clsx from 'clsx';
-import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { ModalMenuType } from '../../types/main';
 import styles from '../Menu/Menu.module.scss';
 
 type ModalMenuProps = {
   modalMenus: ModalMenuType[];
+  mode: string;
 };
 
-const ModalMenu = ({ modalMenus }: ModalMenuProps) => {
-  const searchParams = useSearchParams();
-  const mode = searchParams.get('mode');
-
+const ModalMenu = ({ modalMenus, mode }: ModalMenuProps) => {
   const setModalComponentByMode = () => {
     if (mode === 'basic') {
       return modalMenus.find((menu) => menu.name === '일반 피드 작성')

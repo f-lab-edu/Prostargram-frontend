@@ -10,7 +10,7 @@ const FeedTop = ({ feed }: FeedTopProps) => {
   return (
     <div className={styles.feed_top}>
       <FeedProfile userInfo={feed.basicUser} />
-      <FeedMenu post={feed.post} />
+      <FeedMenu feed={feed} />
     </div>
   );
 };

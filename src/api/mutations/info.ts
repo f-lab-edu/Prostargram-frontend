@@ -7,12 +7,12 @@ import {
   removeSocialAccount,
 } from '../info';
 
+type CustomMutationOptionType<T> =
+  | UseMutationOptions<HttpSuccessType<unknown>, ResponseError, T>
+  | undefined;
+
 const useAddSocialAccountMutation = (
-  options: UseMutationOptions<
-    HttpSuccessType<unknown>,
-    ResponseError,
-    { socialAccountUrl: string }
-  >,
+  options: CustomMutationOptionType<string> = {},
 ) => {
   return useMutation({
     mutationFn: postSocialAccount,
@@ -21,11 +21,7 @@ const useAddSocialAccountMutation = (
 };
 
 const useRemoveSocialAccountMutation = (
-  options: UseMutationOptions<
-    HttpSuccessType<unknown>,
-    ResponseError,
-    { socialAccountUrl: string }
-  >,
+  options: CustomMutationOptionType<string> = {},
 ) => {
   return useMutation({
     mutationFn: removeSocialAccount,
@@ -34,11 +30,10 @@ const useRemoveSocialAccountMutation = (
 };
 
 const useAddInterest = (
-  options: UseMutationOptions<
-    HttpSuccessType<unknown>,
-    ResponseError,
-    { userId: number; interestName: string }
-  >,
+  options: CustomMutationOptionType<{
+    userId: number;
+    interestName: string;
+  }> = {},
 ) => {
   return useMutation({
     mutationFn: postInterest,
@@ -47,11 +42,11 @@ const useAddInterest = (
 };
 
 const useRemoveInterest = (
-  options: UseMutationOptions<
-    HttpSuccessType<unknown>,
-    ResponseError,
-    { userId: number; hashTagId: number; name: string }
-  >,
+  options: CustomMutationOptionType<{
+    userId: number;
+    hashTagId: number;
+    name: string;
+  }> = {},
 ) => {
   return useMutation({
     mutationFn: removeInterest,

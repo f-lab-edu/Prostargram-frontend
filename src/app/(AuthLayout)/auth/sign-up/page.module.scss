@@ -38,7 +38,7 @@
   .button {
     @include res--desktop {
       flex: 1;
-      min-width: 100px;
+      min-width: 5rem;
     }
   }
 

@@ -1,4 +1,4 @@
-import { getProfile } from '@/api/profile/apis';
+import { getProfile } from '@/api/profile';
 import { useAddInterest, useRemoveInterest } from '@/api/mutations/info';
 import { getUserId } from '@/utils/manageToken';
 import { requestPromiseAll } from '@/utils/asyncLogic';
@@ -31,8 +31,8 @@ type RemoveInterestType = RequestInterestType & {
 };
 
 const useInterestsServerRequests = () => {
-  const { mutate: saveInterest } = useAddInterest({});
-  const { mutate: removeInterest } = useRemoveInterest({});
+  const { mutate: saveInterest } = useAddInterest();
+  const { mutate: removeInterest } = useRemoveInterest();
   const { addToast } = useToastContext();
 
   const requestSaveInterest = async ({
@@ -47,7 +47,7 @@ const useInterestsServerRequests = () => {
     try {
       await requestPromiseAll<InterestWithUserIdType>(
         targetInterests,
-        async ({ interestName }) =>
+        ({ interestName }) =>
           saveInterest(
             { userId, interestName },
             {
@@ -69,13 +69,13 @@ const useInterestsServerRequests = () => {
         onSuccess();
       }
     } catch (error) {
-      const profileResponse = await getProfile(userId);
+      const profileResponse = await getProfile();
       if (profileResponse.isSuccess && profileResponse.result) {
         const { interests } = profileResponse.result;
 
         await requestPromiseAll<InterestWithUserIdType>(
           successfulIntersetRequests,
-          async ({ interestName }) => {
+          ({ interestName }) => {
             const hashTagId = interests.find(
               ({ hashTagName }) => interestName === hashTagName,
             )?.hashTagId;

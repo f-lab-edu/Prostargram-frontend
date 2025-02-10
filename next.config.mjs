@@ -27,6 +27,7 @@ const nextConfig = {
         hostname: 'kr.object.ncloudstorage.com',
       },
     ],
+    formats: ['image/avif', 'image/webp'],
   },
   webpack(config) {
     // Grab the existing rule that handles SVG imports

@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { ChangeEvent, FormEvent, useRef, useState } from 'react';
 
-import If from '@/components/common/If';
+import { getUserId } from '@/utils/manageToken';
 import { useProfileImageMutation } from '@/api/profile/profileMutation';
 
 import DefaultAvatar from '@/assets/icons/default_avatar.svg';
@@ -23,6 +23,7 @@ const Profile = ({ userId, profileUrl, isMine, isFollow }: ProfileProps) => {
   const [profile, setProfile] = useState<string | undefined>(profileUrl);
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const fileRef = useRef<HTMLInputElement>(null);
+  const myUserId = getUserId();
 
   const { mutate: updateProfile } = useProfileImageMutation();
 
@@ -30,9 +31,10 @@ const Profile = ({ userId, profileUrl, isMine, isFollow }: ProfileProps) => {
 
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
+    if (!isMine) return;
+
     updateProfile(
-      { formData },
+      { formData: new FormData(e.currentTarget) },
       {
         onSuccess: () => toggleEdit(),
       },
@@ -106,18 +108,19 @@ const Profile = ({ userId, profileUrl, isMine, isFollow }: ProfileProps) => {
       </div>
 
       <div className={styles.profile_button_wrapper}>
-        <If condition={isMine}>
-          <If.True>
-            <ProfileEditButton
-              isEdit={isEdit}
-              onCancel={cancelHandler}
-              onToggle={toggleEdit}
-            />
-          </If.True>
-          <If.False>
-            <ProfileFollowButton userId={userId} isFollow={isFollow} />
-          </If.False>
-        </If>
+        {isMine ? (
+          <ProfileEditButton
+            isEdit={isEdit}
+            onCancel={cancelHandler}
+            onToggle={toggleEdit}
+          />
+        ) : (
+          <ProfileFollowButton
+            fromUserId={myUserId}
+            toUserId={userId}
+            isFollow={isFollow}
+          />
+        )}
       </div>
     </form>
   );

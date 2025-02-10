@@ -5,12 +5,8 @@ import {
 import { requestPromiseAll } from '@/utils/asyncLogic';
 import { useToastContext } from '@/components/common/Toast/ToastProvider';
 
-type SocialAccountType = {
-  link: string;
-};
-
-type RequestSocialAccountType = {
-  targetSocialAccounts: SocialAccountType[];
+type RequestSaveInterestType = {
+  targetSocialAccounts: string[];
   onSuccess?: () => void;
   onError?: () => void;
   successMessage?: string;
@@ -18,30 +14,27 @@ type RequestSocialAccountType = {
 };
 
 const useSocialAccountsServerRequest = () => {
-  const { mutate: saveSocialAccount } = useAddSocialAccountMutation({});
-  const { mutate: removeSocialAccount } = useRemoveSocialAccountMutation({});
+  const { mutate: saveSocialAccount } = useAddSocialAccountMutation();
+  const { mutate: removeSocialAccount } = useRemoveSocialAccountMutation();
   const { addToast } = useToastContext();
 
-  const requestSocialAccountSaveSocialAccounts = async ({
+  const requestSaveSocialAccounts = async ({
     targetSocialAccounts,
     onSuccess,
     onError,
     successMessage,
-  }: RequestSocialAccountType) => {
-    const successfulSocialRequests: SocialAccountType[] = [];
+  }: RequestSaveInterestType) => {
+    const successfulSocialRequests: string[] = [];
 
     try {
-      await requestPromiseAll<SocialAccountType>(
+      await requestPromiseAll<string>(
         targetSocialAccounts,
-        async ({ link: socialAccountUrl }) =>
-          saveSocialAccount(
-            { socialAccountUrl },
-            {
-              onSuccess: () => {
-                successfulSocialRequests.push({ link: socialAccountUrl });
-              },
+        (socialAccount: string) =>
+          saveSocialAccount(socialAccount, {
+            onSuccess: () => {
+              successfulSocialRequests.push(socialAccount);
             },
-          ),
+          }),
       );
 
       if (successMessage) {
@@ -55,10 +48,10 @@ const useSocialAccountsServerRequest = () => {
         onSuccess();
       }
     } catch (error) {
-      await requestPromiseAll<SocialAccountType>(
+      await requestPromiseAll<string>(
         successfulSocialRequests,
-        async ({ link: socialAccountUrl }) => {
-          removeSocialAccount({ socialAccountUrl });
+        (socialAccount) => {
+          removeSocialAccount(socialAccount);
         },
       );
 
@@ -67,28 +60,21 @@ const useSocialAccountsServerRequest = () => {
       }
     }
   };
-  const requestSocialAccountRemoveSocialAccounts = async ({
+  const requestRemoveSocialAccounts = async ({
     targetSocialAccounts,
     onSuccess,
     onError,
     successMessage,
-  }: RequestSocialAccountType) => {
-    const successfulSocialAccountRequests: SocialAccountType[] = [];
+  }: RequestSaveInterestType) => {
+    const successfulSocialAccountRequests: string[] = [];
 
     try {
-      await requestPromiseAll<SocialAccountType>(
-        targetSocialAccounts,
-        async ({ link: socialAccountUrl }) =>
-          removeSocialAccount(
-            { socialAccountUrl },
-            {
-              onSuccess: () => {
-                successfulSocialAccountRequests.push({
-                  link: socialAccountUrl,
-                });
-              },
-            },
-          ),
+      await requestPromiseAll<string>(targetSocialAccounts, async (link) =>
+        removeSocialAccount(link, {
+          onSuccess: () => {
+            successfulSocialAccountRequests.push(link);
+          },
+        }),
       );
 
       if (successMessage) {
@@ -102,10 +88,10 @@ const useSocialAccountsServerRequest = () => {
         onSuccess();
       }
     } catch (error) {
-      await requestPromiseAll<SocialAccountType>(
+      await requestPromiseAll<string>(
         successfulSocialAccountRequests,
-        async ({ link: socialAccountUrl }) => {
-          saveSocialAccount({ socialAccountUrl });
+        async (link) => {
+          saveSocialAccount(link);
         },
       );
 
@@ -116,8 +102,8 @@ const useSocialAccountsServerRequest = () => {
   };
 
   return {
-    requestSocialAccountSaveSocialAccounts,
-    requestSocialAccountRemoveSocialAccounts,
+    requestSaveSocialAccounts,
+    requestRemoveSocialAccounts,
   };
 };
 
