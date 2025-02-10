@@ -34,7 +34,7 @@ const useInterestsServerRequests = () => {
     try {
       await requestPromiseAll<InterestWithUserIdType>(
         targetInterests,
-        async ({ userId: interestUserId, interestName }) =>
+        ({ userId: interestUserId, interestName }) =>
           saveInterest(
             { userId: interestUserId, interestName },
             {
@@ -62,7 +62,7 @@ const useInterestsServerRequests = () => {
 
         await requestPromiseAll<InterestWithUserIdType>(
           successfulIntersetRequests,
-          async ({ userId: interestUserId, interestName }) => {
+          ({ userId: interestUserId, interestName }) => {
             const hashTagId = interests.find(
               ({ hashTagName }) => interestName === hashTagName,
             )?.hashTagId;

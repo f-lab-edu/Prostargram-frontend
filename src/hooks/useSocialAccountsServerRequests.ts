@@ -14,8 +14,8 @@ type RequestSaveInterestType = {
 };
 
 const useSocialAccountsServerRequest = () => {
-  const { mutate: saveSocialAccount } = useAddSocialAccountMutation({});
-  const { mutate: removeSocialAccount } = useRemoveSocialAccountMutation({});
+  const { mutate: saveSocialAccount } = useAddSocialAccountMutation();
+  const { mutate: removeSocialAccount } = useRemoveSocialAccountMutation();
   const { addToast } = useToastContext();
 
   const requestSaveSocialAccounts = async ({
@@ -29,7 +29,7 @@ const useSocialAccountsServerRequest = () => {
     try {
       await requestPromiseAll<string>(
         targetSocialAccounts,
-        async (socialAccount: string) =>
+        (socialAccount: string) =>
           saveSocialAccount(socialAccount, {
             onSuccess: () => {
               successfulSocialRequests.push(socialAccount);
@@ -50,7 +50,7 @@ const useSocialAccountsServerRequest = () => {
     } catch (error) {
       await requestPromiseAll<string>(
         successfulSocialRequests,
-        async (socialAccount) => {
+        (socialAccount) => {
           removeSocialAccount(socialAccount);
         },
       );

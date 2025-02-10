@@ -1,7 +1,7 @@
 'use client';
 
 import clsx from 'clsx';
-import { FormEvent, useMemo, useState } from 'react';
+import { FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 
 import Logo from '@/components/common/Logo';
@@ -13,21 +13,15 @@ import useInterestsServerRequests from '@/hooks/useInterestsServerRequests';
 import useSocialAccountsServerRequest from '@/hooks/useSocialAccountsServerRequests';
 
 import PlusIcon from '@/assets/icons/plus.svg';
-import {
-  UserInterestType,
-  UserInterestsType,
-  UserSocialAccountType,
-} from './types/info';
 import AdditionalLink from './components/AdditionalLink';
 import MyInterestField from './components/MyInterestField';
 import RecommandedInterests from './components/RecommededInterests';
+import useUserInterest from './hooks/useUserInterest';
+import useUserSocialAccount from './hooks/useUserSocialAccount';
 
 import styles from './page.module.scss';
 
 const LINK_FIELDS_LIMIT = 3;
-const MY_INTERESTS_FIELDS_LIMIT = 10;
-
-const generateId = () => Date.now().toLocaleString();
 
 const AdditionalInfoPage = () => {
   const router = useRouter();
@@ -35,89 +29,17 @@ const AdditionalInfoPage = () => {
   const { requestSaveSocialAccounts } = useSocialAccountsServerRequest();
   const { requestSaveInterest } = useInterestsServerRequests();
 
-  const [userSocialAccounts, setUserSocialAccounts] = useState<
-    UserSocialAccountType[]
-  >([{ id: generateId(), socialAccount: '' }]);
+  const {
+    userInterests,
+    currentInterestList,
+    isMaxInterestCount,
+    addInterest,
+    removeUserInterest,
+    updateUserInterest,
+  } = useUserInterest();
 
-  const [userInterests, setUserInterests] = useState<UserInterestsType>({
-    recommended: [],
-    user: [],
-  });
-
-  const currentInterestList = useMemo(
-    () => [...userInterests.user, ...userInterests.recommended],
-    [userInterests],
-  );
-
-  const currentInterestStringList = useMemo(
-    () => [
-      ...new Set([
-        ...userInterests.user.map(({ interestName }) => interestName),
-        ...userInterests.recommended.map(({ interestName }) => interestName),
-      ]),
-    ],
-    [userInterests],
-  );
-
-  const isMax = currentInterestStringList.length >= MY_INTERESTS_FIELDS_LIMIT;
-
-  const addUserSocialAccount = () => {
-    setUserSocialAccounts((prev) => [
-      ...prev,
-      { id: generateId(), socialAccount: '' },
-    ]);
-  };
-
-  const removeUserSocialAccount = (removeTargetId: string) => {
-    setUserSocialAccounts((prev) =>
-      prev.filter(({ id }) => id !== removeTargetId),
-    );
-  };
-
-  const addInterest = (type: 'user' | 'recommended', interestName?: string) => {
-    if (isMax) return;
-
-    const newInterest = {
-      id: generateId(),
-      interestName: interestName ?? '',
-    };
-
-    setUserInterests((prev) => ({
-      ...prev,
-      [type]: [...prev[type], newInterest],
-    }));
-  };
-
-  const removeUserInterest = (removeTargetId: string) => {
-    setUserInterests(({ recommended, user }) => ({
-      recommended: recommended.filter(({ id }) => id !== removeTargetId),
-      user: user.filter(({ id }) => id !== removeTargetId),
-    }));
-  };
-
-  const updateUserInterest = (field: UserInterestType) => {
-    const newUserInterests: UserInterestType[] = [];
-
-    setUserInterests(({ recommended, user }) => ({
-      recommended,
-      user: user.reduce((acc, cur) => {
-        if (cur.id === field.id) {
-          const duplicateInterests = acc.filter(
-            (target) => target.interestName === cur.interestName,
-          ).length;
-          if (duplicateInterests > 0) {
-            return acc;
-          }
-
-          acc.push(field);
-          return acc;
-        }
-
-        acc.push(cur);
-        return acc;
-      }, newUserInterests),
-    }));
-  };
+  const { userSocialAccounts, addUserSocialAccount, removeUserSocialAccount } =
+    useUserSocialAccount();
 
   const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -188,7 +110,7 @@ const AdditionalInfoPage = () => {
             className={clsx(styles.field_box, styles.interest_field_box)}
           >
             <RecommandedInterests
-              isMax={isMax}
+              isMax={isMaxInterestCount}
               interests={currentInterestList}
               addInterest={addInterest}
               removeInterest={removeUserInterest}
@@ -210,7 +132,7 @@ const AdditionalInfoPage = () => {
               />
             ))}
 
-            {isMax === false && (
+            {isMaxInterestCount === false && (
               <Button
                 type="button"
                 fill="white"
