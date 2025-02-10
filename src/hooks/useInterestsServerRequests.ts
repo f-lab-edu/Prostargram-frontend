@@ -18,8 +18,8 @@ type RequestSaveInterestType = {
 };
 
 const useInterestsServerRequests = () => {
-  const { mutate: saveInterest } = useAddInterest({});
-  const { mutate: removeInterest } = useRemoveInterest({});
+  const { mutate: saveInterest } = useAddInterest();
+  const { mutate: removeInterest } = useRemoveInterest();
   const { addToast } = useToastContext();
 
   const requestSaveInterest = async ({
