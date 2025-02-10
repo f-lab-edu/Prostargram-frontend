@@ -21,17 +21,13 @@ type UserInterestType = { id: string; interestName: string };
 interface MyInterestFieldProps
   extends Omit<HTMLAttributes<HTMLInputElement>, 'onClick'> {
   field: UserInterestType;
-  checkList: string[];
   onRemove: (id: string) => void;
-  changeError: (boolean: boolean) => void;
   updateUserInterest: (field: UserInterestType) => void;
 }
 
 const MyInterestField = ({
   field,
-  checkList,
   onRemove,
-  changeError,
   updateUserInterest,
   ...props
 }: MyInterestFieldProps) => {
@@ -41,21 +37,9 @@ const MyInterestField = ({
 
   const inputWidth = calculateWidth(word.length);
 
-  const noticeDuplicateError = () => changeError(true);
-
-  const isDuplicate = () => {
-    if (word !== '' && checkList.includes(word)) {
-      noticeDuplicateError();
-      onRemove(field.id);
-      return true;
-    }
-    return false;
-  };
-
   const updateInterest = () => {
     updateUserInterest({ id: field.id, interestName: word });
     setIsEditing(false);
-    changeError(false);
   };
 
   const clickHandler = () => {
@@ -66,7 +50,6 @@ const MyInterestField = ({
 
   const keydownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key !== ' ' && e.key !== 'Enter') return;
-    if (isEditing && isDuplicate()) return;
     e.preventDefault();
 
     updateInterest();
@@ -77,7 +60,6 @@ const MyInterestField = ({
       onRemove(field.id);
       return;
     }
-    if (isEditing && isDuplicate()) return;
 
     updateInterest();
   };

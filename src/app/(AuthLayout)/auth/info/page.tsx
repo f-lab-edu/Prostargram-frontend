@@ -4,7 +4,6 @@ import clsx from 'clsx';
 import { FormEvent, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { RECOMMANED_INTERESTS } from '@/data/mock';
 import Logo from '@/components/common/Logo';
 import Field from '@/components/common/Field';
 import Button from '@/components/common/Button';
@@ -14,9 +13,14 @@ import useInterestsServerRequests from '@/hooks/useInterestsServerRequests';
 import useSocialAccountsServerRequest from '@/hooks/useSocialAccountsServerRequests';
 
 import PlusIcon from '@/assets/icons/plus.svg';
+import {
+  UserInterestType,
+  UserInterestsType,
+  UserSocialAccountType,
+} from './types/info';
 import AdditionalLink from './components/AdditionalLink';
 import MyInterestField from './components/MyInterestField';
-import InterestCheckbox from './components/InterestCheckbox';
+import RecommandedInterests from './components/RecommededInterests';
 
 import styles from './page.module.scss';
 
@@ -24,13 +28,6 @@ const LINK_FIELDS_LIMIT = 3;
 const MY_INTERESTS_FIELDS_LIMIT = 10;
 
 const generateId = () => Date.now().toLocaleString();
-
-type UserInterestType = { id: string; interestName: string };
-type UserSocialAccountType = { id: string; socialAccount: string };
-type UserInterestsType = {
-  recommended: UserInterestType[];
-  user: UserInterestType[];
-};
 
 const AdditionalInfoPage = () => {
   const router = useRouter();
@@ -41,11 +38,11 @@ const AdditionalInfoPage = () => {
   const [userSocialAccounts, setUserSocialAccounts] = useState<
     UserSocialAccountType[]
   >([{ id: generateId(), socialAccount: '' }]);
+
   const [userInterests, setUserInterests] = useState<UserInterestsType>({
     recommended: [],
     user: [],
   });
-  const [isError, setIsError] = useState<boolean>(false);
 
   const currentInterestList = useMemo(
     () => [...userInterests.user, ...userInterests.recommended],
@@ -54,8 +51,10 @@ const AdditionalInfoPage = () => {
 
   const currentInterestStringList = useMemo(
     () => [
-      ...userInterests.user.map(({ interestName }) => interestName),
-      ...userInterests.recommended.map(({ interestName }) => interestName),
+      ...new Set([
+        ...userInterests.user.map(({ interestName }) => interestName),
+        ...userInterests.recommended.map(({ interestName }) => interestName),
+      ]),
     ],
     [userInterests],
   );
@@ -77,29 +76,15 @@ const AdditionalInfoPage = () => {
 
   const addInterest = (type: 'user' | 'recommended', interestName?: string) => {
     if (isMax) return;
-    setUserInterests(({ user, recommended }) => {
-      const newInterest = {
-        id: generateId(),
-        interestName: interestName ?? '',
-      };
 
-      const nextUser = type === 'user' ? [...user, newInterest] : user;
-      const nextRecommended =
-        type === 'recommended' ? [...recommended, newInterest] : recommended;
+    const newInterest = {
+      id: generateId(),
+      interestName: interestName ?? '',
+    };
 
-      return {
-        user: nextUser,
-        recommended: nextRecommended,
-      };
-    });
-  };
-
-  const updateUserInterest = (field: UserInterestType) => {
-    setUserInterests(({ recommended, user }) => ({
-      recommended,
-      user: user.map((interest) =>
-        interest.id === field.id ? field : interest,
-      ),
+    setUserInterests((prev) => ({
+      ...prev,
+      [type]: [...prev[type], newInterest],
     }));
   };
 
@@ -110,14 +95,33 @@ const AdditionalInfoPage = () => {
     }));
   };
 
-  const changeError = (bool: boolean) => {
-    setIsError(bool);
+  const updateUserInterest = (field: UserInterestType) => {
+    const newUserInterests: UserInterestType[] = [];
+
+    setUserInterests(({ recommended, user }) => ({
+      recommended,
+      user: user.reduce((acc, cur) => {
+        if (cur.id === field.id) {
+          const duplicateInterests = acc.filter(
+            (target) => target.interestName === cur.interestName,
+          ).length;
+          if (duplicateInterests > 0) {
+            return acc;
+          }
+
+          acc.push(field);
+          return acc;
+        }
+
+        acc.push(cur);
+        return acc;
+      }, newUserInterests),
+    }));
   };
 
   const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const userId = getUserId();
-    console.log(userId);
 
     const uniqueSocialAccounts = userSocialAccounts
       .map(({ socialAccount }) => socialAccount)
@@ -148,8 +152,6 @@ const AdditionalInfoPage = () => {
       },
     });
   };
-
-  console.log(userInterests);
 
   return (
     <div className={styles.container}>
@@ -185,38 +187,17 @@ const AdditionalInfoPage = () => {
           <Field.Box
             className={clsx(styles.field_box, styles.interest_field_box)}
           >
-            {RECOMMANED_INTERESTS.map((interest) => {
-              const findedInterestId = currentInterestList.find(
-                ({ interestName }) => interestName === interest,
-              )?.id;
-
-              const removeInterestIfinterestIsMatched = () => {
-                if (findedInterestId) {
-                  removeUserInterest(findedInterestId);
-                }
-              };
-
-              return (
-                <InterestCheckbox
-                  key={interest}
-                  value={interest}
-                  isMax={isMax}
-                  isCheckedInterest={Boolean(findedInterestId)}
-                  onClickWithChecked={removeInterestIfinterestIsMatched}
-                  onClickWithUnchecked={() =>
-                    addInterest('recommended', interest)
-                  }
-                />
-              );
-            })}
+            <RecommandedInterests
+              isMax={isMax}
+              interests={currentInterestList}
+              addInterest={addInterest}
+              removeInterest={removeUserInterest}
+            />
           </Field.Box>
         </Field>
 
         <Field>
           <Field.Label>나만의 관심사를 추가해보세요! (최대 10개)</Field.Label>
-          {isError && (
-            <p className={styles.interest_error}>중복된 관심사 입니다.</p>
-          )}
           <Field.Box
             className={clsx(styles.field_box, styles.my_interest_field_box)}
           >
@@ -224,9 +205,7 @@ const AdditionalInfoPage = () => {
               <MyInterestField
                 key={field.id}
                 field={field}
-                checkList={currentInterestStringList}
                 onRemove={removeUserInterest}
-                changeError={changeError}
                 updateUserInterest={updateUserInterest}
               />
             ))}
