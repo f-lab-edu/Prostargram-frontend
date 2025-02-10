@@ -1,8 +1,5 @@
-'use client';
+import { ReactNode } from 'react';
 
-import { ReactNode, useEffect, useState } from 'react';
-
-import { getProfile } from '@/api/my';
 import { UserType } from './types/my';
 import Mypage from './components/Mypage';
 
@@ -12,21 +9,13 @@ interface MypageLayoutProps {
   children?: ReactNode;
 }
 
-const MypageLayout = ({ children }: MypageLayoutProps) => {
-  const [userData, setUserData] = useState<UserType | undefined>();
-
-  useEffect(() => {
-    (async function () {
-      const response = await getProfile();
-      if (response.isSuccess) {
-        setUserData(response.result);
-      }
-    })();
-  }, []);
+const MypageLayout = async ({ children }: MypageLayoutProps) => {
+  const result = await fetch('http://localhost:3000/mock/user.json');
+  const userData = (await result.json()) as { data: UserType };
 
   return (
     <div className={styles.container}>
-      {userData && <Mypage myData={userData}>{children}</Mypage>}
+      <Mypage myData={userData.data}>{children}</Mypage>
     </div>
   );
 };

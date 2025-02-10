@@ -11,7 +11,7 @@ const MainPage = () => {
     <div className={styles.container}>
       <LocalQueryErrorBoundary>
         <Suspense>
-          <FollowingList userId={1} />
+          <FollowingList />
           <FeedList />
         </Suspense>
       </LocalQueryErrorBoundary>

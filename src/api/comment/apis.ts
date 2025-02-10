@@ -1,7 +1,7 @@
 import { authInstance } from '../httpRequest';
 
 const getComments = (postId: number) => {
-  const res = authInstance<Comment.CommentResponse[] | []>({
+  const res = authInstance<Comment.CommentResponse>({
     method: 'get',
     url: `/posts/${postId}/comments`,
   });
