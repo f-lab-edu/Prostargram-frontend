@@ -1,7 +1,11 @@
 import { UseMutationOptions, useMutation } from '@tanstack/react-query';
 
 import { updateProfileImage, updateProfileInfo } from './apis';
-import { HttpSuccessType, ResponseError } from '../httpRequest';
+import {
+  HttpResponseType,
+  HttpSuccessType,
+  ResponseError,
+} from '../httpRequest';
 
 const useProfileInfoMutation = (
   options?: UseMutationOptions<
@@ -22,11 +26,11 @@ const useProfileInfoMutation = (
 
 const useProfileImageMutation = (
   options?: UseMutationOptions<
-    HttpSuccessType<unknown>,
+    (HttpResponseType & {
+      result?: unknown;
+    })[],
     ResponseError,
-    {
-      formData: FormData;
-    }
+    { imgFiles: File[] }
   >,
 ) => {
   return useMutation({

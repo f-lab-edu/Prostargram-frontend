@@ -25,20 +25,22 @@ const Profile = ({ userId, profileUrl, isMine, isFollow }: ProfileProps) => {
   const fileRef = useRef<HTMLInputElement>(null);
   const myUserId = getUserId();
 
-  const { mutate: updateProfile } = useProfileImageMutation();
+  const { mutate: updateProfile } = useProfileImageMutation({
+    onError: () => setProfile(profileUrl),
+  });
 
   const toggleEdit = () => setIsEdit((prev) => !prev);
 
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!isMine) return;
+    const imgFiles = new FormData(e.currentTarget).getAll(
+      'profileImage',
+    ) as File[];
 
-    updateProfile(
-      { formData: new FormData(e.currentTarget) },
-      {
-        onSuccess: () => toggleEdit(),
-      },
-    );
+    if (imgFiles) {
+      updateProfile({ imgFiles }, { onSettled: () => toggleEdit() });
+    }
   };
 
   const cancelHandler = () => {
@@ -52,15 +54,15 @@ const Profile = ({ userId, profileUrl, isMine, isFollow }: ProfileProps) => {
 
   const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const profileObject = e.target.files?.[0];
+
     if (profileObject) {
-      const fileReader = new FileReader();
-      fileReader.readAsDataURL(profileObject);
-      fileReader.onload = (data) => {
-        const result = data.target?.result;
-        if (typeof result === 'string') {
-          setProfile(result);
+      const imgUrl = URL.createObjectURL(profileObject);
+      setProfile((prev) => {
+        if (prev) {
+          URL.revokeObjectURL(prev);
         }
-      };
+        return imgUrl;
+      });
     }
   };
 
@@ -98,7 +100,7 @@ const Profile = ({ userId, profileUrl, isMine, isFollow }: ProfileProps) => {
               src={profile}
               width="150"
               height="150"
-              alt="profile-image2"
+              alt="profile-image1"
               onClick={clickHandler}
               priority
             />
