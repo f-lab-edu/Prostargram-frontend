@@ -54,7 +54,7 @@ type UploadImageUrlType = {
   preSignedUrls: string[];
 };
 
-export const requestProfileImageUrls = async (imageCount: number) => {
+const requestProfileImageUrls = async (imageCount: number) => {
   const result = await authInstance<UploadImageUrlType>({
     method: 'POST',
     url: `/images`,
@@ -64,7 +64,7 @@ export const requestProfileImageUrls = async (imageCount: number) => {
   return result;
 };
 
-export const uploadImageWithPresignedUrl = async ({
+const uploadImageWithPresignedUrl = async ({
   contentUrls,
   preSignedUrls,
   imgFiles,
@@ -94,7 +94,7 @@ export const uploadImageWithPresignedUrl = async ({
   }));
 };
 
-export const uploadContentUrl = async (
+const uploadContentUrl = async (
   userId: number,
   urls: { contentUrl: string }[],
 ) => {

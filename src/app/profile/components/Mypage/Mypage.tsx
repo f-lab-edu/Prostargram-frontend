@@ -33,10 +33,7 @@ const paramCandidates = ['followers', 'followings', 'feeds'];
 const MyPage = ({ slug, userId }: MyPageProps) => {
   const params = (new URLSearchParams(useSearchParams()).get('page') ||
     'feeds') as MyPageSearchParamsType;
-  const { data: myData, isLoading } = useGetProfileInformation(userId, [
-    userId,
-  ]);
-  console.log(myData);
+  const { data: myData, isLoading } = useGetProfileInformation(userId);
 
   const url = slug ? `/profile/${slug}` : '/profile';
 

@@ -9,22 +9,27 @@ import { UserType } from '@/app/profile/types/profile';
 import { getProfileFeeds, getProfile } from './apis';
 import { HttpSuccessType, ResponseError } from '../httpRequest';
 
-const PROPFILE_QUERY_KEYS = {
+export const PROPFILE_QUERY_KEYS = {
   DEFAULT: 'default_profile',
-  PROFILE: (keys: (string | number)[]) =>
-    ['my_profile', PROPFILE_QUERY_KEYS.DEFAULT, ...keys] as const,
-  FEEDS: (keys: (string | number)[]) =>
-    ['feeds', PROPFILE_QUERY_KEYS.DEFAULT, ...keys] as const,
+  PROFILE: (keys: number[]) => [
+    'my_profile',
+    PROPFILE_QUERY_KEYS.DEFAULT,
+    ...keys,
+  ],
+  FEEDS: (keys: (string | number)[]) => [
+    'feeds',
+    PROPFILE_QUERY_KEYS.DEFAULT,
+    ...keys,
+  ],
 };
 
 const useGetProfileInformation = (
   userId: number,
-  queryKeys: (string | number)[],
   options?: UseQueryOptions<HttpSuccessType<UserType>, ResponseError>,
 ) => {
   return useQuery({
     queryFn: () => getProfile(userId),
-    queryKey: PROPFILE_QUERY_KEYS.PROFILE(queryKeys),
+    queryKey: PROPFILE_QUERY_KEYS.PROFILE([userId]),
     ...options,
   });
 };
