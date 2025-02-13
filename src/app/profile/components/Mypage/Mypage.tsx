@@ -51,8 +51,8 @@ const MyPage = ({ slug, userId }: MyPageProps) => {
 
   if (!myData || !myData?.result || !paramCandidates.includes(params)) {
     redirect('/auth');
-    return null;
   }
+
   const {
     followerCount,
     followingCount,

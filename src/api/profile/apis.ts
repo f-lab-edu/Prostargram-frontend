@@ -11,13 +11,26 @@ export const getProfile = async (userId: number) => {
   return result;
 };
 
-export const getMyFeeds = async (userId: number) => {
-  const result = await authInstance({
+export const getProfileFeeds = async ({
+  userId,
+  pageParam,
+}: {
+  userId: number;
+  pageParam?: number;
+}) => {
+  const result = await authInstance<Feed.FeedsResponse>({
     method: 'GET',
     url: `/users/${userId}/profile-feeds`,
+    params: {
+      lastPostId: pageParam,
+    },
   });
 
-  return result;
+  return {
+    data: result.result?.data ?? [],
+    hasNextPage:
+      result.result?.hasNextPage && result.result?.data.at(-1)?.post.postId,
+  };
 };
 
 export const updateProfileInfo = async (data: {

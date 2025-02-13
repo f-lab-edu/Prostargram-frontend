@@ -1,7 +1,12 @@
-import { UseQueryOptions, useQuery } from '@tanstack/react-query';
+import {
+  UseInfiniteQueryOptions,
+  UseQueryOptions,
+  useInfiniteQuery,
+  useQuery,
+} from '@tanstack/react-query';
 
 import { UserType } from '@/app/profile/types/profile';
-import { getMyFeeds, getProfile } from './apis';
+import { getProfileFeeds, getProfile } from './apis';
 import { HttpSuccessType, ResponseError } from '../httpRequest';
 
 const PROPFILE_QUERY_KEYS = {
@@ -24,13 +29,28 @@ const useGetProfileInformation = (
   });
 };
 
+type ProfileFeedType = {
+  data: Feed.FeedData[];
+  hasNextPage: number | false | undefined;
+};
+
 const useGetProfileFeeds = (
   userId: number,
-  options?: UseQueryOptions<HttpSuccessType<unknown>, ResponseError>,
+  options?: UseInfiniteQueryOptions<
+    ProfileFeedType,
+    ResponseError,
+    Feed.FeedData[],
+    ProfileFeedType,
+    ReturnType<typeof PROPFILE_QUERY_KEYS.FEEDS>,
+    number | undefined
+  >,
 ) => {
-  return useQuery({
-    queryFn: () => getMyFeeds(userId),
+  return useInfiniteQuery({
     queryKey: PROPFILE_QUERY_KEYS.FEEDS([userId]),
+    queryFn: async ({ pageParam }) => getProfileFeeds({ userId, pageParam }),
+    select: (data) => data.pages[0].data,
+    getNextPageParam: (lastPage) => lastPage.hasNextPage || undefined,
+    initialPageParam: undefined,
     ...options,
   });
 };

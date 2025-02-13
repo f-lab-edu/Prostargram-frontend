@@ -72,8 +72,14 @@
 }
 
 .changeable_area {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  overflow: scroll;
+
   @include res--desktop {
     min-height: 50rem;
-    padding: 2.5rem 4.375rem 0 4.375rem;
+    max-height: 50rem;
+    padding: 2.5rem 4.375rem;
   }
 }
