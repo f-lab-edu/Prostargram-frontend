@@ -60,6 +60,7 @@ const useSocialAccountsServerRequest = () => {
       }
     }
   };
+
   const requestRemoveSocialAccounts = async ({
     targetSocialAccounts,
     onSuccess,

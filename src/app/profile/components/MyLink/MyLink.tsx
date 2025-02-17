@@ -65,35 +65,33 @@ const MyLink = ({ links, isMine }: MyLinkProps) => {
         </If>
       </ul>
       <div className={styles.edit_button_wrapper}>
-        <If condition={isMine}>
-          <If.True>
-            <If condition={isEdit}>
-              <If.True>
-                <Button type="submit" className={styles.edit_button}>
-                  저장
-                </Button>
-                <Button
-                  type="button"
-                  fill="gray"
-                  className={styles.edit_button}
-                  onClick={toggleEdit}
-                >
-                  취소
-                </Button>
-              </If.True>
-              <If.False>
-                <Button
-                  key="editButton"
-                  type="button"
-                  className={styles.edit_button}
-                  onClick={toggleEdit}
-                >
-                  수정
-                </Button>
-              </If.False>
-            </If>
-          </If.True>
-        </If>
+        {isMine && (
+          <If condition={isEdit}>
+            <If.True>
+              <Button type="submit" className={styles.edit_button}>
+                저장
+              </Button>
+              <Button
+                type="button"
+                fill="gray"
+                className={styles.edit_button}
+                onClick={toggleEdit}
+              >
+                취소
+              </Button>
+            </If.True>
+            <If.False>
+              <Button
+                key="editButton"
+                type="button"
+                className={styles.edit_button}
+                onClick={toggleEdit}
+              >
+                수정
+              </Button>
+            </If.False>
+          </If>
+        )}
       </div>
     </form>
   );

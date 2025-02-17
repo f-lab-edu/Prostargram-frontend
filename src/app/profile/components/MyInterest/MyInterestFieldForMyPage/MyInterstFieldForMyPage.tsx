@@ -31,12 +31,7 @@ const MyInterestFieldForMyPage = ({
 
   const inputWidth = calculateWidth(word.length);
 
-  const isDuplicate = () => {
-    if (word !== '' && checkList.includes(word)) {
-      return true;
-    }
-    return false;
-  };
+  const isDuplicate = () => word !== '' && checkList.includes(word);
 
   const isInterestEditOn = () => {
     if (!isInterestEdit) {
@@ -44,11 +39,7 @@ const MyInterestFieldForMyPage = ({
     }
   };
 
-  const keydownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key !== ' ' && e.key !== 'Enter') return;
-    if (isInterestEdit && isDuplicate()) return;
-    e.preventDefault();
-
+  const handleInterestSave = () => {
     if (word.length !== 0) {
       addInterestHandler(word);
     }
@@ -57,15 +48,16 @@ const MyInterestFieldForMyPage = ({
     setInterestEdit(false);
   };
 
+  const keydownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key !== ' ' && e.key !== 'Enter') return;
+    if (isInterestEdit && isDuplicate()) return;
+    e.preventDefault();
+    handleInterestSave();
+  };
+
   const blurHandler = () => {
     if (isInterestEdit && isDuplicate()) return;
-
-    if (word.length !== 0) {
-      addInterestHandler(word);
-    }
-
-    setWord('');
-    setInterestEdit(false);
+    handleInterestSave();
   };
 
   const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
