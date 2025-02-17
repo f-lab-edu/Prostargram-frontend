@@ -9,7 +9,7 @@ import { useProfileInfoMutation } from '@/api/profile/profileMutation';
 import styles from './MyInformation.module.scss';
 import MyEditInformation from './MyEditInformation';
 
-export interface MyInfoType extends Record<string, string | boolean> {
+export interface MyInfoType {
   username: string;
   departmentName: string;
   selfIntroduction: string;
@@ -65,7 +65,7 @@ const MyInformation = ({
         <MyEditInformation
           toggleEditHandler={toggleIsEdit}
           myInfo={myInfo}
-          submitHandler={submitHandler}
+          onSubmitNextInfo={submitHandler}
         />
       </If.True>
 

@@ -1,9 +1,11 @@
 'use client';
 
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 
-import { useConfirmUsernameDuplicate } from '@/api/mutations/sign-up';
+import { getFormData } from '@/utils/form';
 import Button from '@/components/common/Button';
+import { useToastContext } from '@/components/common/Toast/ToastProvider';
+import { useConfirmUsernameDuplicate } from '@/api/mutations/sign-up';
 import type { MyInfoType } from '../MyInformation';
 
 import styles from './MyEditInformation.module.scss';
@@ -11,23 +13,27 @@ import styles from './MyEditInformation.module.scss';
 interface MyEditInformationProps {
   myInfo: MyInfoType;
   toggleEditHandler: () => void;
-  submitHandler: (nextInfo: MyInfoType) => void;
+  onSubmitNextInfo: (nextInfo: MyInfoType) => void;
 }
 
 const MyEditInformation = ({
   myInfo,
   toggleEditHandler,
-  submitHandler,
+  onSubmitNextInfo,
 }: MyEditInformationProps) => {
-  const [isConfirmDuplicate, setIsConfirmDuplicate] = useState<boolean>(true);
-  const [nextMyInfo, setNextMyInfo] = useState<MyInfoType>(myInfo);
+  const { addToast } = useToastContext();
+  const [isDuplicate, setIsDuplicate] = useState<boolean>(false);
+  const [username, setUsername] = useState<string>(myInfo.username);
+  const [selfIntroduction, setSelfIntroduction] = useState<string>(
+    myInfo.selfIntroduction,
+  );
 
   const { mutate: checkIsDuplicateUsername } = useConfirmUsernameDuplicate();
 
   const checkDuplicate = () => {
-    checkIsDuplicateUsername(nextMyInfo.username, {
+    checkIsDuplicateUsername(username, {
       onSuccess: (res) => {
-        setIsConfirmDuplicate(res.isSuccess);
+        setIsDuplicate(!res.isSuccess);
       },
     });
   };
@@ -35,71 +41,75 @@ const MyEditInformation = ({
   const changeHandler = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    const { value } = e.target;
-    const targetInputName = e.target.name as keyof MyInfoType;
+    const { value, name } = e.target;
 
-    if (targetInputName === 'username') {
-      setIsConfirmDuplicate(myInfo.username === value);
+    if (name === 'username') {
+      setIsDuplicate(value !== '' && myInfo.username !== value);
+      setUsername(value);
     }
 
-    setNextMyInfo({ ...myInfo, [targetInputName]: value });
+    if (name === 'selfIntroduction') {
+      setSelfIntroduction(value);
+    }
   };
 
-  const confirmMyInfoHandler = () => {
-    if (nextMyInfo.username === myInfo.username || isConfirmDuplicate) {
-      submitHandler(nextMyInfo);
+  const submitHandler = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const nextInfo: MyInfoType = getFormData<keyof MyInfoType>(formData);
+
+    if (!isDuplicate) {
+      onSubmitNextInfo(nextInfo);
       return;
     }
 
-    alert('닉네임 중복 확인을 해주세요.');
+    addToast({ type: 'error', message: '닉네임 중복 확인을 실행 해 주세요.' });
   };
 
   return (
-    <div className={styles.container}>
+    <form className={styles.container} onSubmit={submitHandler}>
       <div className={styles.input_wrapper}>
         <div className={styles.left}>
           <input
-            className={styles.nickname}
             name="username"
-            value={nextMyInfo.username || ''}
+            defaultValue={username || ''}
             onChange={changeHandler}
+            className={styles.nickname}
           />
           <input
             name="departmentName"
-            value={nextMyInfo.departmentName || ''}
-            onChange={changeHandler}
+            defaultValue={myInfo.departmentName || ''}
           />
         </div>
 
         <Button
+          type="button"
           className={styles.right}
           onClick={checkDuplicate}
-          disabled={isConfirmDuplicate}
+          disabled={!isDuplicate}
         >
-          {isConfirmDuplicate ? '확인 완료' : '중복 확인'}
+          {!isDuplicate ? '확인 완료' : '중복 확인'}
         </Button>
       </div>
       <div className={styles.textarea_wrapper}>
         <textarea
           name="selfIntroduction"
-          value={nextMyInfo.selfIntroduction || ''}
+          defaultValue={myInfo.selfIntroduction || ''}
           onChange={changeHandler}
           maxLength={200}
         />
-        <p>
-          <span className="gray">
-            {nextMyInfo.selfIntroduction?.length || 0}
-          </span>{' '}
-          / 200
-        </p>
+        <div className={styles.character_count}>
+          <span className={styles.gray}>{selfIntroduction?.length || 0}</span> /
+          200
+        </div>
       </div>
       <div className={styles.confirm_button_wrapper}>
-        <Button onClick={confirmMyInfoHandler}>확인</Button>
-        <Button fill="gray" onClick={toggleEditHandler}>
+        <Button type="submit">확인</Button>
+        <Button type="button" fill="gray" onClick={toggleEditHandler}>
           취소
         </Button>
       </div>
-    </div>
+    </form>
   );
 };
 

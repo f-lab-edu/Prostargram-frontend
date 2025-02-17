@@ -28,8 +28,8 @@ const useGetProfileInformation = (
   options?: UseQueryOptions<HttpSuccessType<UserType>, ResponseError>,
 ) => {
   return useQuery({
-    queryFn: () => getProfile(userId),
     queryKey: PROPFILE_QUERY_KEYS.PROFILE([userId]),
+    queryFn: () => getProfile(userId),
     ...options,
   });
 };

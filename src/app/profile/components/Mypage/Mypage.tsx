@@ -31,16 +31,12 @@ type MyPageSearchParamsType = 'followings' | 'followers' | 'feeds';
 const paramCandidates = ['followers', 'followings', 'feeds'];
 
 const MyPage = ({ slug, userId }: MyPageProps) => {
-  const params = (new URLSearchParams(useSearchParams()).get('page') ||
+  const params = (useSearchParams().get('page') ||
     'feeds') as MyPageSearchParamsType;
   const { data: myData, isLoading } = useGetProfileInformation(userId);
 
   const url = slug ? `/profile/${slug}` : '/profile';
-
-  const isMine = useMemo(() => {
-    const currentUserId = getUserId();
-    return currentUserId === userId;
-  }, [userId]);
+  const isMine = useMemo(() => userId === getUserId(), [userId]);
 
   if (isLoading) {
     return <p>로딩 중....</p>;
@@ -87,14 +83,12 @@ const MyPage = ({ slug, userId }: MyPageProps) => {
       <div className={styles.user_background}>백그라운드 이미지</div>
       <div className={styles.profile_follow_my_information_wrapper}>
         <div className={styles.profile_and_follow_wrapper}>
-          <div className={styles.profile_wrapper}>
-            <Profile
-              userId={userId}
-              isFollow={isFollow}
-              isMine={isMine}
-              profileUrl={profileImgUrl}
-            />
-          </div>
+          <Profile
+            userId={userId}
+            isFollow={isFollow}
+            isMine={isMine}
+            profileUrl={profileImgUrl}
+          />
           <div className={styles.display_flex}>
             <Follow title="팔로워" href={`${url}?page=followers`}>
               {formattedFollowers}

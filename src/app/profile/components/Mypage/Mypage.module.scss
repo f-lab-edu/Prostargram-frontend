@@ -28,16 +28,6 @@
   }
 }
 
-.profile_wrapper {
-  @include flex-center;
-  @include res--desktop {
-    position: relative;
-    width: 100%;
-    height: 10.875rem;
-    border-bottom: 1px solid;
-  }
-}
-
 .my_information_wrapper {
   @include res--desktop {
     flex: 1;
