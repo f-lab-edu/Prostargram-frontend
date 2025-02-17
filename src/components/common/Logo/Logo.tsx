@@ -7,18 +7,25 @@ import GitHubIcon from '@/assets/icons/github.svg';
 
 import styles from './Logo.module.scss';
 
-const Logo = () => {
+interface LogoProps {
+  isGoHome?: boolean;
+  href?: string;
+}
+
+const Logo = ({ isGoHome = true, href = '/' }: LogoProps) => {
   const pathname = usePathname();
 
+  const Wrapper = isGoHome ? Link : 'div';
+
   return (
-    <Link href="/" className={styles.link}>
+    <Wrapper href={isGoHome ? href : ''} className={styles.link}>
       <span className={styles.logo}>
         Prostargram
         {pathname === '/auth/github' && (
           <GitHubIcon className={styles.github} />
         )}
       </span>
-    </Link>
+    </Wrapper>
   );
 };
 

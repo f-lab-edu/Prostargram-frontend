@@ -5,12 +5,8 @@ import {
 import { requestPromiseAll } from '@/utils/asyncLogic';
 import { useToastContext } from '@/components/common/Toast/ToastProvider';
 
-type SocialAccountType = {
-  link: string;
-};
-
 type RequestSaveInterestType = {
-  targetSocialAccounts: SocialAccountType[];
+  targetSocialAccounts: string[];
   onSuccess?: () => void;
   onError?: () => void;
   successMessage?: string;
@@ -18,30 +14,27 @@ type RequestSaveInterestType = {
 };
 
 const useSocialAccountsServerRequest = () => {
-  const { mutate: saveSocialAccount } = useAddSocialAccountMutation({});
-  const { mutate: removeSocialAccount } = useRemoveSocialAccountMutation({});
+  const { mutate: saveSocialAccount } = useAddSocialAccountMutation();
+  const { mutate: removeSocialAccount } = useRemoveSocialAccountMutation();
   const { addToast } = useToastContext();
 
-  const requestSocialAccountSaveSocialAccounts = async ({
+  const requestSaveSocialAccounts = async ({
     targetSocialAccounts,
     onSuccess,
     onError,
     successMessage,
   }: RequestSaveInterestType) => {
-    const successfulSocialRequests: SocialAccountType[] = [];
+    const successfulSocialRequests: string[] = [];
 
     try {
-      await requestPromiseAll<SocialAccountType>(
+      await requestPromiseAll<string>(
         targetSocialAccounts,
-        async ({ link: socialAccountUrl }) =>
-          saveSocialAccount(
-            { socialAccountUrl },
-            {
-              onSuccess: () => {
-                successfulSocialRequests.push({ link: socialAccountUrl });
-              },
+        (socialAccount: string) =>
+          saveSocialAccount(socialAccount, {
+            onSuccess: () => {
+              successfulSocialRequests.push(socialAccount);
             },
-          ),
+          }),
       );
 
       if (successMessage) {
@@ -55,10 +48,10 @@ const useSocialAccountsServerRequest = () => {
         onSuccess();
       }
     } catch (error) {
-      await requestPromiseAll<SocialAccountType>(
+      await requestPromiseAll<string>(
         successfulSocialRequests,
-        async ({ link: socialAccountUrl }) => {
-          removeSocialAccount({ socialAccountUrl });
+        (socialAccount) => {
+          removeSocialAccount(socialAccount);
         },
       );
 
@@ -68,7 +61,7 @@ const useSocialAccountsServerRequest = () => {
     }
   };
 
-  return { requestSocialAccountSaveSocialAccounts };
+  return { requestSaveSocialAccounts };
 };
 
 export default useSocialAccountsServerRequest;

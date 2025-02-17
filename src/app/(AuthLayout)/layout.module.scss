@@ -6,11 +6,16 @@
 }
 
 .container {
+  position: relative;
+  top: 50px;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
   width: 100%;
 
-  @include flex-center;
   @include res--desktop {
-    height: 100%;
+    top: 100px;
+    height: 100vh;
     min-height: 46.875rem;
   }
 
