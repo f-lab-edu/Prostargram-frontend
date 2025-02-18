@@ -5,10 +5,11 @@ import MyLinkInputStateItem from '../MyLinkInputStateItem';
 import styles from './ReadOnlyMyLinkList.module.scss';
 
 interface ReadOnlyMyLinkListProps {
+  isMine: boolean;
   links: string[];
 }
 
-const ReadOnlyMyLinkList = ({ links }: ReadOnlyMyLinkListProps) => {
+const ReadOnlyMyLinkList = ({ isMine, links }: ReadOnlyMyLinkListProps) => {
   const linksWithUniqueId = links.map((link) => ({
     id: createUniqueId(),
     link,
@@ -28,7 +29,11 @@ const ReadOnlyMyLinkList = ({ links }: ReadOnlyMyLinkListProps) => {
     <li>
       <If condition={isEmptyLinks}>
         <If.True>
-          <p>수정 버튼을 눌러 링크를 추가해 보세요.</p>
+          <p>
+            {isMine
+              ? '수정 버튼을 눌러 링크를 추가해 보세요.'
+              : '등록된 링크가 없습니다.'}
+          </p>
         </If.True>
 
         <If.False>

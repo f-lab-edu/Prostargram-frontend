@@ -60,7 +60,7 @@ const MyLink = ({ links, isMine }: MyLinkProps) => {
             <EditMyLinkList links={myLinks} />
           </If.True>
           <If.False>
-            <ReadOnlyMyLinkList links={myLinks} />
+            <ReadOnlyMyLinkList isMine={isMine} links={myLinks} />
           </If.False>
         </If>
       </ul>
