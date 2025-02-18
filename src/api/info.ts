@@ -50,7 +50,6 @@ const removeInterest = async ({
   hashTagId: number;
   name: string;
 }) => {
-  console.log(name);
   const url = `/users/${userId}/interests?hashTagId=${hashTagId}&name=${encodeURIComponent(name)}`;
 
   const result = await authInstance({
