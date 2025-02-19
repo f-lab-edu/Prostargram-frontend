@@ -1,6 +1,10 @@
 @use '../../../../../styles/helpers/index' as *;
 
-.my_link {
+.gray {
+  color: $COLOR_GRAY_4;
+}
+
+.link_button {
   @include res--desktop {
     display: flex;
     align-items: center;

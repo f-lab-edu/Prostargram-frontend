@@ -9,5 +9,22 @@
 
   i {
     @include flex-center;
+    svg {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+
+    span {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      background-color: $COLOR_PRIMARY_1;
+      border-radius: 9999px;
+      color: $COLOR_WHITE;
+      font-weight: bold;
+      font-size: 0.875rem;
+    }
   }
 }

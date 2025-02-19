@@ -48,6 +48,7 @@ const useSocialAccountsServerRequest = () => {
         onSuccess();
       }
     } catch (error) {
+      console.log('add error');
       await requestPromiseAll<string>(
         successfulSocialRequests,
         (socialAccount) => {
@@ -89,6 +90,7 @@ const useSocialAccountsServerRequest = () => {
         onSuccess();
       }
     } catch (error) {
+      console.log('remove error');
       await requestPromiseAll<string>(
         successfulSocialAccountRequests,
         async (link) => {

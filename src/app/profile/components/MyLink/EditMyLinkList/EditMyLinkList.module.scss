@@ -1,5 +1,10 @@
 @use '../../../../../styles/helpers/index' as *;
 
+.add_link_paragraph {
+  margin-bottom: 1rem;
+  color: $COLOR_GRAY_4;
+}
+
 .my_link_input {
   @include res--desktop {
     flex: 1;

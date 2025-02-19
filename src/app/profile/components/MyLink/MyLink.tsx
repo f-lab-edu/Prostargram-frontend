@@ -15,11 +15,31 @@ interface MyLinkProps {
   isMine: boolean;
 }
 
-const makeArrayExcludeB = <T,>(A: T[], B: T[]) =>
-  A.filter((link) => !B.includes(link));
+const getAllExcluded = <T extends string>(A: T[], B: T[]) => {
+  // B의 요소 개수 카운트 (currentLinks)
+  const bCountMap = B.reduce(
+    (acc, link) => {
+      acc[link] = (acc[link] || 0) + 1;
+      return acc;
+    },
+    {} as Record<T, number>,
+  );
+
+  const result: T[] = [];
+
+  A.forEach((link) => {
+    if (bCountMap[link]) {
+      bCountMap[link] -= 1; // B에 존재하면 개수 차감
+    } else {
+      result.push(link); // 개수가 0이면 결과 배열에 추가
+    }
+  });
+
+  return result;
+};
 
 const MyLink = ({ links, isMine }: MyLinkProps) => {
-  const [myLinks, setMyLinks] = useState<string[]>(links);
+  const [myLinks, setMyLinks] = useState<string[]>(() => links);
   const [isEdit, setIsEdit] = useState<boolean>(false);
 
   const { requestSaveSocialAccounts, requestRemoveSocialAccounts } =
@@ -35,20 +55,31 @@ const MyLink = ({ links, isMine }: MyLinkProps) => {
       .filter((v) => Boolean(v))
       .map((link) => link.toString());
 
-    const needToAddLinks = makeArrayExcludeB(currentLinks, links);
-    const needToRemoveLinks = makeArrayExcludeB(links, currentLinks);
+    const needToAddLinks = getAllExcluded(currentLinks, myLinks);
+    const needToRemoveLinks = getAllExcluded(myLinks, currentLinks);
 
-    requestSaveSocialAccounts({
-      targetSocialAccounts: needToAddLinks,
-      onError: () => setMyLinks(links),
-    });
+    //! if) myLinks = ['naver.com', 'naver.com'], then 하나만 삭제 시, 적용 불가능 `includes` 로직만으로는 해결 불가능
+    // console.log('myLinks', myLinks);
+    // console.log('prop Links', links);
+    // console.log('currentLinks', currentLinks);
+    // console.log('add links', needToAddLinks);
+    // console.log('remove links', needToRemoveLinks);
 
-    requestRemoveSocialAccounts({
-      targetSocialAccounts: needToRemoveLinks,
-      onError: () => setMyLinks(links),
-    });
+    if (needToAddLinks.length !== 0 || needToRemoveLinks.length !== 0) {
+      requestRemoveSocialAccounts({
+        targetSocialAccounts: needToRemoveLinks,
+        onSuccess: () => {
+          requestSaveSocialAccounts({
+            targetSocialAccounts: needToAddLinks,
+            onError: () => setMyLinks(links),
+          });
+        },
+        onError: () => setMyLinks(links),
+      });
 
-    setMyLinks(currentLinks);
+      setMyLinks(currentLinks);
+    }
+
     toggleEdit();
   };
 

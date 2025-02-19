@@ -26,7 +26,11 @@ const EditMyLinkList = ({ links }: EditMyLinksProps) => {
 
   return (
     <li>
-      {myLinks.length === 0 && <p>아래 + 버튼을 눌러 링크를 추가해보세요!</p>}
+      {myLinks.length === 0 && (
+        <p className={styles.add_link_paragraph}>
+          아래 + 버튼을 눌러 링크를 추가해보세요!
+        </p>
+      )}
 
       {myLinks.map(({ id, link }) => (
         <MyLinkInputStateItem key={id} link={link}>

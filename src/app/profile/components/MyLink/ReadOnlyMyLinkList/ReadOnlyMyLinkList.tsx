@@ -23,36 +23,38 @@ const ReadOnlyMyLinkList = ({ isMine, links }: ReadOnlyMyLinkListProps) => {
     window.open(openLink, '_blank', 'noopener,noreferrer');
   };
 
-  const isEmptyLinks = linksWithUniqueId.length === 0;
-
   return (
-    <li>
-      <If condition={isEmptyLinks}>
+    <ul>
+      <If condition={linksWithUniqueId.length === 0}>
         <If.True>
-          <p>
-            {isMine
-              ? '수정 버튼을 눌러 링크를 추가해 보세요.'
-              : '등록된 링크가 없습니다.'}
-          </p>
+          <li>
+            <p className={styles.gray}>
+              {isMine
+                ? '수정 버튼을 눌러 링크를 추가해 보세요.'
+                : '등록된 링크가 없습니다.'}
+            </p>
+          </li>
         </If.True>
 
         <If.False>
           {linksWithUniqueId.map(({ id, link }) => (
-            <MyLinkInputStateItem key={id} link={link}>
-              {() => (
-                <button
-                  type="button"
-                  className={styles.my_link}
-                  onClick={() => handleClick(link)}
-                >
-                  {link}
-                </button>
-              )}
-            </MyLinkInputStateItem>
+            <li key={id}>
+              <MyLinkInputStateItem link={link}>
+                {() => (
+                  <button
+                    type="button"
+                    className={styles.link_button}
+                    onClick={() => handleClick(link)}
+                  >
+                    {link}
+                  </button>
+                )}
+              </MyLinkInputStateItem>
+            </li>
           ))}
         </If.False>
       </If>
-    </li>
+    </ul>
   );
 };
 
