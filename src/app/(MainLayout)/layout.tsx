@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, Suspense } from 'react';
 import Wrapper from './components/Wrapper/Wrapper';
 import Navigation from './components/Navigation/Navigation';
 
@@ -9,8 +9,10 @@ interface MainLayoutProps {
 const MainLayout = ({ children }: MainLayoutProps) => {
   return (
     <Wrapper>
-      <Navigation />
-      {children}
+      <Suspense>
+        <Navigation />
+        {children}
+      </Suspense>
     </Wrapper>
   );
 };

@@ -1,40 +1,63 @@
 'use client';
 
 import clsx from 'clsx';
-import { useFormContext } from 'react-hook-form';
-import { HTMLAttributes, useState } from 'react';
+import { HTMLAttributes, useEffect, useState } from 'react';
 
 import styles from './InterestCheckbox.module.scss';
 
-interface InterestCheckboxType extends HTMLAttributes<HTMLInputElement> {
+interface InterestCheckboxType extends HTMLAttributes<HTMLButtonElement> {
   value: string;
+  isMax: boolean;
+  isCheckedInterest?: boolean;
+  onClickWithChecked: () => void;
+  onClickWithUnchecked: () => void;
 }
 
-const InterestCheckbox = ({ value, ...props }: InterestCheckboxType) => {
-  const [isChecked, setIsChecked] = useState<boolean>(false);
-  const { register } = useFormContext();
+const InterestCheckbox = ({
+  value,
+  isMax,
+  isCheckedInterest,
+  onClickWithChecked,
+  onClickWithUnchecked,
+  ...props
+}: InterestCheckboxType) => {
+  const [isChecked, setIsChecked] = useState<boolean | undefined>(
+    isCheckedInterest,
+  );
 
-  const handleChange = () => {
-    setIsChecked((prev) => !prev);
+  const clickHandler = () => {
+    if (!isChecked && isMax === false) {
+      onClickWithUnchecked();
+      setIsChecked(true);
+    }
+    if (!isChecked && isMax === true) {
+      setIsChecked(false);
+    }
+    if (isChecked && isMax === false) {
+      setIsChecked(false);
+      onClickWithChecked();
+    }
+    if (isChecked && isMax === true) {
+      setIsChecked(false);
+      onClickWithChecked();
+    }
   };
 
+  useEffect(() => {
+    setIsChecked(isCheckedInterest);
+  }, [isCheckedInterest]);
+
   return (
-    <label
-      htmlFor={value}
+    <button
+      type="button"
       className={clsx(styles.checkbox, {
         [styles.checked]: isChecked,
       })}
-      onChange={handleChange}
+      onClick={clickHandler}
+      {...props}
     >
-      <input
-        id={value}
-        type="checkbox"
-        value={value}
-        {...props}
-        {...register('interests')}
-      />
       {`#${value}`}
-    </label>
+    </button>
   );
 };
 

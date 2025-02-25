@@ -36,7 +36,7 @@ const LoginForm = () => {
     register,
     setError,
     handleSubmit,
-    formState: { errors, isDirty },
+    formState: { errors },
   } = useForm<IFormInput>({
     defaultValues: { email: '', password: '' },
     mode: 'onSubmit',
@@ -59,10 +59,14 @@ const LoginForm = () => {
         });
       }
     },
-    onError: () => {
+    onError: (err) => {
       setError('email', {
         type: 'deps',
-        message: '알 수 없는 에러가 발생했습니다. 다시 로그인 해 주세요.',
+        message: err.message,
+      });
+      setError('password', {
+        type: 'deps',
+        message: err.message,
       });
     },
   });
@@ -80,7 +84,7 @@ const LoginForm = () => {
           label="이메일"
           maxLength={30}
           placeholder="이메일을 입력해주세요."
-          errorMessage={isDirty ? errors.email?.message : undefined}
+          errorMessage={errors.email?.message}
           {...register('email', validator.email)}
         />
         <ToggleWrapper>
@@ -91,7 +95,7 @@ const LoginForm = () => {
               label="비밀번호"
               maxLength={20}
               placeholder="비밀번호를 입력해주세요."
-              errorMessage={isDirty ? errors.password?.message : undefined}
+              errorMessage={errors.password?.message}
               {...register('password', validator.password)}
               inputPostFix={
                 <button
@@ -136,7 +140,7 @@ const LoginPage = () => {
     <div className={styles.container}>
       <div className={styles.inner_container}>
         <div style={{ marginBottom: 40 }}>
-          <Logo />
+          <Logo isGoHome={false} />
         </div>
 
         <LoginForm />

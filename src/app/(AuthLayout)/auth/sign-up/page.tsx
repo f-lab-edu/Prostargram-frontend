@@ -18,6 +18,7 @@ import { postLogin } from '@/api/auth';
 import { saveAccessToken, saveRefreshToken } from '@/utils/manageToken';
 
 import styles from './page.module.scss';
+import SignupField from './components/SignupField';
 
 const SignupPage = () => {
   const router = useRouter();
@@ -48,7 +49,7 @@ const SignupPage = () => {
     isEmailRequest,
     isEmailRetry,
     isUsernameConfirmed,
-    changeConfirmState,
+    changeConfirmCodeState,
     changeUsernameState,
     changeSignupToken,
   } = useSignUpState();
@@ -65,37 +66,57 @@ const SignupPage = () => {
   } = useSignupMutation({
     formMethods,
     changeSignupToken,
-    changeConfirmState,
+    changeConfirmCodeState,
     changeUsernameState,
   });
 
-  const preventEnter = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-    }
-  };
+  const [email, confirmCode, password, repassword, username] = watch([
+    'email',
+    'confirm',
+    'password',
+    'repassword',
+    'username',
+  ]);
+
+  const disableButtonForEmailAuthentication =
+    !email.length || !!errors.email?.message || isRequestEmailPending;
+
+  const isDisableNextStepButton =
+    !isEmailConfirmed ||
+    !isUsernameConfirmed ||
+    !isValid ||
+    isRequestSignupPending;
+
+  const handleKeyDown =
+    (callback: () => void) => (e: KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        callback();
+      }
+    };
 
   const resetEmail = () => {
     resetField('email');
     resetField('confirm');
-    changeConfirmState(CONFIRM_STATES.PENDING);
+    changeConfirmCodeState(CONFIRM_STATES.PENDING);
   };
 
   const onSubmit = (values: ISignUpFormValueType) => {
-    const { email, password, username } = values;
+    const loginInfo = {
+      email: values.email,
+      password: values.password,
+    };
 
     const payload = {
-      email,
-      password,
-      username,
+      username: values.username,
+      ...loginInfo,
       ...signupToken,
     };
 
     requestSignupUser(payload, {
       onSuccess: async (res) => {
         if (res.isSuccess) {
-          const authResults = await postLogin({ email, password });
-          const { result, isSuccess } = authResults;
+          const { isSuccess, result } = await postLogin(loginInfo);
 
           if (isSuccess && result) {
             const { accessToken, refreshToken } = result;
@@ -108,122 +129,136 @@ const SignupPage = () => {
     });
   };
 
-  const [password, repassword] = watch(['password', 'repassword']);
-
   useEffect(() => {
-    if (password !== '' && password === repassword) {
+    if (
+      password !== '' &&
+      (!errors.password?.message || !errors.repassword?.message) &&
+      password === repassword
+    ) {
       clearErrors(['password', 'repassword']);
     }
-  }, [password, repassword, clearErrors]);
+  }, [
+    password,
+    repassword,
+    errors.password?.message,
+    errors.repassword?.message,
+    clearErrors,
+  ]);
 
   return (
     <div className={styles.container}>
       <div className={styles.logo_box}>
-        <Logo />
+        <Logo isGoHome={false} />
       </div>
 
       <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
         <p className={styles.sub_title}>회원가입</p>
-        <Field>
-          <Field.Label htmlFor="email">
-            <Field.Emphasize>*</Field.Emphasize>
-            이메일
-          </Field.Label>
-          <Field.Box>
-            <Input
-              id="email"
-              type="text"
-              placeholder="이메일을 입력해주세요."
-              maxLength={30}
-              disabled={!isEmailPending}
-              onKeyDown={preventEnter}
-              state={(errors.email?.message && 'fail') || 'normal'}
-              {...register('email', validators.email)}
-            />
-            {(isEmailPending || isEmailRetry) && (
-              <Button
-                type="button"
-                className={styles.button}
-                onClick={() => requestCodeByEmail(watch('email'))}
-                disabled={
-                  !watch('email').length ||
-                  !!errors.email?.message ||
-                  isRequestEmailPending
-                }
-              >
-                {isEmailPending && !isRequestEmailPending && '인증 요청'}
-                {isEmailRetry && !isRequestEmailPending && '재요청'}
-                {isRequestEmailPending && '요청 중...'}
-              </Button>
-            )}
-            {isEmailRequest && (
-              <Field.TimerButton
-                type="button"
-                className={styles.button}
-                changeState={() => changeConfirmState('retry')}
-                isConfirm={isEmailConfirmed}
-                timerDuration={300_000} // 5분
-                disabled={isRequestEmailPending || !isEmailRetry}
+        <SignupField
+          label="이메일"
+          htmlFor="email"
+          emphasizeString="*"
+          errorMessage={errors.email?.message}
+          content={
+            <>
+              <Input
+                id="email"
+                type="text"
+                placeholder="이메일을 입력해주세요."
+                maxLength={30}
+                disabled={!isEmailPending || isRequestEmailPending}
+                onKeyDown={handleKeyDown(
+                  () =>
+                    !disableButtonForEmailAuthentication &&
+                    requestCodeByEmail(email),
+                )}
+                state={(errors.email?.message && 'fail') || 'normal'}
+                {...register('email', validators.email)}
               />
-            )}
-            {isEmailConfirmed && (
-              <Button
-                type="button"
-                className={styles.button}
-                onClick={resetEmail}
-              >
-                재설정
-              </Button>
-            )}
-          </Field.Box>
-          <Field.ErrorMessage>{errors.email?.message}</Field.ErrorMessage>
-        </Field>
+              {(isEmailPending || isEmailRetry) && (
+                <Button
+                  type="button"
+                  className={styles.button}
+                  onClick={() => requestCodeByEmail(email)}
+                  disabled={disableButtonForEmailAuthentication}
+                >
+                  {isEmailPending && !isRequestEmailPending && '인증 요청'}
+                  {isEmailRetry && !isRequestEmailPending && '재요청'}
+                  {isRequestEmailPending && '요청 중...'}
+                </Button>
+              )}
+              {isEmailRequest && (
+                <Field.TimerButton
+                  type="button"
+                  className={styles.button}
+                  isConfirm={isEmailConfirmed}
+                  timerDuration={300_000} // 5분
+                  expireTimeEvent={() => changeConfirmCodeState('retry')}
+                  disabled={isRequestEmailPending || !isEmailRetry}
+                />
+              )}
+              {!isEmailPending && (
+                <Button
+                  type="button"
+                  className={styles.button}
+                  onClick={resetEmail}
+                >
+                  재설정
+                </Button>
+              )}
+            </>
+          }
+        />
 
         {!isEmailPending && (
-          <Field>
-            <Field.Label htmlFor="confirm">
-              <Field.Emphasize>*</Field.Emphasize>
-              인증번호
-            </Field.Label>
-            <Field.Box>
-              <Input
-                id="confirm"
-                type="text"
-                placeholder="인증번호를 입력해주세요."
-                maxLength={7}
-                disabled={isEmailConfirmed}
-                state={(errors.confirm?.message && 'fail') || 'normal'}
-                onKeyDown={preventEnter}
-                {...register('confirm', validators.confirm)}
-              />
-              <Button
-                type="button"
-                className={styles.button}
-                onClick={() =>
-                  requestConfirmCode({
-                    email: watch('email'),
-                    code: watch('confirm'),
-                  })
-                }
-                disabled={
-                  isRequestConfirmPending || isEmailRetry || isEmailConfirmed
-                }
-              >
-                {!isRequestConfirmPending && !isEmailConfirmed && '인증 확인'}
-                {isEmailConfirmed && '인증 완료'}
-                {isRequestConfirmPending && '인증 중...'}
-              </Button>
-            </Field.Box>
-            <Field.ErrorMessage>{errors.confirm?.message}</Field.ErrorMessage>
-          </Field>
+          <SignupField
+            label="인증번호"
+            htmlFor="confirm"
+            emphasizeString="*"
+            errorMessage={errors.confirm?.message}
+            content={
+              <>
+                <Input
+                  id="confirm"
+                  type="text"
+                  placeholder="인증번호를 입력해주세요."
+                  maxLength={7}
+                  disabled={isEmailConfirmed}
+                  state={(errors.confirm?.message && 'fail') || 'normal'}
+                  onKeyDown={handleKeyDown(
+                    () =>
+                      confirmCode.length === 7 &&
+                      requestConfirmCode({ email, code: confirmCode }),
+                  )}
+                  {...register('confirm', validators.confirm)}
+                />
+                <Button
+                  type="button"
+                  className={styles.button}
+                  onClick={() =>
+                    requestConfirmCode({ email, code: confirmCode })
+                  }
+                  disabled={
+                    confirmCode.length < 7 ||
+                    isRequestConfirmPending ||
+                    isEmailRetry ||
+                    isEmailConfirmed
+                  }
+                >
+                  {!isRequestConfirmPending && !isEmailConfirmed && '인증 확인'}
+                  {isEmailConfirmed && '인증 완료'}
+                  {isRequestConfirmPending && '인증 중...'}
+                </Button>
+              </>
+            }
+          />
         )}
 
-        <Field>
-          <Field.Label htmlFor="password">
-            <Field.Emphasize>*</Field.Emphasize>
-            비밀번호
-          </Field.Label>
-          <Field.Box>
+        <SignupField
+          label="비밀번호"
+          htmlFor="password"
+          emphasizeString="*"
+          errorMessage={errors.password?.message}
+          content={
             <Input
               id="password"
               type="password"
@@ -231,19 +266,18 @@ const SignupPage = () => {
               minLength={8}
               maxLength={20}
               state={errors.password?.message ? 'fail' : 'normal'}
-              onKeyDown={preventEnter}
+              onKeyDown={handleKeyDown(() => {})}
               {...register('password', validators.password)}
             />
-          </Field.Box>
-          <Field.ErrorMessage>{errors.password?.message}</Field.ErrorMessage>
-        </Field>
+          }
+        />
 
-        <Field>
-          <Field.Label htmlFor="repassword">
-            <Field.Emphasize>*</Field.Emphasize>
-            비밀번호 확인
-          </Field.Label>
-          <Field.Box>
+        <SignupField
+          label="비밀번호 확인"
+          htmlFor="repassword"
+          emphasizeString="*"
+          errorMessage={errors.repassword?.message}
+          content={
             <Input
               id="repassword"
               type="password"
@@ -251,49 +285,52 @@ const SignupPage = () => {
               minLength={8}
               maxLength={20}
               state={errors.repassword?.message ? 'fail' : 'normal'}
-              onKeyDown={preventEnter}
+              onKeyDown={handleKeyDown(() => {})}
               {...register('repassword', validators.repassword)}
             />
-          </Field.Box>
-          <Field.ErrorMessage>{errors.repassword?.message}</Field.ErrorMessage>
-        </Field>
+          }
+        />
 
-        <Field>
-          <Field.Label htmlFor="username">
-            <Field.Emphasize>*</Field.Emphasize>
-            닉네임
-          </Field.Label>
-          <Field.Box>
-            <Input
-              id="username"
-              type="text"
-              placeholder="닉네임을 입력해주세요."
-              minLength={2}
-              maxLength={16}
-              state={errors.username?.message ? 'fail' : 'normal'}
-              disabled={isUsernameConfirmed}
-              onKeyDown={preventEnter}
-              {...register('username', validators.username)}
-            />
-            <Button
-              type="button"
-              className={styles.button}
-              onClick={() => requestCheckDuplicateUsername(watch('username'))}
-              disabled={
-                !watch('username')?.length ||
-                isDuplicateUsernamePending ||
-                !!errors.username?.message ||
-                isUsernameConfirmed
-              }
-            >
-              {isDuplicateUsernamePending ? '확인 중...' : '중복 확인'}
-            </Button>
-          </Field.Box>
-          <Field.ErrorMessage>{errors.username?.message}</Field.ErrorMessage>
-        </Field>
+        <SignupField
+          label="닉네임"
+          htmlFor="username"
+          emphasizeString="*"
+          errorMessage={errors.username?.message}
+          content={
+            <>
+              <Input
+                id="username"
+                type="text"
+                placeholder="닉네임을 입력해주세요."
+                minLength={2}
+                maxLength={16}
+                state={errors.username?.message ? 'fail' : 'normal'}
+                disabled={isUsernameConfirmed}
+                onKeyDown={handleKeyDown(() =>
+                  requestCheckDuplicateUsername(username),
+                )}
+                {...register('username', validators.username)}
+              />
+              <Button
+                type="button"
+                className={styles.button}
+                onClick={() => requestCheckDuplicateUsername(username)}
+                disabled={
+                  !username?.length ||
+                  isDuplicateUsernamePending ||
+                  !!errors.username?.message ||
+                  isUsernameConfirmed
+                }
+              >
+                {isDuplicateUsernamePending ? '확인 중...' : '중복 확인'}
+              </Button>
+            </>
+          }
+        />
+
         <Button
           className={styles.next_button}
-          disabled={!isValid || isRequestSignupPending}
+          disabled={isDisableNextStepButton}
         >
           {isRequestSignupPending ? '...' : '다음 단계로'}
         </Button>

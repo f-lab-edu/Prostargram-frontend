@@ -1,5 +1,4 @@
 import { KeyboardEvent } from 'react';
-import { useFormContext } from 'react-hook-form';
 
 import Input from '@/components/common/Input';
 import RemoveIcon from '@/assets/icons/close.svg';
@@ -8,12 +7,11 @@ import styles from './AdditionalLink.module.scss';
 
 interface AdditionalLinkProps {
   index: number;
-  removeHandler: (index: number) => void;
+  id: string;
+  removeHandler: (index: string) => void;
 }
 
-const AdditionalLink = ({ index, removeHandler }: AdditionalLinkProps) => {
-  const { register } = useFormContext();
-
+const AdditionalLink = ({ index, id, removeHandler }: AdditionalLinkProps) => {
   const keyupHandler = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
@@ -30,14 +28,13 @@ const AdditionalLink = ({ index, removeHandler }: AdditionalLinkProps) => {
           <button
             type="button"
             className={styles.remove_link_button}
-            onClick={() => removeHandler(index)}
+            onClick={() => removeHandler(id)}
             aria-label="remove-link"
           >
             <RemoveIcon />
           </button>
         )
       }
-      {...register(`links.${index}.link`)}
     />
   );
 };

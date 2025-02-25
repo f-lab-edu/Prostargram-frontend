@@ -1,3 +1,5 @@
 const createUniqueId = () => `${Date.now() - Math.random()}`;
 
-export { createUniqueId };
+const generateId = () => Date.now().toLocaleString();
+
+export { createUniqueId, generateId };

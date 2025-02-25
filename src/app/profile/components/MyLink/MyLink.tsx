@@ -2,7 +2,7 @@
 
 import { ChangeEvent, useState } from 'react';
 
-import { updateMyLinks } from '@/api/my';
+import { updateMyLinks } from '@/api/profile';
 import If from '@/components/common/If';
 import Button from '@/components/common/Button';
 import EditMyLinkList from './EditMyLinkList';

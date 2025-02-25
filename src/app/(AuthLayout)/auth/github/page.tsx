@@ -48,7 +48,7 @@ const GithubSignupPage = () => {
     isEmailRequest,
     isEmailRetry,
     isUsernameConfirmed,
-    changeConfirmState,
+    changeConfirmCodeState,
     changeUsernameState,
     changeSignupToken,
   } = useSignUpState();
@@ -65,7 +65,7 @@ const GithubSignupPage = () => {
   } = useSignupMutation({
     formMethods,
     changeSignupToken,
-    changeConfirmState,
+    changeConfirmCodeState,
     changeUsernameState,
   });
 
@@ -78,7 +78,7 @@ const GithubSignupPage = () => {
   const resetEmail = () => {
     resetField('email');
     resetField('confirm');
-    changeConfirmState(CONFIRM_STATES.PENDING);
+    changeConfirmCodeState(CONFIRM_STATES.PENDING);
   };
 
   const onSubmit = (values: ISignUpFormValueType) => {
@@ -118,7 +118,7 @@ const GithubSignupPage = () => {
 
   return (
     <div className={styles.container}>
-      <Logo />
+      <Logo isGoHome={false} />
 
       <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
         <div>
@@ -159,7 +159,7 @@ const GithubSignupPage = () => {
                 <Field.TimerButton
                   type="button"
                   className={styles.button}
-                  changeState={() => changeConfirmState('retry')}
+                  expireTimeEvent={() => changeConfirmCodeState('retry')}
                   isConfirm={isEmailConfirmed}
                   timerDuration={300_000} // 5분
                   disabled={isRequestEmailPending || !isEmailRetry}

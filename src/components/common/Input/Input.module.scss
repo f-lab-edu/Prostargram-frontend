@@ -57,11 +57,17 @@
   font-size: $FONT_SIZE_14;
 
   &::placeholder {
-    font-size: 12;
+    font-size: $FONT_SIZE_12;
   }
 
   &:disabled {
     color: $COLOR_GRAY_3;
+  }
+
+  &:-webkit-autofill {
+    height: fit-content;
+    -webkit-box-shadow: 0 0 0 500px $COLOR_GRAY_9 inset !important;
+    font-size: $FONT_SIZE_12;
   }
 
   @include res--desktop {
@@ -69,6 +75,10 @@
     font-size: $FONT_SIZE_16;
 
     &::placeholder {
+      font-size: $FONT_SIZE_16;
+    }
+
+    &:-webkit-autofill {
       font-size: $FONT_SIZE_16;
     }
   }

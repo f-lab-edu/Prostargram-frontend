@@ -1,8 +1,9 @@
 const requestPromiseAll = async <T>(
   arr: T[],
-  callback: (params: T, index: number, array: T[]) => Promise<unknown>,
+  callback: (params: T, index: number, array: T[]) => unknown,
 ) => {
-  return Promise.all(arr.map(callback));
+  const result = await Promise.all(arr.map(callback));
+  return result;
 };
 
 export { requestPromiseAll };

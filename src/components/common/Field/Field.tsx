@@ -65,51 +65,36 @@ interface TimerButtonProps
   extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onClick'> {
   isConfirm?: boolean;
   timerDuration: number;
-  onClick?: () => void;
-  changeState: () => void;
+  expireTimeEvent: () => void;
 }
 
 const TimerButton = ({
   isConfirm,
   timerDuration,
-  onClick,
-  changeState,
+  expireTimeEvent,
   ...props
 }: TimerButtonProps) => {
-  const { time, startTimer, changeTime, clearTimer } = useTimer({
+  const { time, startTimer, clearTimer } = useTimer({
     waitTime: timerDuration,
   });
-
-  const clickHandler = () => {
-    if (onClick) {
-      onClick();
-    }
-    changeTime(timerDuration);
-    startTimer();
-  };
-
-  useEffect(() => {
-    if (time <= 0) return;
-    startTimer();
-  }, [time, startTimer]);
-
-  useEffect(() => {
-    if (time > 0) return;
-
-    changeState();
-    clearTimer();
-  }, [time, changeState, clearTimer]);
 
   useEffect(() => {
     if (isConfirm) {
       clearTimer();
     }
-  }, [isConfirm, clearTimer]);
+
+    if (time > 0) {
+      startTimer();
+    }
+
+    if (time <= 0) {
+      expireTimeEvent();
+      clearTimer();
+    }
+  }, [time, isConfirm, expireTimeEvent, startTimer, clearTimer]);
 
   return (
-    <Button onClick={clickHandler} {...props}>
-      {time <= 0 ? '재요청' : timeFormatter(time)}
-    </Button>
+    <Button {...props}>{time <= 0 ? '재요청' : timeFormatter(time)}</Button>
   );
 };
 
