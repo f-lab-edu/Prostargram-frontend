@@ -17,6 +17,7 @@ const FeedContentBox = ({ feed }: FeedContentBoxProps) => {
       router.push(`?cf=${feed.post.postId}`);
     }
     if (feed.post.postType === 'DEBATE') {
+      console.log('feed.post.postId::', feed.post.postId);
       router.push(`?df=${feed.post.postId}`);
     }
   };

@@ -15,10 +15,11 @@ const FeedCountBox = ({ post }: FeedCountBoxProps) => {
 
   const onClickMessageIcon = () => {
     if (post.postType === 'BASIC') {
+      console.log('post.postId', post.postId);
       router.push(`?cf=${post.postId}`);
     }
     if (post.postType === 'DEBATE') {
-      router.push('?df=1');
+      router.push(`?df=${post.postId}`);
     }
   };
 

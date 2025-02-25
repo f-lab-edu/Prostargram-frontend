@@ -4,12 +4,12 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 import { useInfiniteFeeds } from '@/api/feed/feedQueries';
-import { MOCK_DATA_OF_DEBATE_FEED } from '@/data/mock';
 import SkeletonFeed from '@/components/common/SkletonFeed/SkeletonFeed';
 
 import Feed from '../Feed/Feed';
 import ReadOnlyCommonFeed from '../ReadOnlyCommonFeed';
 import ReadOnlyDebateFeed from '../ReadOnlyDebateFeed';
+import styles from './FeedList.module.scss';
 
 const FeedList = () => {
   const observer = useRef<IntersectionObserver | null>(null);
@@ -36,35 +36,50 @@ const FeedList = () => {
   );
 
   const params = useSearchParams();
-  const [detailFeedId, setDetailFeedId] = useState<string | null>(
-    params.get('cf'),
+  const [detailCommonFeedId, setDetailCommonFeedId] = useState<string | null>(
+    null,
+  );
+  const [detailDebateFeedId, setDetailDebateFeedId] = useState<string | null>(
+    null,
   );
 
   useEffect(() => {
-    setDetailFeedId(params.get('cf'));
+    const cf = params.get('cf');
+    const df = params.get('df');
+
+    if (cf) {
+      setDetailCommonFeedId(cf);
+      setDetailDebateFeedId(null);
+    } else if (df) {
+      setDetailDebateFeedId(df);
+      setDetailCommonFeedId(null);
+    } else {
+      setDetailCommonFeedId(null);
+      setDetailDebateFeedId(null);
+    }
   }, [params]);
   return (
     <>
       {isLoading && <SkeletonFeed />}
-      {!isLoading &&
-        feeds?.map((page) =>
-          page.result?.data?.map((result, idx) => {
-            return (
-              <Feed
-                ref={page.result?.data?.length === idx + 1 ? lastPostRef : null}
-                key={result.post.postId}
-                feed={result}
-                feedIndex={idx}
-              />
-            );
-          }),
-        )}
-      {detailFeedId && (
-        <>
-          <ReadOnlyCommonFeed feedId={detailFeedId} />
-          <ReadOnlyDebateFeed debateFeedData={MOCK_DATA_OF_DEBATE_FEED} />
-        </>
-      )}
+      <div className={styles.feed_wrap}>
+        {!isLoading &&
+          feeds?.map((page) =>
+            page.result?.data?.map((result, idx) => {
+              return (
+                <Feed
+                  ref={
+                    page.result?.data?.length === idx + 1 ? lastPostRef : null
+                  }
+                  key={result.post.postId}
+                  feed={result}
+                  feedIndex={idx}
+                />
+              );
+            }),
+          )}
+      </div>
+      {detailDebateFeedId && <ReadOnlyDebateFeed feedId={detailDebateFeedId} />}
+      {detailCommonFeedId && <ReadOnlyCommonFeed feedId={detailCommonFeedId} />}
     </>
   );
 };

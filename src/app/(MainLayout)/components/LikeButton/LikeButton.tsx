@@ -41,8 +41,20 @@ const LikeButton = ({
       });
     },
   });
-  const { mutate: likeCommentMutation } = useLikeComment(commentId!);
-  const { mutate: dislikeCommentMutation } = useDislikeComment(commentId!);
+  const { mutate: likeCommentMutation } = useLikeComment(commentId!, {
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: FEED_QUERY_KEYS.id(String(postId)),
+      });
+    },
+  });
+  const { mutate: dislikeCommentMutation } = useDislikeComment(commentId!, {
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: FEED_QUERY_KEYS.id(String(postId)),
+      });
+    },
+  });
 
   const clickHandler = () => {
     if (postId) {

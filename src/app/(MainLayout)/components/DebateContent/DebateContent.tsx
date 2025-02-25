@@ -68,7 +68,7 @@ const DebateContent = ({
       </div>
       <div>
         <FeedCommentWriteInput
-          postId={1}
+          postId={postId}
           placeholder={
             disabled
               ? '댓글 달기...'

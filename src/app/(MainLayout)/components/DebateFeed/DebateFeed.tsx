@@ -47,13 +47,14 @@ const DebateFeed = () => {
 
   const { mutate: createDebateMutation } = useCreateDebateFeed(debateFeedData);
 
-  const createDiscussionFeed = () => {
-    createDebateMutation();
-  };
-
   const handleDeleteFeed = () => {
     window.location.href = '/';
     handleClosePopup();
+  };
+
+  const createDiscussionFeed = () => {
+    createDebateMutation();
+    handleDeleteFeed();
   };
 
   const updateDebateFeedData = (
