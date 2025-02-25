@@ -75,6 +75,19 @@ const deleteFeed = (postId: number) => {
   return res;
 };
 
+const postImageController = (imageCount: number, fileType: string) => {
+  const res = authInstance({
+    method: 'post',
+    url: '/images',
+    data: {
+      imageCount,
+      fileType,
+    },
+  });
+
+  return res;
+};
+
 export {
   getFeeds,
   getDetailCommonFeed,
@@ -85,4 +98,5 @@ export {
   likeFeed,
   dislikeFeed,
   deleteFeed,
+  postImageController,
 };

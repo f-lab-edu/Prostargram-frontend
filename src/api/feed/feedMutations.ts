@@ -5,6 +5,7 @@ import {
   deleteFeed,
   dislikeFeed,
   likeFeed,
+  postImageController,
   updateCommonFeed,
 } from './apis';
 
@@ -38,18 +39,36 @@ export const useCreateDebateFeed = (
   });
 };
 
+export const useImageController = (
+  {
+    imageCount,
+    fileType,
+  }: {
+    imageCount: number;
+    fileType: string;
+  },
+  options = {},
+) => {
+  return useMutation({
+    mutationFn: () => postImageController(imageCount, fileType),
+    ...options,
+  });
+};
+
 export const useBatchImageUpload = (options = {}) => {
   return useMutation({
     mutationFn: async ({
-      preSignedImageUrls,
+      preSignedUrls,
       images,
+      callback,
     }: {
-      preSignedImageUrls: string[];
+      preSignedUrls: string[];
       images: File[];
+      callback?: () => void;
     }) => {
-      console.log('batch image upload', preSignedImageUrls);
+      console.log('batch image upload', preSignedUrls);
       const results = await Promise.all(
-        preSignedImageUrls.map((url, index) =>
+        preSignedUrls.map((url, index) =>
           fetch(`${url}`, {
             method: 'PUT',
             headers: {
@@ -60,7 +79,11 @@ export const useBatchImageUpload = (options = {}) => {
         ),
       );
 
-      return results.map((_, index) => preSignedImageUrls[index]);
+      if (callback) {
+        callback();
+      }
+
+      return results.map((_, index) => preSignedUrls[index]);
     },
     ...options,
   });

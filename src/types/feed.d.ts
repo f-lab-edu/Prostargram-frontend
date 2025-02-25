@@ -56,6 +56,7 @@ declare module Feed {
     content: string;
     hashTagNames: string[];
     imageCount: number;
+    contentUrls: string[];
   }
 
   interface DebatePostRequestBody {
@@ -67,7 +68,7 @@ declare module Feed {
   interface BasicPostResponse {
     commentCount: number;
     content: string;
-    contentImageUrls: string[];
+    contentUrls: string[];
     createdAt?: string;
     hashTagNames?: string[];
     isFollow: boolean;
@@ -75,7 +76,7 @@ declare module Feed {
     likeCount: number;
     postId: number;
     postType: string;
-    preSignedImageUrls: string[];
+    preSignedUrls: string[];
     userId: number;
   }
 

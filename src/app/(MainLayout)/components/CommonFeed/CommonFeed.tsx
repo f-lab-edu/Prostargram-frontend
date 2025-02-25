@@ -9,6 +9,7 @@ import ConfirmPopup from '@/components/common/Popup/ConfirmPopup/ConfirmPopup';
 import {
   useBatchImageUpload,
   useCreateCommonFeed,
+  useImageController,
 } from '@/api/feed/feedMutations';
 import { HttpSuccessType } from '@/api/httpRequest';
 import { useGetDetailCommonFeed } from '@/api/feed/feedQueries';
@@ -42,6 +43,7 @@ const CommonFeed = () => {
       imageCount: images.length,
       content: '',
       hashTagNames: [],
+      contentUrls: [],
     });
 
   const setPostData = () => {
@@ -63,11 +65,20 @@ const CommonFeed = () => {
 
   const updateCommonFeedData = (
     nextCommonFeedData: Partial<Feed.BasicPostRequestBody>,
+    callback?: () => void,
   ) => {
-    setCommonFeedData((prev) => ({
-      ...prev,
-      ...nextCommonFeedData,
-    }));
+    setCommonFeedData((prev) => {
+      const updatedData = {
+        ...prev,
+        ...nextCommonFeedData,
+      };
+
+      if (callback) {
+        callback();
+      }
+
+      return updatedData;
+    });
   };
 
   const [popupState, setPopupState] = useState<FeedPopup>(null);
@@ -77,14 +88,15 @@ const CommonFeed = () => {
   const handleOpenPublishPopup = () => setPopupState('publish');
   const handleClosePopup = () => setPopupState(null);
 
+  // 일반피드 이미지 업로드
   const { mutate: batchImageUploadMutation } = useBatchImageUpload();
   const batchImageUpload = (
     data: HttpSuccessType<Feed.BasicPostResponse>,
     imageFiles: File[],
   ) => {
-    if (data.result?.preSignedImageUrls) {
+    if (data.result?.preSignedUrls) {
       const res = batchImageUploadMutation({
-        preSignedImageUrls: data.result?.preSignedImageUrls,
+        preSignedUrls: data.result?.preSignedUrls,
         images: imageFiles,
       });
 
@@ -92,15 +104,16 @@ const CommonFeed = () => {
     }
   };
 
-  const { mutate: commonFeedCreateMutation } = useCreateCommonFeed(
-    commonFeedData,
-    {
-      onSuccess: (data: HttpSuccessType<Feed.BasicPostResponse>) => {
-        const imageFiles = images.map((image) => image.file!);
-        batchImageUpload(data, imageFiles);
-      },
-    },
-  );
+  const closePopup = () => {
+    handleClosePopup();
+    window.location.href = '/';
+  };
+
+  // 일반 피드 생성
+  const { mutate: commonFeedCreateMutation } =
+    useCreateCommonFeed(commonFeedData);
+
+  // 일반 피드 수정
   const { mutate: commonFeedUpdateMutation } = useCreateCommonFeed(
     { ...commonFeedData, postId: postId! },
     {
@@ -117,16 +130,35 @@ const CommonFeed = () => {
     },
   );
 
-  const closePopup = () => {
-    handleClosePopup();
-    window.location.href = '/';
-  };
+  const { mutate: imageControllerMutation } = useImageController(
+    {
+      imageCount: commonFeedData.imageCount,
+      fileType: 'POST_IMAGE',
+    },
+    {
+      onSuccess: async (data: HttpSuccessType<Feed.BasicPostResponse>) => {
+        updateCommonFeedData(
+          { contentUrls: data?.result?.contentUrls },
+          commonFeedCreateMutation,
+        );
 
-  const createCommonFeed = () => {
-    // TODO: 일반피드 작성 서버 API 연동
-    console.log('데이터', commonFeedData);
-    commonFeedCreateMutation();
-    // closePopup();
+        const imageFile = images
+          .map((image) => image.file)
+          .filter((file): file is File => file !== undefined);
+
+        if (data.result?.preSignedUrls) {
+          batchImageUploadMutation({
+            preSignedUrls: data?.result?.preSignedUrls,
+            images: imageFile,
+            callback: closePopup,
+          });
+        }
+      },
+    },
+  );
+
+  const createCommonFeed = async () => {
+    await imageControllerMutation();
   };
 
   const updateCommonFeed = () => {
