@@ -4,20 +4,18 @@ import Button from '@/components/common/Button';
 interface ProfileEditButtonProps {
   isEdit: boolean;
   onToggle?: () => void;
-  onSave?: () => void;
   onCancel?: () => void;
 }
 
 const ProfileEditButton = ({
   isEdit,
   onToggle,
-  onSave,
   onCancel,
 }: ProfileEditButtonProps) => {
   return (
     <If condition={isEdit}>
       <If.True>
-        <Button size="large" onClick={onSave}>
+        <Button type="submit" size="large">
           저장
         </Button>
         <Button fill="gray" size="large" onClick={onCancel}>

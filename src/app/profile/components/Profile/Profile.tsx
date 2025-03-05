@@ -1,125 +1,159 @@
 'use client';
 
+import clsx from 'clsx';
 import Image from 'next/image';
-import { ChangeEvent, useRef, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import { ChangeEvent, FormEvent, useRef, useState } from 'react';
 
-import If from '@/components/common/If';
+import { getUserId } from '@/utils/manageToken';
+import { PROPFILE_QUERY_KEYS } from '@/api/profile/profileQuery';
+import { useProfileImageMutation } from '@/api/profile/profileMutation';
 
 import DefaultAvatar from '@/assets/icons/default_avatar.svg';
+import CloseIcon from '@/assets/icons/close.svg';
 import ProfileEditButton from './ProfileEditButton';
 import ProfileFollowButton from './ProfileFollowButton';
 
 import styles from './Profile.module.scss';
 
 interface ProfileProps {
+  userId: number;
   profileUrl?: string;
   isFollow: boolean;
   isMine: boolean;
 }
 
-const Profile = ({ profileUrl, isMine, isFollow }: ProfileProps) => {
+//* 기존 profileUrl(contentUrl)에 대한 File.type
+const OCTET_STREAM_TYPE = 'application/octet-stream';
+
+const Profile = ({ userId, profileUrl, isMine, isFollow }: ProfileProps) => {
+  const queryClient = useQueryClient();
   const [profile, setProfile] = useState<string | undefined>(profileUrl);
   const [isEdit, setIsEdit] = useState<boolean>(false);
-  const [file, setFile] = useState<File>();
   const fileRef = useRef<HTMLInputElement>(null);
+  const profileId = getUserId();
 
-  const toggleEdit = () => setIsEdit((prev) => !prev);
+  const { mutate: updateProfile } = useProfileImageMutation({
+    onError: () => setProfile(profileUrl),
+  });
 
-  const saveHandler = () => {
-    toggleEdit();
-    console.log(file);
+  const submitHandler = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!isMine) return;
+
+    const imgFiles = new FormData(e.currentTarget).getAll(
+      'profileImage',
+    ) as File[];
+
+    if (imgFiles[0].type !== OCTET_STREAM_TYPE) {
+      updateProfile(
+        { imgFiles },
+        {
+          onSuccess: () => {
+            queryClient.invalidateQueries({
+              queryKey: PROPFILE_QUERY_KEYS.PROFILE([userId]),
+              exact: true,
+            });
+          },
+          onSettled: () => setIsEdit(false),
+        },
+      );
+    } else {
+      setIsEdit(false);
+    }
+  };
+
+  const removeProfileImage = () => {
+    setProfile(undefined);
+  };
+
+  const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    const profileImageFile = e.target.files?.[0];
+
+    if (profileImageFile) {
+      setProfile((prev) => {
+        if (prev) {
+          URL.revokeObjectURL(prev);
+        }
+        return URL.createObjectURL(profileImageFile);
+      });
+    }
   };
 
   const cancelHandler = () => {
     setProfile(profileUrl);
-    toggleEdit();
+    setIsEdit(false);
   };
 
   const clickHandler = () => {
-    fileRef.current?.click();
-  };
-
-  const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    const profileObject = e.target.files?.[0];
-    if (profileObject) {
-      const fileReader = new FileReader();
-      fileReader.readAsDataURL(profileObject);
-      fileReader.onload = (data) => {
-        const result = data.target?.result;
-        if (typeof result === 'string') {
-          setProfile(result);
-          setFile(profileObject);
-        }
-      };
+    if (isEdit) {
+      fileRef.current?.click();
     }
   };
 
+  const toggleEdit = () => setIsEdit((prev) => !prev);
+
+  const ProfileImage = profile ? Image : DefaultAvatar;
+
   return (
-    <div className={styles.profile_content}>
-      <div className={styles.profile_image}>
-        <If condition={isEdit}>
-          <If.True>
-            <input
-              type="file"
-              ref={fileRef}
-              onChange={changeHandler}
-              style={{ display: 'none' }}
-            />
-            <If condition={Boolean(profile)}>
-              <If.True>
-                <Image
-                  src={profile!}
-                  width="150"
-                  height="150"
-                  alt="profile-image"
-                  onClick={clickHandler}
-                  priority
-                />
-              </If.True>
-              <If.False>
-                <DefaultAvatar
-                  width="150"
-                  height="150"
-                  onClick={clickHandler}
-                />
-              </If.False>
-            </If>
-          </If.True>
-        </If>
-        <If.False>
-          <If condition={Boolean(profile)}>
-            <If.True>
-              <Image
-                src={profile!}
-                width="150"
-                height="150"
-                alt="profile-image"
-                priority
-              />
-            </If.True>
-            <If.False>
-              <DefaultAvatar width="150" height="150" />
-            </If.False>
-          </If>
-        </If.False>
+    <form className={styles.profile_form} onSubmit={submitHandler}>
+      {isEdit && (
+        <input
+          ref={fileRef}
+          type="file"
+          name="profileImage"
+          accept="image/png,image/jpg,image/jpeg"
+          onChange={changeHandler}
+          style={{ display: 'none' }}
+        />
+      )}
+
+      <div className={styles.profile_image_button}>
+        <button
+          type="button"
+          onClick={clickHandler}
+          className={clsx([
+            styles.profile_image_wrapper,
+            { [styles.pointer]: isEdit },
+          ])}
+        >
+          <ProfileImage
+            src={profile}
+            width="150"
+            height="150"
+            alt="profile-image"
+            priority={1}
+          />
+        </button>
+
+        {isEdit && (
+          <button
+            type="button"
+            aria-label="remove_profile_button"
+            onClick={removeProfileImage}
+            className={styles.delete_profile_button}
+          >
+            <CloseIcon width="28" height="28" />
+          </button>
+        )}
       </div>
 
       <div className={styles.profile_button_wrapper}>
-        <If condition={isMine}>
-          <If.True>
-            <ProfileEditButton
-              isEdit={isEdit}
-              onSave={saveHandler}
-              onCancel={cancelHandler}
-              onToggle={toggleEdit}
-            />
-          </If.True>
-          <If.False>
-            <ProfileFollowButton isFollow={isFollow} />
-          </If.False>
-        </If>
+        {isMine ? (
+          <ProfileEditButton
+            isEdit={isEdit}
+            onCancel={cancelHandler}
+            onToggle={toggleEdit}
+          />
+        ) : (
+          <ProfileFollowButton
+            fromUserId={profileId}
+            toUserId={userId}
+            isFollow={isFollow}
+          />
+        )}
       </div>
-    </div>
+    </form>
   );
 };
 

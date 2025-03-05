@@ -1,8 +1,8 @@
 import { ChangeEvent, ReactNode, useState } from 'react';
 
-import styles from './MyLinkInputStateItem.module.scss';
+import { iconList } from '../iconData';
 
-const ICON_LIST = ['github', 'naver'];
+import styles from './MyLinkInputStateItem.module.scss';
 
 interface MyLinkInputStateItemProps {
   link: string;
@@ -23,12 +23,14 @@ const MyLinkInputStateItem = ({
     setInputState(value);
   };
 
-  const linkIcon =
-    ICON_LIST.find((target) => inputState.includes(target)) || 'default';
+  const linkIcon = iconList.find(({ name }) => inputState.includes(name)) || {
+    name: 'default',
+    icon: <span>P</span>,
+  };
 
   return (
     <div className={styles.edit_link_input_wrapper}>
-      <i>{linkIcon}</i>
+      <i>{linkIcon.icon}</i>
       {children({ inputState, inputStateChangeHandler })}
     </div>
   );

@@ -54,12 +54,12 @@
     word-break: break-word;
   }
 
-  p {
+  .character_count {
     position: absolute;
     right: 0;
     bottom: -24px;
 
-    span {
+    .gray {
       color: $COLOR_GRAY_4;
     }
   }

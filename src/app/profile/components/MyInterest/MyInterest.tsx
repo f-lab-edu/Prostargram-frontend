@@ -3,12 +3,13 @@
 import { useState } from 'react';
 
 import If from '@/components/common/If';
+import useInterestsServerRequests from '@/hooks/useInterestsServerRequests';
 import MyReadOnlyInterest from './MyReadOnlyInterest';
 import MyEditInterest from './MyEditInterest';
 import {
   UserInterestType,
   UserInterestWithOptionalHashTagIdType,
-} from '../../types/my';
+} from '../../types/profile';
 
 import styles from './MyInterest.module.scss';
 
@@ -21,6 +22,8 @@ const MyInterest = ({ isMine, interests }: MyInterestProps) => {
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [myInterests, setMyInterests] =
     useState<UserInterestWithOptionalHashTagIdType[]>(interests);
+  const { requestSaveInterest, requestRemoveInterest } =
+    useInterestsServerRequests();
 
   const toggleHandler = () => {
     setIsEdit((prev) => !prev);
@@ -35,8 +38,17 @@ const MyInterest = ({ isMine, interests }: MyInterestProps) => {
     add: UserInterestWithOptionalHashTagIdType[];
     remove: UserInterestWithOptionalHashTagIdType[];
   }) => {
-    console.log('add', add);
-    console.log('remove', remove);
+    requestSaveInterest({
+      targetInterests: add.map(({ hashTagName }) => ({
+        interestName: hashTagName,
+      })),
+    });
+    requestRemoveInterest({
+      targetInterests: remove.map(({ hashTagName, hashTagId }) => ({
+        hashTagId,
+        interestName: hashTagName,
+      })),
+    });
 
     setMyInterests(nextInterestsState);
     toggleHandler();

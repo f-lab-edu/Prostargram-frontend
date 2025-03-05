@@ -1,43 +1,38 @@
-import { PropsWithChildren, createContext, useContext } from 'react';
-
-type IfContextType = boolean;
-
-const IfContext = createContext<IfContextType | null>(null);
-
-const useIfContext = () => {
-  return useContext(IfContext);
-};
-
-const IfProvider = ({
-  children,
-  condition,
-}: PropsWithChildren & { condition: boolean }) => {
-  return <IfContext.Provider value={condition}>{children}</IfContext.Provider>;
-};
+import {
+  FC,
+  PropsWithChildren,
+  ReactNode,
+  Children,
+  isValidElement,
+} from 'react';
 
 interface IfProps extends PropsWithChildren {
   condition: boolean;
 }
 
-const Condition = ({ condition, children }: IfProps) => {
-  return <IfProvider condition={condition}>{children}</IfProvider>;
+interface IfComponent extends FC<IfProps> {
+  True: FC<PropsWithChildren>;
+  False: FC<PropsWithChildren>;
+}
+
+const If: IfComponent = ({ condition, children }: IfProps): ReactNode => {
+  const filteredChildren: ReactNode = Children.toArray(children).filter(
+    (child) => {
+      if (isValidElement(child)) {
+        return condition ? child.type === If.True : child.type === If.False;
+      }
+      return false;
+    },
+  );
+
+  return filteredChildren;
 };
 
-const True = ({ children }: PropsWithChildren) => {
-  const condition = useIfContext();
-
-  return condition && children;
+If.True = function True({ children }: PropsWithChildren): ReactNode {
+  return children;
 };
-
-const False = ({ children }: PropsWithChildren) => {
-  const condition = useIfContext();
-
-  return !condition && children;
+If.False = function False({ children }: PropsWithChildren): ReactNode {
+  return children;
 };
-
-const If = Object.assign(Condition, {
-  True,
-  False,
-});
 
 export default If;

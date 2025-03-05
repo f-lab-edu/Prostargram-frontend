@@ -1,6 +1,6 @@
 import If from '@/components/common/If';
 import Button from '@/components/common/Button';
-import { UserInterestWithOptionalHashTagIdType } from '@/app/profile/types/my';
+import { UserInterestWithOptionalHashTagIdType } from '@/app/profile/types/profile';
 
 import styles from './MyReadOnlyInterest.module.scss';
 
@@ -17,21 +17,28 @@ const MyReadOnlyInterest = ({
 }: MyReadOnlyInterestProps) => {
   return (
     <>
-      <ul className={styles.my_interest_list}>
-        {interests.map(({ hashTagName }) => (
-          <li key={hashTagName} className={styles.my_interest}>
-            #{hashTagName}
-          </li>
-        ))}
+      <ul className={styles.interest_list}>
+        <If condition={interests.length === 0}>
+          <If.True>
+            <li className={styles.none_interest}>
+              <p>등록된 관심사가 없습니다.</p>
+            </li>
+          </If.True>
+          <If.False>
+            {interests.map(({ hashTagName }) => (
+              <li key={hashTagName} className={styles.interest}>
+                <span>#{hashTagName}</span>
+              </li>
+            ))}
+          </If.False>
+        </If>
       </ul>
 
-      <If condition={isMine}>
-        <If.True>
-          <div className={styles.edit_button_wrapper}>
-            <Button onClick={toggleHandler}>수정</Button>
-          </div>
-        </If.True>
-      </If>
+      {isMine && (
+        <div className={styles.edit_button_wrapper}>
+          <Button onClick={toggleHandler}>수정</Button>
+        </div>
+      )}
     </>
   );
 };

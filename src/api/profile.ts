@@ -1,5 +1,6 @@
-import { UserType } from '@/app/profile/types/my';
 import { getUserId } from '@/utils/manageToken';
+import { UserType } from '@/app/profile/types/profile';
+
 import { authInstance, defaultInstance } from './httpRequest';
 
 export const updateMyLinks = async (myLinks: (File | string)[]) => {

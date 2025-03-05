@@ -1,24 +1,24 @@
 import { authInstance } from './httpRequest';
 
-const postSocialAccount = async (socialAccount: string) => {
+const postSocialAccount = async (socialAccountUrl: string) => {
   const url = `/social-accounts`;
 
   const result = await authInstance({
     method: 'POST',
     url,
-    data: socialAccount,
+    data: { socialAccountUrl },
   });
 
   return result;
 };
 
-const removeSocialAccount = async (socialAccount: string) => {
+const removeSocialAccount = async (socialAccountUrl: string) => {
   const url = `/social-accounts`;
 
   const result = await authInstance({
     method: 'DELETE',
     url,
-    data: socialAccount,
+    data: { socialAccountUrl },
   });
 
   return result;
@@ -50,7 +50,6 @@ const removeInterest = async ({
   hashTagId: number;
   name: string;
 }) => {
-  console.log(name);
   const url = `/users/${userId}/interests?hashTagId=${hashTagId}&name=${encodeURIComponent(name)}`;
 
   const result = await authInstance({

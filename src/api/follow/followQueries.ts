@@ -1,14 +1,17 @@
 import { useQuery } from '@tanstack/react-query';
-import { getFollowingList } from './apis';
+import { GetFollowListParamType, getFollowList } from './apis';
 
 export const FOLLOWINGS_QUERY_KEYS = {
-  followings: ['followings'] as const,
+  FOLLOW: (keys: (string | number)[]) => ['follow', ...keys],
 };
 
-export const useGetFollowingList = (userId: number, options = {}) => {
+export const useGetFollowList = (
+  { userId, type }: GetFollowListParamType,
+  options = {},
+) => {
   return useQuery({
-    queryKey: FOLLOWINGS_QUERY_KEYS.followings,
-    queryFn: () => getFollowingList(userId),
+    queryKey: FOLLOWINGS_QUERY_KEYS.FOLLOW([userId, type]),
+    queryFn: () => getFollowList({ userId, type }),
     ...options,
   });
 };

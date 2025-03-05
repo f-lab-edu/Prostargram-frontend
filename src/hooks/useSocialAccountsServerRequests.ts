@@ -48,6 +48,7 @@ const useSocialAccountsServerRequest = () => {
         onSuccess();
       }
     } catch (error) {
+      console.log('add error');
       await requestPromiseAll<string>(
         successfulSocialRequests,
         (socialAccount) => {
@@ -61,7 +62,52 @@ const useSocialAccountsServerRequest = () => {
     }
   };
 
-  return { requestSaveSocialAccounts };
+  const requestRemoveSocialAccounts = async ({
+    targetSocialAccounts,
+    onSuccess,
+    onError,
+    successMessage,
+  }: RequestSaveInterestType) => {
+    const successfulSocialAccountRequests: string[] = [];
+
+    try {
+      await requestPromiseAll<string>(targetSocialAccounts, async (link) =>
+        removeSocialAccount(link, {
+          onSuccess: () => {
+            successfulSocialAccountRequests.push(link);
+          },
+        }),
+      );
+
+      if (successMessage) {
+        addToast({
+          type: 'success',
+          message: successMessage,
+        });
+      }
+
+      if (onSuccess) {
+        onSuccess();
+      }
+    } catch (error) {
+      console.log('remove error');
+      await requestPromiseAll<string>(
+        successfulSocialAccountRequests,
+        async (link) => {
+          saveSocialAccount(link);
+        },
+      );
+
+      if (onError) {
+        onError();
+      }
+    }
+  };
+
+  return {
+    requestSaveSocialAccounts,
+    requestRemoveSocialAccounts,
+  };
 };
 
 export default useSocialAccountsServerRequest;

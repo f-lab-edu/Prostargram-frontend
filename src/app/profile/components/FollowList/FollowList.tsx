@@ -1,44 +1,71 @@
+'use client';
+
 import Image from 'next/image';
 
+import { getUserId } from '@/utils/manageToken';
+import { useGetFollowList } from '@/api/follow/followQueries';
 import ProfileFollowButton from '../Profile/ProfileFollowButton';
 
 import styles from './FollowList.module.scss';
 
-interface FollowProflieType {
-  username: string;
-  description: string;
-  isFollow: boolean;
-  profileUrl?: string;
-}
-
 interface FollowListProps {
-  profileList: FollowProflieType[];
+  type: 'followings' | 'followers';
+  userId: number;
 }
 
-const FollowList = ({ profileList }: FollowListProps) => {
-  return profileList.map(({ username, description, isFollow, profileUrl }) => (
-    <div className={styles.container}>
-      <div className={styles.profile_wrapper}>
-        <div className={styles.profile_image}>
-          {profileUrl ? (
-            <Image
-              src={profileUrl}
-              width="50"
-              height="50"
-              alt={`${username}-profile`}
-            />
-          ) : (
-            '프로필'
-          )}
-        </div>
-        <div className={styles.profile_information}>
-          <p className={styles.username}>{username}</p>
-          <p>{description}</p>
-        </div>
-      </div>
-      <ProfileFollowButton isFollow={isFollow} />
-    </div>
-  ));
+const FollowList = ({ type, userId }: FollowListProps) => {
+  const { data } = useGetFollowList(
+    { userId, type },
+    { gcTime: 100_000_000, staleTime: 100_000_000 },
+  );
+  const myUserId = getUserId();
+  const title = type === 'followers' ? '팔로워 페이지' : '팔로잉 페이지';
+
+  if (!data || !data.result || data.result.length === 0) {
+    return (
+      <>
+        <p className={styles.follower_page_subject}>{title}</p>
+        <p>팔로우 한 사람이 없습니다.</p>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <p className={styles.follower_page_subject}>{title}</p>
+      <ul className={styles.profile_list}>
+        {data.result.map(
+          ({ userId: followerId, userName, departmentName, profileImgUrl }) => (
+            <li className={styles.container} key={followerId}>
+              <div className={styles.profile_wrapper}>
+                <div className={styles.profile_image}>
+                  {profileImgUrl ? (
+                    <Image
+                      src=""
+                      width="50"
+                      height="50"
+                      alt={`${userName}-profile`}
+                    />
+                  ) : (
+                    '프로필'
+                  )}
+                </div>
+                <div className={styles.profile_information}>
+                  <p className={styles.username}>{userName}</p>
+                  <p>{departmentName}</p>
+                </div>
+              </div>
+              <ProfileFollowButton
+                fromUserId={myUserId}
+                toUserId={followerId}
+                isFollow
+              />
+            </li>
+          ),
+        )}
+      </ul>
+    </>
+  );
 };
 
 export default FollowList;
