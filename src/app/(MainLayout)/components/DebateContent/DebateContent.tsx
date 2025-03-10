@@ -53,19 +53,14 @@ const DebateContent = ({
   const currentColor = currentFlagType === 'BLUE' ? styles.blue : styles.red;
   const queryClient = useQueryClient();
 
-  const { mutate: voteMutation } = useVoteDebateFeed(
-    postId,
-    option.optionId,
-    userId,
-    {
-      onSuccess: () => {
-        // 상세피드 캐시 초기화
-        queryClient.invalidateQueries({
-          queryKey: FEED_QUERY_KEYS.id(String(postId)),
-        });
-      },
+  const { mutate: voteMutation } = useVoteDebateFeed(postId, userId, {
+    onSuccess: () => {
+      // 상세피드 캐시 초기화
+      queryClient.invalidateQueries({
+        queryKey: FEED_QUERY_KEYS.id(String(postId)),
+      });
     },
-  );
+  });
 
   return (
     <div className={styles.container}>
@@ -75,7 +70,10 @@ const DebateContent = ({
           {isSelected ? (
             <FLAG.FILL />
           ) : (
-            <FLAG.NORMAL style={{ cursor: 'pointer' }} onClick={voteMutation} />
+            <FLAG.NORMAL
+              style={{ cursor: 'pointer' }}
+              onClick={() => voteMutation(option.optionId)}
+            />
           )}
           {digitNumberFormatter(voteCount)}
         </div>

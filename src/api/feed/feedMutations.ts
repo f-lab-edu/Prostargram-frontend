@@ -113,12 +113,11 @@ export const useDeleteFeed = (postId: number, options = {}) => {
 
 export const useVoteDebateFeed = (
   postId: number,
-  optionId: number,
   userId: number,
   options = {},
 ) => {
   return useMutation({
-    mutationFn: () => voteDebateFeed(postId, optionId, userId),
+    mutationFn: (optionId: number) => voteDebateFeed(postId, optionId, userId),
     ...options,
   });
 };
