@@ -88,6 +88,15 @@ const postImageController = (imageCount: number, fileType: string) => {
   return res;
 };
 
+const voteDebateFeed = (postId: number, userId: number, optionId: number) => {
+  const res = authInstance({
+    method: 'post',
+    url: `/posts/${postId}/votes/debate?optionId=${optionId}&userId=${userId}`,
+  });
+
+  return res;
+};
+
 export {
   getFeeds,
   getDetailCommonFeed,
@@ -99,4 +108,5 @@ export {
   dislikeFeed,
   deleteFeed,
   postImageController,
+  voteDebateFeed,
 };

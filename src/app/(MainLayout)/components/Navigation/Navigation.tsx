@@ -7,7 +7,6 @@ import ProfileIcon from '@/assets/icons/nav-profile.svg';
 import SettingIcon from '@/assets/icons/nav-setting.svg';
 import DiscussionFeedIcon from '@/assets/icons/nav-discussion-feed.svg';
 import CommonFeedIcon from '@/assets/icons/nav-common-feed.svg';
-import { getUserId } from '@/utils/manageToken';
 import styles from './Navigation.module.scss';
 import Menu from '../Menu/Menu';
 import ModalMenu from '../ModalMenu/ModalMenu';
@@ -35,7 +34,7 @@ const Navigation = () => {
       order: 2,
     },
     {
-      name: `설정 ${getUserId()}`,
+      name: `설정`,
       type: 'page',
       url: '/?mode=setting',
       icon: <SettingIcon />,

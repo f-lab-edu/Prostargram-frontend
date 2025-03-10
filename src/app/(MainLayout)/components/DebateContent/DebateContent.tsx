@@ -6,6 +6,10 @@ import BlueFlag from '@/assets/icons/blue_flag.svg';
 import BlueFillFlag from '@/assets/icons/blue_flag_fill.svg';
 import RedFlag from '@/assets/icons/red_flag.svg';
 import RedFillFlag from '@/assets/icons/red_flag_fill.svg';
+import { getUserId } from '@/utils/manageToken';
+import { useVoteDebateFeed } from '@/api/feed/feedMutations';
+import { useQueryClient } from '@tanstack/react-query';
+import { FEED_QUERY_KEYS } from '@/api/feed/feedQueries';
 import FeedCommentList from '../FeedCommentList';
 
 import styles from './DebateContent.module.scss';
@@ -41,18 +45,38 @@ const DebateContent = ({
   disabled,
 }: DebateContentProps) => {
   const { optionContent, voteCount } = option;
+  const userId = getUserId();
 
   const currentFlagType = index === 1 ? 'BLUE' : ('RED' as const);
   const FLAG = FLAG_SET[currentFlagType];
 
   const currentColor = currentFlagType === 'BLUE' ? styles.blue : styles.red;
+  const queryClient = useQueryClient();
+
+  const { mutate: voteMutation } = useVoteDebateFeed(
+    postId,
+    option.optionId,
+    userId,
+    {
+      onSuccess: () => {
+        // 상세피드 캐시 초기화
+        queryClient.invalidateQueries({
+          queryKey: FEED_QUERY_KEYS.id(String(postId)),
+        });
+      },
+    },
+  );
 
   return (
     <div className={styles.container}>
       <div className={clsx(styles.debate_container, currentColor)}>
         <h2>{optionContent}</h2>
         <div className={styles.vote_count}>
-          {isSelected ? <FLAG.FILL /> : <FLAG.NORMAL />}
+          {isSelected ? (
+            <FLAG.FILL />
+          ) : (
+            <FLAG.NORMAL style={{ cursor: 'pointer' }} onClick={voteMutation} />
+          )}
           {digitNumberFormatter(voteCount)}
         </div>
         <div

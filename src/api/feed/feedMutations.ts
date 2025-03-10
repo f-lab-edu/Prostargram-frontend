@@ -7,6 +7,7 @@ import {
   likeFeed,
   postImageController,
   updateCommonFeed,
+  voteDebateFeed,
 } from './apis';
 
 export const useCreateCommonFeed = (
@@ -106,6 +107,18 @@ export const useDislikeFeed = (postId: number, options = {}) => {
 export const useDeleteFeed = (postId: number, options = {}) => {
   return useMutation({
     mutationFn: () => deleteFeed(postId),
+    ...options,
+  });
+};
+
+export const useVoteDebateFeed = (
+  postId: number,
+  optionId: number,
+  userId: number,
+  options = {},
+) => {
+  return useMutation({
+    mutationFn: () => voteDebateFeed(postId, optionId, userId),
     ...options,
   });
 };
