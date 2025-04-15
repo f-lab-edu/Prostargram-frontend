@@ -8,6 +8,14 @@ const getComments = (postId: number) => {
   return res;
 };
 
+const getDebateComments = (postId: number, optionId: number) => {
+  const res = authInstance<Comment.CommentResponse>({
+    method: 'get',
+    url: `/posts/${postId}/options/${optionId}/comments`,
+  });
+  return res;
+};
+
 const likeComment = (commentId: number) => {
   const res = authInstance({
     method: 'post',
@@ -63,6 +71,7 @@ const writeReplyComment = (postId: string, parentId: string, data: string) => {
 
 export {
   getComments,
+  getDebateComments,
   likeComment,
   dislikeComment,
   writeComment,

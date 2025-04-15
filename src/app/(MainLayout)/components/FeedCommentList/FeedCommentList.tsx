@@ -13,17 +13,19 @@ import styles from './FeedCommentList.module.scss';
 interface FeedCommentListProps {
   feedId?: string;
   commentId?: string;
+  optionId?: number;
   feedCommentIds: string[];
 }
 
 const FeedCommentList = ({
   feedId,
   commentId,
+  optionId,
   feedCommentIds,
 }: FeedCommentListProps) => {
-  const { data: comments } = useGetComments(Number(feedId), {});
+  const { data: comments } = useGetComments(Number(feedId), optionId, {});
 
-  console.log(feedCommentIds);
+  console.log('댓글조회::', feedCommentIds);
 
   return (
     <div

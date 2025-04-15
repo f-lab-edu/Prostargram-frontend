@@ -87,6 +87,7 @@ const DebateContent = ({
       <div className={styles.comment_container}>
         <FeedCommentList
           feedId={postId.toString()}
+          optionId={option.optionId}
           feedCommentIds={['1', '2', '3']}
         />
       </div>
