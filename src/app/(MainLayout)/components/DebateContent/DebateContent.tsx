@@ -62,6 +62,8 @@ const DebateContent = ({
     },
   });
 
+  console.log('option,,', option.optionId);
+
   return (
     <div className={styles.container}>
       <div className={clsx(styles.debate_container, currentColor)}>
@@ -91,6 +93,7 @@ const DebateContent = ({
       <div>
         <FeedCommentWriteInput
           postId={postId}
+          optionId={option.optionId}
           placeholder={
             disabled
               ? '댓글 달기...'

@@ -3,7 +3,10 @@
 import { ChangeEvent } from 'react';
 
 import useAutoResizeTextArea from '@/hooks/useAutoResizeTextArea';
-import { useWriteComment } from '@/api/comment/commentMutations';
+import {
+  useWriteComment,
+  useWriteDebateComment,
+} from '@/api/comment/commentMutations';
 
 import { useQueryClient } from '@tanstack/react-query';
 import { COMMENT_QUERY_KEYS } from '@/api/comment/commentQueries';
@@ -15,6 +18,7 @@ const MAX_LENGTH = 1_000;
 
 interface FeedCommentWriteInputProps {
   postId: number;
+  optionId?: number;
   parentId?: number;
   placeholder?: string;
   disabled?: boolean;
@@ -23,6 +27,7 @@ interface FeedCommentWriteInputProps {
 const FeedCommentWriteInput = ({
   postId,
   parentId,
+  optionId,
   placeholder = '댓글 달기...',
   disabled,
 }: FeedCommentWriteInputProps) => {
@@ -53,9 +58,29 @@ const FeedCommentWriteInput = ({
       },
     },
   );
+
+  const { mutate: writeDebateCommentMutation } = useWriteDebateComment(
+    postId,
+    optionId ?? 0,
+    textareaContent,
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: COMMENT_QUERY_KEYS.id(postId),
+        });
+        queryClient.invalidateQueries({
+          queryKey: FEED_QUERY_KEYS.id(String(postId)),
+        });
+        setTextareaContent('');
+      },
+    },
+  );
+
   const submitHandler = () => {
-    console.log(postId, parentId);
-    if (textareaContent) {
+    console.log(postId, parentId, optionId);
+    if (textareaContent && optionId) {
+      writeDebateCommentMutation();
+    } else if (textareaContent) {
       console.log(textareaContent);
       writeCommentMutation();
     }

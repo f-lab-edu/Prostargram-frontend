@@ -36,6 +36,18 @@ const writeComment = (postId: number, data: string) => {
   return res;
 };
 
+const writeDebateComment = (postId: number, optionId: number, data: string) => {
+  const res = authInstance({
+    method: 'post',
+    url: `/posts/${postId}/options/${optionId}/comments`,
+    data,
+    headers: {
+      'Content-Type': 'text/plain',
+    },
+  });
+  return res;
+};
+
 const writeReplyComment = (postId: string, parentId: string, data: string) => {
   const res = authInstance({
     method: 'post',
@@ -54,5 +66,6 @@ export {
   likeComment,
   dislikeComment,
   writeComment,
+  writeDebateComment,
   writeReplyComment,
 };

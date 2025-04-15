@@ -3,6 +3,7 @@ import {
   dislikeComment,
   likeComment,
   writeComment,
+  writeDebateComment,
   writeReplyComment,
 } from './apis';
 
@@ -23,6 +24,18 @@ export const useDislikeComment = (commentId: number, options = {}) => {
 export const useWriteComment = (postId: number, data: string, options = {}) => {
   return useMutation({
     mutationFn: () => writeComment(postId, data),
+    ...options,
+  });
+};
+
+export const useWriteDebateComment = (
+  postId: number,
+  optionId: number,
+  data: string,
+  options = {},
+) => {
+  return useMutation({
+    mutationFn: () => writeDebateComment(postId, optionId, data),
     ...options,
   });
 };
