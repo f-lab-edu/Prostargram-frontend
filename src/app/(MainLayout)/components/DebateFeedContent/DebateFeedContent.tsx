@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 import BlueFlag from '@/assets/icons/blue_flag.svg';
 import BlueFillFlag from '@/assets/icons/blue_flag_fill.svg';
 import RedFlag from '@/assets/icons/red_flag.svg';
@@ -27,32 +29,31 @@ const DebateFeedContent = ({ debate }: DebateFeedContentProps) => {
     },
   });
 
+  const sortedOptions = useMemo(() => {
+    return debate?.options?.slice().sort((a, b) => a.optionId - b.optionId);
+  }, [debate?.options]);
+
   return (
     <div className={styles.debate_wrap}>
       <div className={styles.blue_area}>
         <Typo as="div" fontSize="body-32" textAlign="center">
-          {debate?.options?.[0].optionContent}
+          {sortedOptions?.[0].optionContent}
         </Typo>
-        {debate?.options?.[0].optionId === debate.selectedOptionId ? (
+        {sortedOptions?.[0].optionId === debate.selectedOptionId ? (
           <BlueFillFlag />
         ) : (
-          <BlueFlag
-            onClick={() => voteMutation(debate?.options?.[0].optionId)}
-          />
+          <BlueFlag onClick={() => voteMutation(sortedOptions?.[0].optionId)} />
         )}
       </div>
       <div className={styles.red_area}>
         <Typo as="div" fontSize="body-32" textAlign="center">
-          {debate?.options?.[1].optionContent}
+          {sortedOptions?.[1].optionContent}
         </Typo>
-        {debate?.options?.[1].optionId === debate.selectedOptionId ? (
+        {sortedOptions?.[1].optionId === debate.selectedOptionId ? (
           <RedFillFlag />
         ) : (
-          <RedFlag
-            onClick={() => voteMutation(debate?.options?.[1].optionId)}
-          />
+          <RedFlag onClick={() => voteMutation(sortedOptions?.[1].optionId)} />
         )}
-        <RedFlag />
       </div>
     </div>
   );
